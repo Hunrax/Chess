@@ -43,7 +43,7 @@ namespace Chess
             else // choose where you want to move your piece
             {
                 Button selectedField = e.Source as Button;
-                movePiece(selectedField); 
+                selectField(selectedField); 
             }
         }
         void selectPiece(Button button, string piece)
@@ -61,10 +61,7 @@ namespace Chess
                 buttonClicked = true;
                 pressedButton = button;
 
-                foreach (Grid field in dolnaWarstwa.Children)
-                    field.Opacity = 0.5;
-                foreach (Button field in gornaWarstwa.Children)
-                    field.Opacity = 0.5;
+                changeChessBoardOpacity(0.5);
                 pressedButton.Opacity = 1;
             }
             else if (!buttonClicked && button.Background == Brushes.Transparent)
@@ -72,7 +69,7 @@ namespace Chess
                 MessageBox.Show("Select a piece first.");
             }
         }
-        void movePiece(Button selectedField)
+        void selectField(Button selectedField)
         {
             var fieldRow = Grid.GetRow(selectedField);
             var fieldColumn = Grid.GetColumn(selectedField);
@@ -82,22 +79,20 @@ namespace Chess
 
             if (fieldColumn == pieceColumn && fieldRow == pieceRow)
             {
-                foreach (Grid field in dolnaWarstwa.Children)
-                    field.Opacity = 1;
-                foreach (Button field in gornaWarstwa.Children)
-                    field.Opacity = 1;
+                changeChessBoardOpacity(1);
 
                 buttonClicked = false;
                 return;
             }
-
             string pieceType = pressedButton.Tag.ToString();
             string fieldType = selectedField.Tag.ToString();
+
             ArrayList possibleMovesRow = new ArrayList();
             ArrayList possibleMovesColumn = new ArrayList();
 
             int newPieceRow = pieceRow;
             int newPieceColumn = pieceColumn;
+
             switch (pieceType)
             {
                 case "WhitePawn":
@@ -417,44 +412,53 @@ namespace Chess
 
             if (correctFieldSelected)
             {
-                Grid.SetColumn(pressedButton, fieldColumn);
-                Grid.SetRow(pressedButton, fieldRow);
-
-                Grid.SetColumn(selectedField, pieceColumn);
-                Grid.SetRow(selectedField, pieceRow);
-
-                if (fieldType != "Empty")
-                {
-                    selectedField.Background = Brushes.Transparent;
-                    selectedField.Tag = "Empty";
-                }
-
-                foreach (Grid field in dolnaWarstwa.Children)
-                    field.Opacity = 1;
-                foreach (Button field in gornaWarstwa.Children)
-                    field.Opacity = 1;
-
-                if (turn == "White")
-                {
-                    movesCounter++;
-                    turn = "Black";
-                    turnTextBox.Background = Brushes.Black;
-                    turnTextBox.Foreground = Brushes.White;
-                }
-                else
-                {
-                    turn = "White";
-                    turnTextBox.Background = Brushes.White;
-                    turnTextBox.Foreground = Brushes.Black;
-                }
-                movesCounterTextBox.Text = movesCounter.ToString();
-
-                buttonClicked = false;
+                movePieceToField(selectedField, fieldType, fieldColumn, fieldRow, pieceColumn, pieceRow);
             }
             else
             {
                 MessageBox.Show("You can't move this piece here.");
             }
+        }
+        void movePieceToField(Button selectedField, string fieldType, int fieldColumn, int fieldRow, int pieceColumn, int pieceRow)
+        {
+            Grid.SetColumn(pressedButton, fieldColumn);
+            Grid.SetRow(pressedButton, fieldRow);
+
+            Grid.SetColumn(selectedField, pieceColumn);
+            Grid.SetRow(selectedField, pieceRow);
+
+            if (fieldType != "Empty")
+            {
+                selectedField.Background = Brushes.Transparent;
+                selectedField.Tag = "Empty";
+            }
+            changeChessBoardOpacity(1);
+            changeTurn();
+            buttonClicked = false;
+        }
+        void changeTurn()
+        {
+            if (turn == "White")
+            {
+                movesCounter++;
+                turn = "Black";
+                turnTextBox.Background = Brushes.Black;
+                turnTextBox.Foreground = Brushes.White;
+            }
+            else
+            {
+                turn = "White";
+                turnTextBox.Background = Brushes.White;
+                turnTextBox.Foreground = Brushes.Black;
+            }
+            movesCounterTextBox.Text = movesCounter.ToString();
+        }
+        void changeChessBoardOpacity(double opacity)
+        {
+            foreach (Grid field in dolnaWarstwa.Children)
+                field.Opacity = opacity;
+            foreach (Button field in gornaWarstwa.Children)
+                field.Opacity = opacity;
         }
     }
 }
