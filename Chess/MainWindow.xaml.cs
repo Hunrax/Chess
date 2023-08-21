@@ -36,28 +36,9 @@ namespace Chess
             Button button = e.Source as Button;
             string piece = button.Tag.ToString();
 
-            if (!buttonClicked && blackPiecesWithKing.Contains(piece) && turn == "White")
+            if(!buttonClicked)
             {
-                MessageBox.Show("It's white's turn!");
-            }
-            else if (!buttonClicked && whitePiecesWithKing.Contains(piece) && turn == "Black")
-            {
-                MessageBox.Show("It's black's turn!");
-            }
-            else if (!buttonClicked && button.Background != Brushes.Transparent)
-            {
-                buttonClicked = true;
-                pressedButton = button;
-
-                foreach (Grid field in dolnaWarstwa.Children)
-                    field.Opacity = 0.5;
-                foreach (Button field in gornaWarstwa.Children)
-                    field.Opacity = 0.5;
-                pressedButton.Opacity = 1;
-            }
-            else if (!buttonClicked && button.Background == Brushes.Transparent)
-            {
-                MessageBox.Show("Select a piece first.");
+                selectPiece(button, piece);
             }
             else
             {
@@ -445,6 +426,36 @@ namespace Chess
                     MessageBox.Show("You can't move this piece here.");
                 }
             }
+        }
+        void selectPiece(Button button, string piece)
+        {
+            if (!buttonClicked && blackPiecesWithKing.Contains(piece) && turn == "White")
+            {
+                MessageBox.Show("It's white's turn!");
+            }
+            else if (!buttonClicked && whitePiecesWithKing.Contains(piece) && turn == "Black")
+            {
+                MessageBox.Show("It's black's turn!");
+            }
+            else if (!buttonClicked && button.Background != Brushes.Transparent)
+            {
+                buttonClicked = true;
+                pressedButton = button;
+
+                foreach (Grid field in dolnaWarstwa.Children)
+                    field.Opacity = 0.5;
+                foreach (Button field in gornaWarstwa.Children)
+                    field.Opacity = 0.5;
+                pressedButton.Opacity = 1;
+            }
+            else if (!buttonClicked && button.Background == Brushes.Transparent)
+            {
+                MessageBox.Show("Select a piece first.");
+            }
+        }
+        void movePiece(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }
