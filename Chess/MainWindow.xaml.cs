@@ -96,11 +96,11 @@ namespace Chess
             switch (pieceType)
             {
                 case "WhitePawn":
-                    moveWhitePawn(fieldType, pieceRow, pieceColumn, newPieceRow, fieldRow, fieldColumn, possibleMovesRow, possibleMovesColumn);
+                    movePawn(fieldType, pieceRow, pieceColumn, newPieceRow, fieldRow, fieldColumn, possibleMovesRow, possibleMovesColumn, blackPiecesNoKing, 6, -1, 1);
                     break;
 
                 case "BlackPawn":
-                    moveBlackPawn(fieldType, pieceRow, pieceColumn, newPieceRow, fieldRow, fieldColumn, possibleMovesRow, possibleMovesColumn);
+                    movePawn(fieldType, pieceRow, pieceColumn, newPieceRow, fieldRow, fieldColumn, possibleMovesRow, possibleMovesColumn, whitePiecesNoKing, 1, 1, -1);
                     break;
 
                 case "WhiteRook":
@@ -189,57 +189,30 @@ namespace Chess
             foreach (Button field in gornaWarstwa.Children)
                 field.Opacity = opacity;
         }
-        void moveWhitePawn(string fieldType, int pieceRow, int pieceColumn, int newPieceRow, int fieldRow, int fieldColumn, ArrayList possibleMovesRow, ArrayList possibleMovesColumn)
+        void movePawn(string fieldType, int pieceRow, int pieceColumn, int newPieceRow, int fieldRow, int fieldColumn, ArrayList possibleMovesRow, ArrayList possibleMovesColumn, ArrayList piecesNoKing, int pieceRowValueCheck, int value1, int value2)
         {
             if (fieldType == "Empty")
             {
-                newPieceRow = pieceRow - 1;
+                newPieceRow = pieceRow + value1;
                 possibleMovesRow.Add(newPieceRow);
                 possibleMovesColumn.Add(pieceColumn);
-                if (pieceRow == 6)
+                if (pieceRow == pieceRowValueCheck)
                 {
-                    possibleMovesRow.Add(newPieceRow - 1);
+                    possibleMovesRow.Add(newPieceRow + value1);
                     possibleMovesColumn.Add(pieceColumn);
                 }
             }
-            else if (blackPiecesNoKing.Contains(fieldType))
+            else if (piecesNoKing.Contains(fieldType))
             {
-                if (fieldRow == pieceRow - 1 && fieldColumn == pieceColumn - 1)
+                if (fieldRow == pieceRow + value1 && fieldColumn == pieceColumn + value1)
                 {
-                    possibleMovesRow.Add(pieceRow - 1);
-                    possibleMovesColumn.Add(pieceColumn - 1);
+                    possibleMovesRow.Add(pieceRow + value1);
+                    possibleMovesColumn.Add(pieceColumn + value1);
                 }
-                if (fieldRow == pieceRow - 1 && fieldColumn == pieceColumn + 1)
+                if (fieldRow == pieceRow + value1 && fieldColumn == pieceColumn + value2)
                 {
-                    possibleMovesRow.Add(pieceRow - 1);
-                    possibleMovesColumn.Add(pieceColumn + 1);
-                }
-            }
-        }
-        void moveBlackPawn(string fieldType, int pieceRow, int pieceColumn, int newPieceRow, int fieldRow, int fieldColumn, ArrayList possibleMovesRow, ArrayList possibleMovesColumn)
-        {
-            if (fieldType == "Empty")
-            {
-                newPieceRow = pieceRow + 1;
-                possibleMovesRow.Add(newPieceRow);
-                possibleMovesColumn.Add(pieceColumn);
-                if (pieceRow == 1)
-                {
-                    possibleMovesRow.Add(newPieceRow + 1);
-                    possibleMovesColumn.Add(pieceColumn);
-                }
-            }
-            else if (whitePiecesNoKing.Contains(fieldType))
-            {
-                if (fieldRow == pieceRow + 1 && fieldColumn == pieceColumn - 1)
-                {
-                    possibleMovesRow.Add(pieceRow + 1);
-                    possibleMovesColumn.Add(pieceColumn - 1);
-                }
-                if (fieldRow == pieceRow + 1 && fieldColumn == pieceColumn + 1)
-                {
-                    possibleMovesRow.Add(pieceRow + 1);
-                    possibleMovesColumn.Add(pieceColumn + 1);
+                    possibleMovesRow.Add(pieceRow + value1);
+                    possibleMovesColumn.Add(pieceColumn + value2);
                 }
             }
         }
