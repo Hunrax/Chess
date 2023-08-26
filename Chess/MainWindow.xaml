@@ -368,6 +368,8 @@
 
         <Line Stroke="SaddleBrown" StrokeThickness="15" X1="696.5" Y1="50" X2="696.5" Y2="150" Margin="15,-38,-15,37"></Line>
 
+        <Button Name="TestModeButton" Margin="17,718,686,16" FontSize="10" FontWeight="Black" Click="TestMode">TestMode: OFF</Button>
+        
         <!-- Oznakowania pol -->
         <TextBox Margin="82,692,633,16" Text="A" TextAlignment="Center" FontSize="40" Background="Transparent" Foreground="#4E3524" FontWeight="Bold" BorderThickness="0" IsReadOnly="True"/>
         <TextBox Margin="166,692,556,16" Text="B" TextAlignment="Center" FontSize="40" Background="Transparent" Foreground="#4E3524" FontWeight="Bold" BorderThickness="0" IsReadOnly="True"/>
