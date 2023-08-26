@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,6 +23,7 @@ namespace Chess
         Button pressedButton;
         string turn = "White";
         int movesCounter = 0;
+        ChessBoard chessBoard = new ChessBoard();
 
         ArrayList whitePiecesNoKing = new ArrayList{ "WhitePawn", "WhiteKnight", "WhiteBishop", "WhiteRook", "WhiteQueen" };
         ArrayList whitePiecesWithKing = new ArrayList { "WhitePawn", "WhiteKnight", "WhiteBishop", "WhiteRook", "WhiteQueen", "WhiteKing" };
@@ -30,20 +32,24 @@ namespace Chess
         public MainWindow()
         {
             InitializeComponent();
+            chessBoard.Clear();
+            chessBoard.Initialize();
+            chessBoard.Print();
         }
         void PieceSelected(object sender, RoutedEventArgs e)
         {
             Button button = e.Source as Button;
             string piece = button.Tag.ToString();
 
-            if(!buttonClicked) // select Piece you want to move
+            if(!buttonClicked) // select piece you want to move
             {
                 selectPiece(button, piece);
             }
             else // choose where you want to move your piece
             {
                 Button selectedField = e.Source as Button;
-                selectField(selectedField); 
+                selectField(selectedField);
+                chessBoard.Print();
             }
         }
         void selectPiece(Button button, string piece)
@@ -141,20 +147,22 @@ namespace Chess
 
             if (correctFieldSelected)
             {
-                movePieceToField(selectedField, fieldType, fieldColumn, fieldRow, pieceColumn, pieceRow);
+                movePieceToField(selectedField, pieceType, fieldType, fieldColumn, fieldRow, pieceColumn, pieceRow);
             }
             else
             {
                 MessageBox.Show("You can't move this piece here.");
             }
         }
-        void movePieceToField(Button selectedField, string fieldType, int fieldColumn, int fieldRow, int pieceColumn, int pieceRow)
+        void movePieceToField(Button selectedField, string pieceType, string fieldType, int fieldColumn, int fieldRow, int pieceColumn, int pieceRow)
         {
-            Grid.SetColumn(pressedButton, fieldColumn);
+            Grid.SetColumn(pressedButton, fieldColumn); // move piece to field
             Grid.SetRow(pressedButton, fieldRow);
+            chessBoard.board[fieldRow, fieldColumn] = getPieceFromPieceType(pieceType);
 
-            Grid.SetColumn(selectedField, pieceColumn);
+            Grid.SetColumn(selectedField, pieceColumn); // set former piece field to empty
             Grid.SetRow(selectedField, pieceRow);
+            chessBoard.board[pieceRow, pieceColumn] = new Piece("None", "Empty", '.');
 
             if (fieldType != "Empty")
             {
@@ -188,6 +196,38 @@ namespace Chess
                 field.Opacity = opacity;
             foreach (Button field in gornaWarstwa.Children)
                 field.Opacity = opacity;
+        }
+        Piece getPieceFromPieceType(string pieceType)
+        {
+            switch(pieceType)
+            {
+                case "WhitePawn":
+                    return new Piece("White", "Pawn", 'P');
+                case "BlackPawn":
+                    return new Piece("Black", "Pawn", 'P');
+                case "WhiteRook":
+                    return new Piece("White", "Rook", 'W');
+                case "BlackRook":
+                    return new Piece("Black", "Rook", 'W');
+                case "WhiteKnight":
+                    return new Piece("White", "Knight", 'S');
+                case "BlackKnight":
+                    return new Piece("Black", "Knight", 'S');
+                case "WhiteBishop":
+                    return new Piece("White", "Bishop", 'G');
+                case "BlackBishop":
+                    return new Piece("Black", "Bishop", 'G');
+                case "WhiteQueen":
+                    return new Piece("White", "Queen", 'H');
+                case "BlackQueen":
+                    return new Piece("Black", "Queen", 'H');
+                case "WhiteKing":
+                    return new Piece("White", "King", 'K');
+                case "BlackKing":
+                    return new Piece("Black", "King", 'K');
+                default:
+                    return new Piece("None", "Empty", '.');
+            }
         }
         void movePawn(string fieldType, int pieceRow, int pieceColumn, int newPieceRow, int fieldRow, int fieldColumn, ArrayList possibleMovesRow, ArrayList possibleMovesColumn, ArrayList piecesNoKing, int pieceRowValueCheck, int value1, int value2)
         {
@@ -276,6 +316,8 @@ namespace Chess
                 {
                     possibleMovesColumn.Add(newPieceColumn);
                     possibleMovesRow.Add(newPieceRow);
+                    if (chessBoard.board[newPieceRow, newPieceColumn].type != "Empty")
+                        break;
                     newPieceColumn++;
                     newPieceRow++;
                 }
@@ -285,6 +327,8 @@ namespace Chess
                 {
                     possibleMovesColumn.Add(newPieceColumn);
                     possibleMovesRow.Add(newPieceRow);
+                    if (chessBoard.board[newPieceRow, newPieceColumn].type != "Empty")
+                        break;
                     newPieceColumn--;
                     newPieceRow--;
                 }
@@ -294,6 +338,8 @@ namespace Chess
                 {
                     possibleMovesColumn.Add(newPieceColumn);
                     possibleMovesRow.Add(newPieceRow);
+                    if (chessBoard.board[newPieceRow, newPieceColumn].type != "Empty")
+                        break;
                     newPieceColumn++;
                     newPieceRow--;
                 }
@@ -303,6 +349,8 @@ namespace Chess
                 {
                     possibleMovesColumn.Add(newPieceColumn);
                     possibleMovesRow.Add(newPieceRow);
+                    if (chessBoard.board[newPieceRow, newPieceColumn].type != "Empty")
+                        break;
                     newPieceColumn--;
                     newPieceRow++;
                 }
@@ -319,6 +367,8 @@ namespace Chess
                     newPieceColumn += 1;
                     possibleMovesColumn.Add(newPieceColumn);
                     possibleMovesRow.Add(pieceRow);
+                    if (chessBoard.board[pieceRow, newPieceColumn].type != "Empty")
+                        break;
                 }
                 newPieceColumn = pieceColumn;
                 for (int i = pieceColumn - 1; i >= 0; i--)
@@ -326,12 +376,16 @@ namespace Chess
                     newPieceColumn -= 1;
                     possibleMovesColumn.Add(newPieceColumn);
                     possibleMovesRow.Add(pieceRow);
+                    if (chessBoard.board[pieceRow, newPieceColumn].type != "Empty")
+                        break;
                 }
                 for (int i = pieceRow + 1; i < 8; i++)
                 {
                     newPieceRow += 1;
                     possibleMovesColumn.Add(pieceColumn);
                     possibleMovesRow.Add(newPieceRow);
+                    if (chessBoard.board[newPieceRow, pieceColumn].type != "Empty")
+                        break;
                 }
                 newPieceRow = pieceRow;
                 for (int i = pieceRow - 1; i >= 0; i--)
@@ -339,6 +393,8 @@ namespace Chess
                     newPieceRow -= 1;
                     possibleMovesColumn.Add(pieceColumn);
                     possibleMovesRow.Add(newPieceRow);
+                    if (chessBoard.board[newPieceRow, pieceColumn].type != "Empty")
+                        break;
                 }
             }
         }
@@ -353,6 +409,8 @@ namespace Chess
                     newPieceColumn += 1;
                     possibleMovesColumn.Add(newPieceColumn);
                     possibleMovesRow.Add(pieceRow);
+                    if (chessBoard.board[pieceRow, newPieceColumn].type != "Empty")
+                        break;
                 }
                 newPieceColumn = pieceColumn;
                 for (int i = pieceColumn - 1; i >= 0; i--)
@@ -360,12 +418,16 @@ namespace Chess
                     newPieceColumn -= 1;
                     possibleMovesColumn.Add(newPieceColumn);
                     possibleMovesRow.Add(pieceRow);
+                    if (chessBoard.board[pieceRow, newPieceColumn].type != "Empty")
+                        break;
                 }
                 for (int i = pieceRow + 1; i < 8; i++)
                 {
                     newPieceRow += 1;
                     possibleMovesColumn.Add(pieceColumn);
                     possibleMovesRow.Add(newPieceRow);
+                    if (chessBoard.board[newPieceRow, pieceColumn].type != "Empty")
+                        break;
                 }
                 newPieceRow = pieceRow;
                 for (int i = pieceRow - 1; i >= 0; i--)
@@ -373,6 +435,8 @@ namespace Chess
                     newPieceRow -= 1;
                     possibleMovesColumn.Add(pieceColumn);
                     possibleMovesRow.Add(newPieceRow);
+                    if (chessBoard.board[newPieceRow, pieceColumn].type != "Empty")
+                        break;
                 }
 
                 newPieceColumn = pieceColumn + 1;
@@ -381,6 +445,8 @@ namespace Chess
                 {
                     possibleMovesColumn.Add(newPieceColumn);
                     possibleMovesRow.Add(newPieceRow);
+                    if (chessBoard.board[newPieceRow, newPieceColumn].type != "Empty")
+                        break;
                     newPieceColumn++;
                     newPieceRow++;
                 }
@@ -390,6 +456,8 @@ namespace Chess
                 {
                     possibleMovesColumn.Add(newPieceColumn);
                     possibleMovesRow.Add(newPieceRow);
+                    if (chessBoard.board[newPieceRow, newPieceColumn].type != "Empty")
+                        break;
                     newPieceColumn--;
                     newPieceRow--;
                 }
@@ -399,6 +467,8 @@ namespace Chess
                 {
                     possibleMovesColumn.Add(newPieceColumn);
                     possibleMovesRow.Add(newPieceRow);
+                    if (chessBoard.board[newPieceRow, newPieceColumn].type != "Empty")
+                        break;
                     newPieceColumn++;
                     newPieceRow--;
                 }
@@ -408,6 +478,8 @@ namespace Chess
                 {
                     possibleMovesColumn.Add(newPieceColumn);
                     possibleMovesRow.Add(newPieceRow);
+                    if (chessBoard.board[newPieceRow, newPieceColumn].type != "Empty")
+                        break;
                     newPieceColumn--;
                     newPieceRow++;
                 }
