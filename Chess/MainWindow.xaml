@@ -311,7 +311,7 @@
                                     <ImageBrush ImageSource="/Chess;component/images/Knight_Black.png"/>
                                 </Button.Background>
                             </Button>
-                            <Button Grid.Row="0" Grid.Column="7" Style="{StaticResource MyButtonStyle}" Click="PieceSelected" Tag="BlackPawn">
+                            <Button Grid.Row="0" Grid.Column="7" Style="{StaticResource MyButtonStyle}" Click="PieceSelected" Tag="BlackRook">
                                 <Button.Background>
                                     <ImageBrush ImageSource="/Chess;component/images/Rook_Black.png"/>
                                 </Button.Background>

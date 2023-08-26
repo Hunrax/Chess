@@ -96,307 +96,36 @@ namespace Chess
             switch (pieceType)
             {
                 case "WhitePawn":
-                    if (fieldType == "Empty")
-                    {
-                        newPieceRow = pieceRow - 1;
-                        possibleMovesRow.Add(newPieceRow);
-                        possibleMovesColumn.Add(pieceColumn);
-                        if (pieceRow == 6)
-                        {
-                            possibleMovesRow.Add(newPieceRow - 1);
-                            possibleMovesColumn.Add(pieceColumn);
-                        }
-                    }
-                    else if (blackPiecesNoKing.Contains(fieldType))
-                    {
-                        if (fieldRow == pieceRow - 1 && fieldColumn == pieceColumn - 1)
-                        {
-                            possibleMovesRow.Add(pieceRow - 1);
-                            possibleMovesColumn.Add(pieceColumn - 1);
-                        }
-                        if (fieldRow == pieceRow - 1 && fieldColumn == pieceColumn + 1)
-                        {
-                            possibleMovesRow.Add(pieceRow - 1);
-                            possibleMovesColumn.Add(pieceColumn + 1);
-                        }
-                    }
+                    moveWhitePawn(fieldType, pieceRow, pieceColumn, newPieceRow, fieldRow, fieldColumn, possibleMovesRow, possibleMovesColumn);
                     break;
 
                 case "BlackPawn":
-                    if (fieldType == "Empty")
-                    {
-                        newPieceRow = pieceRow + 1;
-                        possibleMovesRow.Add(newPieceRow);
-                        possibleMovesColumn.Add(pieceColumn);
-                        if (pieceRow == 1)
-                        {
-                            possibleMovesRow.Add(newPieceRow + 1);
-                            possibleMovesColumn.Add(pieceColumn);
-                        }
-                    }
-                    else if (whitePiecesNoKing.Contains(fieldType))
-                    {
-                        if (fieldRow == pieceRow + 1 && fieldColumn == pieceColumn - 1)
-                        {
-                            possibleMovesRow.Add(pieceRow + 1);
-                            possibleMovesColumn.Add(pieceColumn - 1);
-                        }
-                        if (fieldRow == pieceRow + 1 && fieldColumn == pieceColumn + 1)
-                        {
-                            possibleMovesRow.Add(pieceRow + 1);
-                            possibleMovesColumn.Add(pieceColumn + 1);
-                        }
-                    }
+                    moveBlackPawn(fieldType, pieceRow, pieceColumn, newPieceRow, fieldRow, fieldColumn, possibleMovesRow, possibleMovesColumn);
                     break;
 
                 case "WhiteRook":
                 case "BlackRook":
-                    if (fieldType == "Empty" ||
-                    (pieceType == "WhiteRook" && blackPiecesNoKing.Contains(fieldType)) ||
-                    (pieceType == "BlackRook" && whitePiecesNoKing.Contains(fieldType)))
-                    {
-                        for (int i = pieceColumn + 1; i < 8; i++)
-                        {
-                            newPieceColumn += 1;
-                            possibleMovesColumn.Add(newPieceColumn);
-                            possibleMovesRow.Add(pieceRow);
-                        }
-                        newPieceColumn = pieceColumn;
-                        for (int i = pieceColumn - 1; i >= 0; i--)
-                        {
-                            newPieceColumn -= 1;
-                            possibleMovesColumn.Add(newPieceColumn);
-                            possibleMovesRow.Add(pieceRow);
-                        }
-                        for (int i = pieceRow + 1; i < 8; i++)
-                        {
-                            newPieceRow += 1;
-                            possibleMovesColumn.Add(pieceColumn);
-                            possibleMovesRow.Add(newPieceRow);
-                        }
-                        newPieceRow = pieceRow;
-                        for (int i = pieceRow - 1; i >= 0; i--)
-                        {
-                            newPieceRow -= 1;
-                            possibleMovesColumn.Add(pieceColumn);
-                            possibleMovesRow.Add(newPieceRow);
-                        }
-                    }
+                    moveRook(pieceType, fieldType, pieceRow, pieceColumn, newPieceRow, newPieceColumn, possibleMovesRow, possibleMovesColumn);
                     break;
 
                 case "WhiteKnight":
                 case "BlackKnight":
-                    if (fieldType == "Empty" ||
-                    (pieceType == "WhiteKnight" && blackPiecesNoKing.Contains(fieldType)) ||
-                    (pieceType == "BlackKnight" && whitePiecesNoKing.Contains(fieldType)))
-                    {
-                        if (pieceColumn - 2 >= 0 && pieceRow - 1 >= 0)
-                        {
-                            possibleMovesColumn.Add(pieceColumn - 2);
-                            possibleMovesRow.Add(pieceRow - 1);
-                        }
-                        if (pieceColumn - 2 >= 0 && pieceRow + 1 <= 7)
-                        {
-                            possibleMovesColumn.Add(pieceColumn - 2);
-                            possibleMovesRow.Add(pieceRow + 1);
-                        }
-                        if (pieceColumn + 2 <= 7 && pieceRow - 1 >= 0)
-                        {
-                            possibleMovesColumn.Add(pieceColumn + 2);
-                            possibleMovesRow.Add(pieceRow - 1);
-                        }
-                        if (pieceColumn + 2 <= 7 && pieceRow + 1 <= 7)
-                        {
-                            possibleMovesColumn.Add(pieceColumn + 2);
-                            possibleMovesRow.Add(pieceRow + 1);
-                        }
-                        if (pieceColumn + 1 <= 7 && pieceRow - 2 >= 0)
-                        {
-                            possibleMovesColumn.Add(pieceColumn + 1);
-                            possibleMovesRow.Add(pieceRow - 2);
-                        }
-                        if (pieceColumn + 1 <= 7 && pieceRow + 2 <= 7)
-                        {
-                            possibleMovesColumn.Add(pieceColumn + 1);
-                            possibleMovesRow.Add(pieceRow + 2);
-                        }
-                        if (pieceColumn - 1 >= 0 && pieceRow - 2 >= 0)
-                        {
-                            possibleMovesColumn.Add(pieceColumn - 1);
-                            possibleMovesRow.Add(pieceRow - 2);
-                        }
-                        if (pieceColumn - 1 >= 0 && pieceRow + 2 <= 7)
-                        {
-                            possibleMovesColumn.Add(pieceColumn - 1);
-                            possibleMovesRow.Add(pieceRow + 2);
-                        }
-                    }
+                    moveKnight(pieceType, fieldType, pieceRow, pieceColumn, fieldRow, fieldColumn, possibleMovesRow, possibleMovesColumn);
                     break;
 
                 case "WhiteBishop":
                 case "BlackBishop":
-                    if (fieldType == "Empty" ||
-                    (pieceType == "WhiteBishop" && blackPiecesNoKing.Contains(fieldType)) ||
-                    (pieceType == "BlackBishop" && whitePiecesNoKing.Contains(fieldType)))
-                    {
-                        newPieceColumn = pieceColumn + 1;
-                        newPieceRow = pieceRow + 1;
-                        while (newPieceColumn < 8 && newPieceRow < 8)
-                        {
-                            possibleMovesColumn.Add(newPieceColumn);
-                            possibleMovesRow.Add(newPieceRow);
-                            newPieceColumn++;
-                            newPieceRow++;
-                        }
-                        newPieceColumn = pieceColumn - 1;
-                        newPieceRow = pieceRow - 1;
-                        while (newPieceColumn >= 0 && newPieceRow >= 0)
-                        {
-                            possibleMovesColumn.Add(newPieceColumn);
-                            possibleMovesRow.Add(newPieceRow);
-                            newPieceColumn--;
-                            newPieceRow--;
-                        }
-                        newPieceColumn = pieceColumn + 1;
-                        newPieceRow = pieceRow - 1;
-                        while (newPieceColumn < 8 && newPieceRow >= 0)
-                        {
-                            possibleMovesColumn.Add(newPieceColumn);
-                            possibleMovesRow.Add(newPieceRow);
-                            newPieceColumn++;
-                            newPieceRow--;
-                        }
-                        newPieceColumn = pieceColumn - 1;
-                        newPieceRow = pieceRow + 1;
-                        while (newPieceColumn >= 0 && newPieceRow < 8)
-                        {
-                            possibleMovesColumn.Add(newPieceColumn);
-                            possibleMovesRow.Add(newPieceRow);
-                            newPieceColumn--;
-                            newPieceRow++;
-                        }
-                    }
+                    moveBishop(pieceType, fieldType, pieceRow, pieceColumn, newPieceRow, newPieceColumn, possibleMovesRow, possibleMovesColumn);
                     break;
 
                 case "WhiteQueen":
                 case "BlackQueen":
-                    if (fieldType == "Empty" ||
-                    (pieceType == "WhiteQueen" && blackPiecesNoKing.Contains(fieldType)) ||
-                    (pieceType == "BlackQueen" && whitePiecesNoKing.Contains(fieldType)))
-                    {
-                        for (int i = pieceColumn + 1; i < 8; i++)
-                        {
-                            newPieceColumn += 1;
-                            possibleMovesColumn.Add(newPieceColumn);
-                            possibleMovesRow.Add(pieceRow);
-                        }
-                        newPieceColumn = pieceColumn;
-                        for (int i = pieceColumn - 1; i >= 0; i--)
-                        {
-                            newPieceColumn -= 1;
-                            possibleMovesColumn.Add(newPieceColumn);
-                            possibleMovesRow.Add(pieceRow);
-                        }
-                        for (int i = pieceRow + 1; i < 8; i++)
-                        {
-                            newPieceRow += 1;
-                            possibleMovesColumn.Add(pieceColumn);
-                            possibleMovesRow.Add(newPieceRow);
-                        }
-                        newPieceRow = pieceRow;
-                        for (int i = pieceRow - 1; i >= 0; i--)
-                        {
-                            newPieceRow -= 1;
-                            possibleMovesColumn.Add(pieceColumn);
-                            possibleMovesRow.Add(newPieceRow);
-                        }
-
-                        newPieceColumn = pieceColumn + 1;
-                        newPieceRow = pieceRow + 1;
-                        while (newPieceColumn < 8 && newPieceRow < 8)
-                        {
-                            possibleMovesColumn.Add(newPieceColumn);
-                            possibleMovesRow.Add(newPieceRow);
-                            newPieceColumn++;
-                            newPieceRow++;
-                        }
-                        newPieceColumn = pieceColumn - 1;
-                        newPieceRow = pieceRow - 1;
-                        while (newPieceColumn >= 0 && newPieceRow >= 0)
-                        {
-                            possibleMovesColumn.Add(newPieceColumn);
-                            possibleMovesRow.Add(newPieceRow);
-                            newPieceColumn--;
-                            newPieceRow--;
-                        }
-                        newPieceColumn = pieceColumn + 1;
-                        newPieceRow = pieceRow - 1;
-                        while (newPieceColumn < 8 && newPieceRow >= 0)
-                        {
-                            possibleMovesColumn.Add(newPieceColumn);
-                            possibleMovesRow.Add(newPieceRow);
-                            newPieceColumn++;
-                            newPieceRow--;
-                        }
-                        newPieceColumn = pieceColumn - 1;
-                        newPieceRow = pieceRow + 1;
-                        while (newPieceColumn >= 0 && newPieceRow < 8)
-                        {
-                            possibleMovesColumn.Add(newPieceColumn);
-                            possibleMovesRow.Add(newPieceRow);
-                            newPieceColumn--;
-                            newPieceRow++;
-                        }
-                    }
+                    moveQueen(pieceType, fieldType, pieceRow, pieceColumn, newPieceRow, newPieceColumn, possibleMovesRow, possibleMovesColumn);
                     break;
 
                 case "WhiteKing":
                 case "BlackKing":
-                    if (fieldType == "Empty" ||
-                    (pieceType == "WhiteKing" && blackPiecesNoKing.Contains(fieldType)) ||
-                    (pieceType == "BlackKing" && whitePiecesNoKing.Contains(fieldType)))
-                    {
-                        if (pieceColumn - 1 >= 0)
-                        {
-                            possibleMovesColumn.Add(pieceColumn - 1);
-                            possibleMovesRow.Add(pieceRow);
-                            if (pieceRow - 1 >= 0)
-                            {
-                                possibleMovesColumn.Add(pieceColumn - 1);
-                                possibleMovesRow.Add(pieceRow - 1);
-                            }
-                            if (pieceRow + 1 < 8)
-                            {
-                                possibleMovesColumn.Add(pieceColumn - 1);
-                                possibleMovesRow.Add(pieceRow + 1);
-                            }
-                        }
-                        if (pieceColumn + 1 < 8)
-                        {
-                            possibleMovesColumn.Add(pieceColumn + 1);
-                            possibleMovesRow.Add(pieceRow);
-                            if (pieceRow - 1 >= 0)
-                            {
-                                possibleMovesColumn.Add(pieceColumn + 1);
-                                possibleMovesRow.Add(pieceRow - 1);
-                            }
-                            if (pieceRow + 1 < 8)
-                            {
-                                possibleMovesColumn.Add(pieceColumn + 1);
-                                possibleMovesRow.Add(pieceRow + 1);
-                            }
-                        }
-                        if (pieceRow + 1 < 8)
-                        {
-                            possibleMovesColumn.Add(pieceColumn);
-                            possibleMovesRow.Add(pieceRow + 1);
-                        }
-                        if (pieceRow - 1 >= 0)
-                        {
-                            possibleMovesColumn.Add(pieceColumn);
-                            possibleMovesRow.Add(pieceRow - 1);
-                        }
-                    }
+                    moveKing(pieceType, fieldType, pieceRow, pieceColumn, possibleMovesRow, possibleMovesColumn);
                     break;
             }
 
@@ -459,6 +188,305 @@ namespace Chess
                 field.Opacity = opacity;
             foreach (Button field in gornaWarstwa.Children)
                 field.Opacity = opacity;
+        }
+        void moveWhitePawn(string fieldType, int pieceRow, int pieceColumn, int newPieceRow, int fieldRow, int fieldColumn, ArrayList possibleMovesRow, ArrayList possibleMovesColumn)
+        {
+            if (fieldType == "Empty")
+            {
+                newPieceRow = pieceRow - 1;
+                possibleMovesRow.Add(newPieceRow);
+                possibleMovesColumn.Add(pieceColumn);
+                if (pieceRow == 6)
+                {
+                    possibleMovesRow.Add(newPieceRow - 1);
+                    possibleMovesColumn.Add(pieceColumn);
+                }
+            }
+            else if (blackPiecesNoKing.Contains(fieldType))
+            {
+                if (fieldRow == pieceRow - 1 && fieldColumn == pieceColumn - 1)
+                {
+                    possibleMovesRow.Add(pieceRow - 1);
+                    possibleMovesColumn.Add(pieceColumn - 1);
+                }
+                if (fieldRow == pieceRow - 1 && fieldColumn == pieceColumn + 1)
+                {
+                    possibleMovesRow.Add(pieceRow - 1);
+                    possibleMovesColumn.Add(pieceColumn + 1);
+                }
+            }
+        }
+        void moveBlackPawn(string fieldType, int pieceRow, int pieceColumn, int newPieceRow, int fieldRow, int fieldColumn, ArrayList possibleMovesRow, ArrayList possibleMovesColumn)
+        {
+            if (fieldType == "Empty")
+            {
+                newPieceRow = pieceRow + 1;
+                possibleMovesRow.Add(newPieceRow);
+                possibleMovesColumn.Add(pieceColumn);
+                if (pieceRow == 1)
+                {
+                    possibleMovesRow.Add(newPieceRow + 1);
+                    possibleMovesColumn.Add(pieceColumn);
+                }
+            }
+            else if (whitePiecesNoKing.Contains(fieldType))
+            {
+                if (fieldRow == pieceRow + 1 && fieldColumn == pieceColumn - 1)
+                {
+                    possibleMovesRow.Add(pieceRow + 1);
+                    possibleMovesColumn.Add(pieceColumn - 1);
+                }
+                if (fieldRow == pieceRow + 1 && fieldColumn == pieceColumn + 1)
+                {
+                    possibleMovesRow.Add(pieceRow + 1);
+                    possibleMovesColumn.Add(pieceColumn + 1);
+                }
+            }
+        }
+        void moveKnight(string pieceType, string fieldType, int pieceRow, int pieceColumn, int fieldRow, int fieldColumn, ArrayList possibleMovesRow, ArrayList possibleMovesColumn)
+        {
+            if (fieldType == "Empty" ||
+               (pieceType == "WhiteKnight" && blackPiecesNoKing.Contains(fieldType)) ||
+               (pieceType == "BlackKnight" && whitePiecesNoKing.Contains(fieldType)))
+            {
+                if (pieceColumn - 2 >= 0 && pieceRow - 1 >= 0)
+                {
+                    possibleMovesColumn.Add(pieceColumn - 2);
+                    possibleMovesRow.Add(pieceRow - 1);
+                }
+                if (pieceColumn - 2 >= 0 && pieceRow + 1 <= 7)
+                {
+                    possibleMovesColumn.Add(pieceColumn - 2);
+                    possibleMovesRow.Add(pieceRow + 1);
+                }
+                if (pieceColumn + 2 <= 7 && pieceRow - 1 >= 0)
+                {
+                    possibleMovesColumn.Add(pieceColumn + 2);
+                    possibleMovesRow.Add(pieceRow - 1);
+                }
+                if (pieceColumn + 2 <= 7 && pieceRow + 1 <= 7)
+                {
+                    possibleMovesColumn.Add(pieceColumn + 2);
+                    possibleMovesRow.Add(pieceRow + 1);
+                }
+                if (pieceColumn + 1 <= 7 && pieceRow - 2 >= 0)
+                {
+                    possibleMovesColumn.Add(pieceColumn + 1);
+                    possibleMovesRow.Add(pieceRow - 2);
+                }
+                if (pieceColumn + 1 <= 7 && pieceRow + 2 <= 7)
+                {
+                    possibleMovesColumn.Add(pieceColumn + 1);
+                    possibleMovesRow.Add(pieceRow + 2);
+                }
+                if (pieceColumn - 1 >= 0 && pieceRow - 2 >= 0)
+                {
+                    possibleMovesColumn.Add(pieceColumn - 1);
+                    possibleMovesRow.Add(pieceRow - 2);
+                }
+                if (pieceColumn - 1 >= 0 && pieceRow + 2 <= 7)
+                {
+                    possibleMovesColumn.Add(pieceColumn - 1);
+                    possibleMovesRow.Add(pieceRow + 2);
+                }
+            }
+        }
+        void moveBishop(string pieceType, string fieldType, int pieceRow, int pieceColumn, int newPieceRow, int newPieceColumn, ArrayList possibleMovesRow, ArrayList possibleMovesColumn)
+        {
+            if (fieldType == "Empty" ||
+               (pieceType == "WhiteBishop" && blackPiecesNoKing.Contains(fieldType)) ||
+               (pieceType == "BlackBishop" && whitePiecesNoKing.Contains(fieldType)))
+            {
+                newPieceColumn = pieceColumn + 1;
+                newPieceRow = pieceRow + 1;
+                while (newPieceColumn < 8 && newPieceRow < 8)
+                {
+                    possibleMovesColumn.Add(newPieceColumn);
+                    possibleMovesRow.Add(newPieceRow);
+                    newPieceColumn++;
+                    newPieceRow++;
+                }
+                newPieceColumn = pieceColumn - 1;
+                newPieceRow = pieceRow - 1;
+                while (newPieceColumn >= 0 && newPieceRow >= 0)
+                {
+                    possibleMovesColumn.Add(newPieceColumn);
+                    possibleMovesRow.Add(newPieceRow);
+                    newPieceColumn--;
+                    newPieceRow--;
+                }
+                newPieceColumn = pieceColumn + 1;
+                newPieceRow = pieceRow - 1;
+                while (newPieceColumn < 8 && newPieceRow >= 0)
+                {
+                    possibleMovesColumn.Add(newPieceColumn);
+                    possibleMovesRow.Add(newPieceRow);
+                    newPieceColumn++;
+                    newPieceRow--;
+                }
+                newPieceColumn = pieceColumn - 1;
+                newPieceRow = pieceRow + 1;
+                while (newPieceColumn >= 0 && newPieceRow < 8)
+                {
+                    possibleMovesColumn.Add(newPieceColumn);
+                    possibleMovesRow.Add(newPieceRow);
+                    newPieceColumn--;
+                    newPieceRow++;
+                }
+            }
+        }
+        void moveRook(string pieceType, string fieldType, int pieceRow, int pieceColumn, int newPieceRow, int newPieceColumn, ArrayList possibleMovesRow, ArrayList possibleMovesColumn)
+        {
+            if (fieldType == "Empty" ||
+               (pieceType == "WhiteRook" && blackPiecesNoKing.Contains(fieldType)) ||
+               (pieceType == "BlackRook" && whitePiecesNoKing.Contains(fieldType)))
+            {
+                for (int i = pieceColumn + 1; i < 8; i++)
+                {
+                    newPieceColumn += 1;
+                    possibleMovesColumn.Add(newPieceColumn);
+                    possibleMovesRow.Add(pieceRow);
+                }
+                newPieceColumn = pieceColumn;
+                for (int i = pieceColumn - 1; i >= 0; i--)
+                {
+                    newPieceColumn -= 1;
+                    possibleMovesColumn.Add(newPieceColumn);
+                    possibleMovesRow.Add(pieceRow);
+                }
+                for (int i = pieceRow + 1; i < 8; i++)
+                {
+                    newPieceRow += 1;
+                    possibleMovesColumn.Add(pieceColumn);
+                    possibleMovesRow.Add(newPieceRow);
+                }
+                newPieceRow = pieceRow;
+                for (int i = pieceRow - 1; i >= 0; i--)
+                {
+                    newPieceRow -= 1;
+                    possibleMovesColumn.Add(pieceColumn);
+                    possibleMovesRow.Add(newPieceRow);
+                }
+            }
+        }
+        void moveQueen(string pieceType, string fieldType, int pieceRow, int pieceColumn, int newPieceRow, int newPieceColumn, ArrayList possibleMovesRow, ArrayList possibleMovesColumn)
+        {
+            if (fieldType == "Empty" ||
+               (pieceType == "WhiteQueen" && blackPiecesNoKing.Contains(fieldType)) ||
+               (pieceType == "BlackQueen" && whitePiecesNoKing.Contains(fieldType)))
+            {
+                for (int i = pieceColumn + 1; i < 8; i++)
+                {
+                    newPieceColumn += 1;
+                    possibleMovesColumn.Add(newPieceColumn);
+                    possibleMovesRow.Add(pieceRow);
+                }
+                newPieceColumn = pieceColumn;
+                for (int i = pieceColumn - 1; i >= 0; i--)
+                {
+                    newPieceColumn -= 1;
+                    possibleMovesColumn.Add(newPieceColumn);
+                    possibleMovesRow.Add(pieceRow);
+                }
+                for (int i = pieceRow + 1; i < 8; i++)
+                {
+                    newPieceRow += 1;
+                    possibleMovesColumn.Add(pieceColumn);
+                    possibleMovesRow.Add(newPieceRow);
+                }
+                newPieceRow = pieceRow;
+                for (int i = pieceRow - 1; i >= 0; i--)
+                {
+                    newPieceRow -= 1;
+                    possibleMovesColumn.Add(pieceColumn);
+                    possibleMovesRow.Add(newPieceRow);
+                }
+
+                newPieceColumn = pieceColumn + 1;
+                newPieceRow = pieceRow + 1;
+                while (newPieceColumn < 8 && newPieceRow < 8)
+                {
+                    possibleMovesColumn.Add(newPieceColumn);
+                    possibleMovesRow.Add(newPieceRow);
+                    newPieceColumn++;
+                    newPieceRow++;
+                }
+                newPieceColumn = pieceColumn - 1;
+                newPieceRow = pieceRow - 1;
+                while (newPieceColumn >= 0 && newPieceRow >= 0)
+                {
+                    possibleMovesColumn.Add(newPieceColumn);
+                    possibleMovesRow.Add(newPieceRow);
+                    newPieceColumn--;
+                    newPieceRow--;
+                }
+                newPieceColumn = pieceColumn + 1;
+                newPieceRow = pieceRow - 1;
+                while (newPieceColumn < 8 && newPieceRow >= 0)
+                {
+                    possibleMovesColumn.Add(newPieceColumn);
+                    possibleMovesRow.Add(newPieceRow);
+                    newPieceColumn++;
+                    newPieceRow--;
+                }
+                newPieceColumn = pieceColumn - 1;
+                newPieceRow = pieceRow + 1;
+                while (newPieceColumn >= 0 && newPieceRow < 8)
+                {
+                    possibleMovesColumn.Add(newPieceColumn);
+                    possibleMovesRow.Add(newPieceRow);
+                    newPieceColumn--;
+                    newPieceRow++;
+                }
+            }
+        }
+        void moveKing(string pieceType, string fieldType, int pieceRow, int pieceColumn, ArrayList possibleMovesRow, ArrayList possibleMovesColumn)
+        {
+            if (fieldType == "Empty" ||
+               (pieceType == "WhiteKing" && blackPiecesNoKing.Contains(fieldType)) ||
+               (pieceType == "BlackKing" && whitePiecesNoKing.Contains(fieldType)))
+            {
+                if (pieceColumn - 1 >= 0)
+                {
+                    possibleMovesColumn.Add(pieceColumn - 1);
+                    possibleMovesRow.Add(pieceRow);
+                    if (pieceRow - 1 >= 0)
+                    {
+                        possibleMovesColumn.Add(pieceColumn - 1);
+                        possibleMovesRow.Add(pieceRow - 1);
+                    }
+                    if (pieceRow + 1 < 8)
+                    {
+                        possibleMovesColumn.Add(pieceColumn - 1);
+                        possibleMovesRow.Add(pieceRow + 1);
+                    }
+                }
+                if (pieceColumn + 1 < 8)
+                {
+                    possibleMovesColumn.Add(pieceColumn + 1);
+                    possibleMovesRow.Add(pieceRow);
+                    if (pieceRow - 1 >= 0)
+                    {
+                        possibleMovesColumn.Add(pieceColumn + 1);
+                        possibleMovesRow.Add(pieceRow - 1);
+                    }
+                    if (pieceRow + 1 < 8)
+                    {
+                        possibleMovesColumn.Add(pieceColumn + 1);
+                        possibleMovesRow.Add(pieceRow + 1);
+                    }
+                }
+                if (pieceRow + 1 < 8)
+                {
+                    possibleMovesColumn.Add(pieceColumn);
+                    possibleMovesRow.Add(pieceRow + 1);
+                }
+                if (pieceRow - 1 >= 0)
+                {
+                    possibleMovesColumn.Add(pieceColumn);
+                    possibleMovesRow.Add(pieceRow - 1);
+                }
+            }
         }
     }
 }
