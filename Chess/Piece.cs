@@ -11,12 +11,13 @@ namespace Chess
         public string color;
         public string type;
         public char symbol;
-
+        public bool firstMove;
         public Piece(string setColor, string setType, char setSymbol)
         {
             color = setColor;
             type = setType;
             symbol = setSymbol;
+            firstMove = true;
         }
     }
 }

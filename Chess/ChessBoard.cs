@@ -11,7 +11,6 @@ namespace Chess
     {
         public Piece[,] board = new Piece[8,8];
 
-
         public void Clear()
         {
             for (int i = 0; i < 8; i++)
