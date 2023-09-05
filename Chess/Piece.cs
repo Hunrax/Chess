@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace Chess
 {
+    [Serializable]
     class Piece
     {
         public string color;
@@ -19,5 +20,6 @@ namespace Chess
             symbol = setSymbol;
             firstMove = true;
         }
+
     }
 }

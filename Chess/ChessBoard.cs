@@ -23,7 +23,7 @@ namespace Chess
         }
         public void Initialize()
         {
-            board[0, 0] = new Piece("White", "Rook", 'W');
+            board[0, 0] = new Piece("Black", "Rook", 'W');
             board[0, 1] = new Piece("Black", "Knight", 'S');
             board[0, 2] = new Piece("Black", "Bishop", 'G');
             board[0, 3] = new Piece("Black", "Queen", 'H');
