@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Data.Common;
 using System.Diagnostics;
 using System.IO;
+using System.IO.Ports;
 using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
@@ -24,8 +25,8 @@ namespace Chess
     {
         bool buttonClicked = false;
         Button pressedButton;
-        Piece selectedAdvancePiece;
-        bool advancePieceSelected = false;
+        Piece selectedPromotionPiece;
+        bool promotionPieceSelected = false;
         string turn = "White";
         int movesCounter = 0;
         ChessBoard chessBoard = new ChessBoard();
@@ -38,9 +39,7 @@ namespace Chess
         bool whiteKingUnderCheck = false;
         bool blackKingUnderCheck = false;
 
-        ArrayList whitePiecesNoKing = new ArrayList{ "WhitePawn", "WhiteKnight", "WhiteBishop", "WhiteRook", "WhiteQueen" };
         ArrayList whitePiecesWithKing = new ArrayList { "WhitePawn", "WhiteKnight", "WhiteBishop", "WhiteRook", "WhiteQueen", "WhiteKing" };
-        ArrayList blackPiecesNoKing = new ArrayList { "BlackPawn", "BlackKnight", "BlackBishop", "BlackRook", "BlackQueen" };
         ArrayList blackPiecesWithKing = new ArrayList { "BlackPawn", "BlackKnight", "BlackBishop", "BlackRook", "BlackQueen", "BlackKing" };
         public MainWindow()
         {
@@ -72,37 +71,25 @@ namespace Chess
             else
                 TestModeButton.Content = "TestMode: OFF";
         }
-        void ChooseAdvancePiece(object sender, RoutedEventArgs e)
+        void ChoosePromotionPiece(object sender, RoutedEventArgs e)
         {
             Button button = e.Source as Button;
             string tag = button.Tag.ToString();
             string pieceType = button.Name.ToString();
 
-            if (tag != "Choice")
-            {
-                MessageBox.Show("Choose a piece for advance!");
-                advancePieceSelected = false;
-            }
-            else
-            {
-                selectedAdvancePiece = getPieceFromPieceType(pieceType);
-                advancePieceSelected = true;
-            }
-
-            if (advancePieceSelected)
-            {
+            selectedPromotionPiece = getPieceFromPieceType(pieceType);
+            promotionPieceSelected = true;
                 int pieceRow = Grid.GetRow(pressedButton);
                 int pieceColumn = Grid.GetColumn(pressedButton);
 
-                advancePawn(pieceRow, pieceColumn, pieceType);
-                var brush = new ImageBrush();
-                brush.ImageSource = new BitmapImage(new Uri($"C:/Users/user/Desktop/Chess/Chess/images/{pieceType}.png", UriKind.Relative));
-                pressedButton.Background = brush;
-                pressedButton.Tag = selectedAdvancePiece.color + selectedAdvancePiece.type;
-                chessBoard.board[pieceRow, pieceColumn] = selectedAdvancePiece;
-                chessBoard.board[pieceRow, pieceColumn].firstMove = false;
-                advancePieceSelected = false;
-            }
+            promotePawn(pieceRow, pieceColumn);
+            var brush = new ImageBrush();
+            brush.ImageSource = new BitmapImage(new Uri($"C:/Users/user/Desktop/Chess/Chess/images/{pieceType}.png", UriKind.Relative));
+            pressedButton.Background = brush;
+            pressedButton.Tag = selectedPromotionPiece.color + selectedPromotionPiece.type;
+            chessBoard.board[pieceRow, pieceColumn] = selectedPromotionPiece;
+            chessBoard.board[pieceRow, pieceColumn].firstMove = false;
+            promotionPieceSelected = false;
         }
         void selectPiece(Button button, string piece)
         {
@@ -121,6 +108,7 @@ namespace Chess
 
                 changeChessBoardOpacity(0.5);
                 pressedButton.Opacity = 1;
+                pressedButton.IsEnabled = true;
 
                 string pieceType = pressedButton.Tag.ToString();
                 int pieceRow = Grid.GetRow(pressedButton);
@@ -129,10 +117,6 @@ namespace Chess
                 List<Point> possibleMoves = new List<Point>();
                 generatePossibleMoves(pieceType, pieceRow, pieceColumn, possibleMoves);
                 highlightPossibleFields(possibleMoves);
-            }
-            else if (!buttonClicked && button.Background == Brushes.Transparent)
-            {
-                MessageBox.Show("Select a piece first.");
             }
         }
         void selectField(Button selectedField)
@@ -167,12 +151,10 @@ namespace Chess
             if (correctFieldSelected)
             {
                 movePieceToField(selectedField, pieceType, fieldType, fieldColumn, fieldRow, pieceColumn, pieceRow);
-                advancePawn(fieldRow, fieldColumn, pieceType);
+                promotePawn(fieldRow, fieldColumn);
                 chessBoard.Print();
                 checkIfAnyKingUnderCheck(chessBoard.board);
             }
-            else
-                MessageBox.Show("You can't move this piece here.");
         }
         void performCastling(int rookRow, int rookColumn, int emptyFieldRow, int emptyFieldColumn)
         {
@@ -252,9 +234,17 @@ namespace Chess
         void changeChessBoardOpacity(double opacity)
         {
             foreach (Grid field in dolnaWarstwa.Children)
+            {
                 field.Opacity = opacity;
+            }
             foreach (Button field in gornaWarstwa.Children)
+            {
                 field.Opacity = opacity;
+                if (field.Opacity < 1)
+                    field.IsEnabled = false;
+                else
+                    field.IsEnabled = true;
+            }
         }
         void generatePossibleMoves(string pieceType, int pieceRow, int pieceColumn, List<Point> possibleMoves)
         {
@@ -301,8 +291,14 @@ namespace Chess
                 Grid gridDolnaWarstwa = dolnaWarstwa.Children.Cast<UIElement>()
                     .FirstOrDefault(e => Grid.GetRow(e) == possibleMoves[i].X && Grid.GetColumn(e) == possibleMoves[i].Y) as Grid;
 
+                Button gridGornaWarstwa = gornaWarstwa.Children.Cast<UIElement>()
+                    .FirstOrDefault(e => Grid.GetRow(e) == Grid.GetRow(gridDolnaWarstwa) && Grid.GetColumn(e) == Grid.GetColumn(gridDolnaWarstwa)) as Button;
+
                 if (!isFieldAKing((int)possibleMoves[i].X, (int)possibleMoves[i].Y))
-                    gridDolnaWarstwa.Opacity = 1;              
+                {
+                    gridDolnaWarstwa.Opacity = 1;
+                    gridGornaWarstwa.IsEnabled = true;
+                }
             }
         }
         Piece getPieceFromPieceType(string pieceType)
@@ -620,7 +616,8 @@ namespace Chess
                 Piece piece = chessBoard.board[pieceRow, pieceColumn];
                 Piece piece2 = chessBoard.board[fieldRow, fieldColumn];
 
-                Piece[,] tempBoard = DeepClone(chessBoard.board);
+                Piece[,] tempBoard = new Piece[8,8];
+                tempBoard = cloneChessboard(chessBoard.board);
 
                 tempBoard[fieldRow, fieldColumn] = piece;
                 tempBoard[pieceRow, pieceColumn] = new Piece("None", "Empty", '.');
@@ -640,7 +637,7 @@ namespace Chess
                 return true;
             return false;
         }
-        void advancePawn(int row, int column, string pieceType)
+        void promotePawn(int row, int column)
         {
             string type = GetPieceTypeFromField(row, column);
             string color = getPieceColorFromField(row, column);
@@ -648,39 +645,39 @@ namespace Chess
             {
                 if(color == "White" && row == 0)
                 {
-                    if (!advancePieceSelected)
+                    if (!promotionPieceSelected)
                     {
-                        AdvanceWhiteBishop.Visibility = Visibility.Visible;
-                        AdvanceWhiteKnight.Visibility = Visibility.Visible;
-                        AdvanceWhiteQueen.Visibility = Visibility.Visible;
-                        AdvanceWhiteRook.Visibility = Visibility.Visible;
+                        PromoteWhiteBishop.Visibility = Visibility.Visible;
+                        PromoteWhiteKnight.Visibility = Visibility.Visible;
+                        PromoteWhiteQueen.Visibility = Visibility.Visible;
+                        PromoteWhiteRook.Visibility = Visibility.Visible;
                         changeChessBoardOpacity(0.5);
                     }
                     else
                     {
-                        AdvanceWhiteBishop.Visibility = Visibility.Hidden;
-                        AdvanceWhiteKnight.Visibility = Visibility.Hidden;
-                        AdvanceWhiteQueen.Visibility = Visibility.Hidden;
-                        AdvanceWhiteRook.Visibility = Visibility.Hidden;
+                        PromoteWhiteBishop.Visibility = Visibility.Hidden;
+                        PromoteWhiteKnight.Visibility = Visibility.Hidden;
+                        PromoteWhiteQueen.Visibility = Visibility.Hidden;
+                        PromoteWhiteRook.Visibility = Visibility.Hidden;
                         changeChessBoardOpacity(1);
                     }
                 }
                 if(color == "Black" && row == 7)
                 {
-                    if(!advancePieceSelected)
+                    if(!promotionPieceSelected)
                     {
-                        AdvanceBlackBishop.Visibility = Visibility.Visible;
-                        AdvanceBlackKnight.Visibility = Visibility.Visible;
-                        AdvanceBlackQueen.Visibility = Visibility.Visible;
-                        AdvanceBlackRook.Visibility = Visibility.Visible;
+                        PromoteBlackBishop.Visibility = Visibility.Visible;
+                        PromoteBlackKnight.Visibility = Visibility.Visible;
+                        PromoteBlackQueen.Visibility = Visibility.Visible;
+                        PromoteBlackRook.Visibility = Visibility.Visible;
                         changeChessBoardOpacity(0.5);
                     }
                     else
                     {
-                        AdvanceBlackBishop.Visibility = Visibility.Hidden;
-                        AdvanceBlackKnight.Visibility = Visibility.Hidden;
-                        AdvanceBlackQueen.Visibility = Visibility.Hidden;
-                        AdvanceBlackRook.Visibility = Visibility.Hidden;
+                        PromoteBlackBishop.Visibility = Visibility.Hidden;
+                        PromoteBlackKnight.Visibility = Visibility.Hidden;
+                        PromoteBlackQueen.Visibility = Visibility.Hidden;
+                        PromoteBlackRook.Visibility = Visibility.Hidden;
                         changeChessBoardOpacity(1);
                     }
                 }
@@ -692,12 +689,12 @@ namespace Chess
             {
                 for(int j = 0; j < 8; j++)
                 {
-                    board[i, j] = chessBoard.board[i, j];
+                    board[i, j] = DeepClone(chessBoard.board[i, j]);
                 }
             }
             return board;
         }
-        public static Piece[,] DeepClone<Piece>(Piece[,] obj)
+        public static Piece DeepClone<Piece>(Piece obj)
         {
             using (var ms = new MemoryStream())
             {
@@ -705,7 +702,7 @@ namespace Chess
                 formatter.Serialize(ms, obj);
                 ms.Position = 0;
 
-                return (Piece[,])formatter.Deserialize(ms);
+                return (Piece)formatter.Deserialize(ms);
             }
         }
     }
