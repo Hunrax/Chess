@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:Chess"
         mc:Ignorable="d"
         ResizeMode="NoResize"
-        Title="Chess" Height="800" Width="800" Icon="images/Knight_Black.png">
+        Title="Chess" Height="800" Width="800" Icon="images/BlackKnight.png">
 
     <Window.Resources>
         <Style x:Key="MyButtonStyle" TargetType="Button">
@@ -157,163 +157,163 @@
                             <!-- Biale -->
                             <Button Grid.Row="6" Grid.Column="0" Style="{StaticResource MyButtonStyle}" Click="PieceSelected" Tag="WhitePawn">
                                 <Button.Background>
-                                    <ImageBrush ImageSource="/Chess;component/images/Pawn_White.png"/>
+                                    <ImageBrush ImageSource="/Chess;component/images/WhitePawn.png"/>
                                 </Button.Background>
                             </Button>
                             <Button Grid.Row="6" Grid.Column="1" Style="{StaticResource MyButtonStyle}" Click="PieceSelected" Tag="WhitePawn">
                                 <Button.Background>
-                                    <ImageBrush ImageSource="/Chess;component/images/Pawn_White.png"/>
+                                    <ImageBrush ImageSource="/Chess;component/images/WhitePawn.png"/>
                                 </Button.Background>
                             </Button>
                             <Button Grid.Row="6" Grid.Column="2" Style="{StaticResource MyButtonStyle}" Click="PieceSelected" Tag="WhitePawn">
                                 <Button.Background>
-                                    <ImageBrush ImageSource="/Chess;component/images/Pawn_White.png"/>
+                                    <ImageBrush ImageSource="/Chess;component/images/WhitePawn.png"/>
                                 </Button.Background>
                             </Button>
                             <Button Grid.Row="6" Grid.Column="3" Style="{StaticResource MyButtonStyle}" Click="PieceSelected" Tag="WhitePawn">
                                 <Button.Background>
-                                    <ImageBrush ImageSource="/Chess;component/images/Pawn_White.png"/>
+                                    <ImageBrush ImageSource="/Chess;component/images/WhitePawn.png"/>
                                 </Button.Background>
                             </Button>
                             <Button Grid.Row="6" Grid.Column="4" Style="{StaticResource MyButtonStyle}" Click="PieceSelected" Tag="WhitePawn">
                                 <Button.Background>
-                                    <ImageBrush ImageSource="/Chess;component/images/Pawn_White.png"/>
+                                    <ImageBrush ImageSource="/Chess;component/images/WhitePawn.png"/>
                                 </Button.Background>
                             </Button>
                             <Button Grid.Row="6" Grid.Column="5" Style="{StaticResource MyButtonStyle}" Click="PieceSelected" Tag="WhitePawn">
                                 <Button.Background>
-                                    <ImageBrush ImageSource="/Chess;component/images/Pawn_White.png"/>
+                                    <ImageBrush ImageSource="/Chess;component/images/WhitePawn.png"/>
                                 </Button.Background>
                             </Button>
                             <Button Grid.Row="6" Grid.Column="6" Style="{StaticResource MyButtonStyle}" Click="PieceSelected" Tag="WhitePawn">
                                 <Button.Background>
-                                    <ImageBrush ImageSource="/Chess;component/images/Pawn_White.png"/>
+                                    <ImageBrush ImageSource="/Chess;component/images/WhitePawn.png"/>
                                 </Button.Background>
                             </Button>
                             <Button Grid.Row="6" Grid.Column="7" Style="{StaticResource MyButtonStyle}" Click="PieceSelected" Tag="WhitePawn">
                                 <Button.Background>
-                                    <ImageBrush ImageSource="/Chess;component/images/Pawn_White.png"/>
+                                    <ImageBrush ImageSource="/Chess;component/images/WhitePawn.png"/>
                                 </Button.Background>
                             </Button>
                             <Button Grid.Row="7" Grid.Column="0" Style="{StaticResource MyButtonStyle}" Click="PieceSelected" Tag="WhiteRook">
                                 <Button.Background>
-                                    <ImageBrush ImageSource="/Chess;component/images/Rook_White.png"/>
+                                    <ImageBrush ImageSource="/Chess;component/images/WhiteRook.png"/>
                                 </Button.Background>
                             </Button>
                             <Button Grid.Row="7" Grid.Column="1" Style="{StaticResource MyButtonStyle}" Click="PieceSelected" Tag="WhiteKnight">
                                 <Button.Background>
-                                    <ImageBrush ImageSource="/Chess;component/images/Knight_White.png"/>
+                                    <ImageBrush ImageSource="/Chess;component/images/WhiteKnight.png"/>
                                 </Button.Background>
                             </Button>
                             <Button Grid.Row="7" Grid.Column="2" Style="{StaticResource MyButtonStyle}" Click="PieceSelected" Tag="WhiteBishop">
                                 <Button.Background>
-                                    <ImageBrush ImageSource="/Chess;component/images/Bishop_White.png"/>
+                                    <ImageBrush ImageSource="/Chess;component/images/WhiteBishop.png"/>
                                 </Button.Background>
                             </Button>
                             <Button Grid.Row="7" Grid.Column="3" Style="{StaticResource MyButtonStyle}" Click="PieceSelected" Tag="WhiteQueen">
                                 <Button.Background>
-                                    <ImageBrush ImageSource="/Chess;component/images/Queen_White.png"/>
+                                    <ImageBrush ImageSource="/Chess;component/images/WhiteQueen.png"/>
                                 </Button.Background>
                             </Button>
                             <Button Grid.Row="7" Grid.Column="4" Style="{StaticResource MyButtonStyle}" Click="PieceSelected" Tag="WhiteKing">
                                 <Button.Background>
-                                    <ImageBrush ImageSource="/Chess;component/images/King_White.png"/>
+                                    <ImageBrush ImageSource="/Chess;component/images/WhiteKing.png"/>
                                 </Button.Background>
                             </Button>
                             <Button Grid.Row="7" Grid.Column="5" Style="{StaticResource MyButtonStyle}" Click="PieceSelected" Tag="WhiteBishop">
                                 <Button.Background>
-                                    <ImageBrush ImageSource="/Chess;component/images/Bishop_White.png"/>
+                                    <ImageBrush ImageSource="/Chess;component/images/WhiteBishop.png"/>
                                 </Button.Background>
                             </Button>
                             <Button Grid.Row="7" Grid.Column="6" Style="{StaticResource MyButtonStyle}" Click="PieceSelected" Tag="WhiteKnight">
                                 <Button.Background>
-                                    <ImageBrush ImageSource="/Chess;component/images/Knight_White.png"/>
+                                    <ImageBrush ImageSource="/Chess;component/images/WhiteKnight.png"/>
                                 </Button.Background>
                             </Button>
                             <Button Grid.Row="7" Grid.Column="7" Style="{StaticResource MyButtonStyle}" Click="PieceSelected" Tag="WhiteRook">
                                 <Button.Background>
-                                    <ImageBrush ImageSource="/Chess;component/images/Rook_White.png"/>
+                                    <ImageBrush ImageSource="/Chess;component/images/WhiteRook.png"/>
                                 </Button.Background>
                             </Button>
                             <!-- Czarne -->
                             <Button Grid.Row="1" Grid.Column="0" Style="{StaticResource MyButtonStyle}" Click="PieceSelected" Tag="BlackPawn">
                                 <Button.Background>
-                                    <ImageBrush ImageSource="/Chess;component/images/Pawn_Black.png"/>
+                                    <ImageBrush ImageSource="/Chess;component/images/BlackPawn.png"/>
                                 </Button.Background>
                             </Button>
                             <Button Grid.Row="1" Grid.Column="1" Style="{StaticResource MyButtonStyle}" Click="PieceSelected" Tag="BlackPawn">
                                 <Button.Background>
-                                    <ImageBrush ImageSource="/Chess;component/images/Pawn_Black.png"/>
+                                    <ImageBrush ImageSource="/Chess;component/images/BlackPawn.png"/>
                                 </Button.Background>
                             </Button>
                             <Button Grid.Row="1" Grid.Column="2" Style="{StaticResource MyButtonStyle}" Click="PieceSelected" Tag="BlackPawn">
                                 <Button.Background>
-                                    <ImageBrush ImageSource="/Chess;component/images/Pawn_Black.png"/>
+                                    <ImageBrush ImageSource="/Chess;component/images/BlackPawn.png"/>
                                 </Button.Background>
                             </Button>
                             <Button Grid.Row="1" Grid.Column="3" Style="{StaticResource MyButtonStyle}" Click="PieceSelected" Tag="BlackPawn">
                                 <Button.Background>
-                                    <ImageBrush ImageSource="/Chess;component/images/Pawn_Black.png"/>
+                                    <ImageBrush ImageSource="/Chess;component/images/BlackPawn.png"/>
                                 </Button.Background>
                             </Button>
                             <Button Grid.Row="1" Grid.Column="4" Style="{StaticResource MyButtonStyle}" Click="PieceSelected" Tag="BlackPawn">
                                 <Button.Background>
-                                    <ImageBrush ImageSource="/Chess;component/images/Pawn_Black.png"/>
+                                    <ImageBrush ImageSource="/Chess;component/images/BlackPawn.png"/>
                                 </Button.Background>
                             </Button>
                             <Button Grid.Row="1" Grid.Column="5" Style="{StaticResource MyButtonStyle}" Click="PieceSelected" Tag="BlackPawn">
                                 <Button.Background>
-                                    <ImageBrush ImageSource="/Chess;component/images/Pawn_Black.png"/>
+                                    <ImageBrush ImageSource="/Chess;component/images/BlackPawn.png"/>
                                 </Button.Background>
                             </Button>
                             <Button Grid.Row="1" Grid.Column="6" Style="{StaticResource MyButtonStyle}" Click="PieceSelected" Tag="BlackPawn">
                                 <Button.Background>
-                                    <ImageBrush ImageSource="/Chess;component/images/Pawn_Black.png"/>
+                                    <ImageBrush ImageSource="/Chess;component/images/BlackPawn.png"/>
                                 </Button.Background>
                             </Button>
                             <Button Grid.Row="1" Grid.Column="7" Style="{StaticResource MyButtonStyle}" Click="PieceSelected" Tag="BlackPawn">
                                 <Button.Background>
-                                    <ImageBrush ImageSource="/Chess;component/images/Pawn_Black.png"/>
+                                    <ImageBrush ImageSource="/Chess;component/images/BlackPawn.png"/>
                                 </Button.Background>
                             </Button>
                             <Button Grid.Row="0" Grid.Column="0" Style="{StaticResource MyButtonStyle}" Click="PieceSelected" Tag="BlackRook">
                                 <Button.Background>
-                                    <ImageBrush ImageSource="/Chess;component/images/Rook_Black.png"/>
+                                    <ImageBrush ImageSource="/Chess;component/images/BlackRook.png"/>
                                 </Button.Background>
                             </Button>
                             <Button Grid.Row="0" Grid.Column="1" Style="{StaticResource MyButtonStyle}" Click="PieceSelected" Tag="BlackKnight">
                                 <Button.Background>
-                                    <ImageBrush ImageSource="/Chess;component/images/Knight_Black.png"/>
+                                    <ImageBrush ImageSource="/Chess;component/images/BlackKnight.png"/>
                                 </Button.Background>
                             </Button>
                             <Button Grid.Row="0" Grid.Column="2" Style="{StaticResource MyButtonStyle}" Click="PieceSelected" Tag="BlackBishop">
                                 <Button.Background>
-                                    <ImageBrush ImageSource="/Chess;component/images/Bishop_Black.png"/>
+                                    <ImageBrush ImageSource="/Chess;component/images/BlackBishop.png"/>
                                 </Button.Background>
                             </Button>
                             <Button Grid.Row="0" Grid.Column="3" Style="{StaticResource MyButtonStyle}" Click="PieceSelected" Tag="BlackQueen">
                                 <Button.Background>
-                                    <ImageBrush ImageSource="/Chess;component/images/Queen_Black.png"/>
+                                    <ImageBrush ImageSource="/Chess;component/images/BlackQueen.png"/>
                                 </Button.Background>
                             </Button>
                             <Button Grid.Row="0" Grid.Column="4" Style="{StaticResource MyButtonStyle}" Click="PieceSelected" Tag="BlackKing">
                                 <Button.Background>
-                                    <ImageBrush ImageSource="/Chess;component/images/King_Black.png"/>
+                                    <ImageBrush ImageSource="/Chess;component/images/BlackKing.png"/>
                                 </Button.Background>
                             </Button>
                             <Button Grid.Row="0" Grid.Column="5" Style="{StaticResource MyButtonStyle}" Click="PieceSelected" Tag="BlackBishop">
                                 <Button.Background>
-                                    <ImageBrush ImageSource="/Chess;component/images/Bishop_Black.png"/>
+                                    <ImageBrush ImageSource="/Chess;component/images/BlackBishop.png"/>
                                 </Button.Background>
                             </Button>
                             <Button Grid.Row="0" Grid.Column="6" Style="{StaticResource MyButtonStyle}" Click="PieceSelected" Tag="BlackKnight">
                                 <Button.Background>
-                                    <ImageBrush ImageSource="/Chess;component/images/Knight_Black.png"/>
+                                    <ImageBrush ImageSource="/Chess;component/images/BlackKnight.png"/>
                                 </Button.Background>
                             </Button>
                             <Button Grid.Row="0" Grid.Column="7" Style="{StaticResource MyButtonStyle}" Click="PieceSelected" Tag="BlackRook">
                                 <Button.Background>
-                                    <ImageBrush ImageSource="/Chess;component/images/Rook_Black.png"/>
+                                    <ImageBrush ImageSource="/Chess;component/images/BlackRook.png"/>
                                 </Button.Background>
                             </Button>
                             <!-- Puste pola-->
@@ -408,31 +408,60 @@
         <TextBox Margin="715,158,10,535" Text="7" TextAlignment="Center" FontSize="40" Background="Transparent" Foreground="#4E3524" FontWeight="Bold" BorderThickness="0" IsReadOnly="True"/>
         <TextBox Margin="714,82,10,611" Text="8" TextAlignment="Center" FontSize="40" Background="Transparent" Foreground="#4E3524" FontWeight="Bold" BorderThickness="0" IsReadOnly="True"/>
 
-        <Border Name="AdvanceBlackQueen" Background="BurlyWood" BorderBrush="SaddleBrown" BorderThickness="4" Height="59" CornerRadius="25,25,25,25" Margin="217,356,491,356" Visibility ="Visible">
-            <Button Name="AdvanceBlackQueenButton" Style="{StaticResource MyButtonStyle}" Margin="17,6">
+        <Border Name="AdvanceBlackQueen" Background="BurlyWood" BorderBrush="SaddleBrown" BorderThickness="4" Height="59" CornerRadius="25,25,25,25" Margin="217,356,491,356" Visibility ="Hidden">
+            <Button Name="BlackQueen" Click="ChooseAdvancePiece" Style="{StaticResource MyButtonStyle}" Tag="Choice" Margin="17,6">
                 <Button.Background>
-                    <ImageBrush ImageSource="/Chess;component/images/Queen_Black.png"/>
+                    <ImageBrush ImageSource="/Chess;component/images/BlackQueen.png"/>
                 </Button.Background>
             </Button>
         </Border>
-        <Border Name="AdvanceBlackRook" Background="BurlyWood" BorderBrush="SaddleBrown" BorderThickness="4" Height="59" CornerRadius="25,25,25,25" Margin="308,356,400,356" Visibility ="Visible">
-            <Button Name="AdvanceBlackRookButton" Style="{StaticResource MyButtonStyle}" Margin="17,6">
+        <Border Name="AdvanceBlackRook" Background="BurlyWood" BorderBrush="SaddleBrown" BorderThickness="4" Height="59" CornerRadius="25,25,25,25" Margin="308,356,400,356" Visibility ="Hidden">
+            <Button Name="BlackRook" Click="ChooseAdvancePiece" Style="{StaticResource MyButtonStyle}" Tag="Choice" Margin="17,6">
                 <Button.Background>
-                    <ImageBrush ImageSource="/Chess;component/images/Rook_Black.png"/>
+                    <ImageBrush ImageSource="/Chess;component/images/BlackRook.png"/>
                 </Button.Background>
             </Button>
         </Border>
-        <Border Name="AdvanceBlackKnight" Background="BurlyWood" BorderBrush="SaddleBrown" BorderThickness="4" Height="59" CornerRadius="25,25,25,25" Margin="399,356,309,356" Visibility ="Visible">
-            <Button Name="AdvanceBlackKnightButton" Style="{StaticResource MyButtonStyle}" Margin="17,6">
+        <Border Name="AdvanceBlackKnight" Background="BurlyWood" BorderBrush="SaddleBrown" BorderThickness="4" Height="59" CornerRadius="25,25,25,25" Margin="399,356,309,356" Visibility ="Hidden">
+            <Button Name="BlackKnight" Click="ChooseAdvancePiece" Style="{StaticResource MyButtonStyle}" Tag="Choice" Margin="17,6">
                 <Button.Background>
-                    <ImageBrush ImageSource="/Chess;component/images/Knight_Black.png"/>
+                    <ImageBrush ImageSource="/Chess;component/images/BlackKnight.png"/>
                 </Button.Background>
             </Button>
         </Border>
-        <Border Name="AdvanceBlackBishop" Background="BurlyWood" BorderBrush="SaddleBrown" BorderThickness="4" Height="59" CornerRadius="25,25,25,25" Margin="490,356,218,356" Visibility ="Visible">
-            <Button Name="AdvanceBlackBishopButton" Style="{StaticResource MyButtonStyle}" Margin="17,6">
+        <Border Name="AdvanceBlackBishop" Background="BurlyWood" BorderBrush="SaddleBrown" BorderThickness="4" Height="59" CornerRadius="25,25,25,25" Margin="490,356,218,356" Visibility ="Hidden">
+            <Button Name="BlackBishop" Click="ChooseAdvancePiece" Style="{StaticResource MyButtonStyle}" Tag="Choice" Margin="17,6">
                 <Button.Background>
-                    <ImageBrush ImageSource="/Chess;component/images/Bishop_Black.png"/>
+                    <ImageBrush ImageSource="/Chess;component/images/BlackBishop.png"/>
+                </Button.Background>
+            </Button>
+        </Border>
+
+        <Border Name="AdvanceWhiteQueen" Background="BurlyWood" BorderBrush="SaddleBrown" BorderThickness="4" Height="59" CornerRadius="25,25,25,25" Margin="217,356,491,356" Visibility ="Hidden">
+            <Button Name="WhiteQueen" Click="ChooseAdvancePiece" Style="{StaticResource MyButtonStyle}" Tag="Choice" Margin="17,6">
+                <Button.Background>
+                    <ImageBrush ImageSource="/Chess;component/images/WhiteQueen.png"/>
+                </Button.Background>
+            </Button>
+        </Border>
+        <Border Name="AdvanceWhiteRook" Background="BurlyWood" BorderBrush="SaddleBrown" BorderThickness="4" Height="59" CornerRadius="25,25,25,25" Margin="308,356,400,356" Visibility ="Hidden">
+            <Button Name="WhiteRook" Click="ChooseAdvancePiece" Style="{StaticResource MyButtonStyle}" Tag="Choice" Margin="17,6">
+                <Button.Background>
+                    <ImageBrush ImageSource="/Chess;component/images/WhiteRook.png"/>
+                </Button.Background>
+            </Button>
+        </Border>
+        <Border Name="AdvanceWhiteKnight" Background="BurlyWood" BorderBrush="SaddleBrown" BorderThickness="4" Height="59" CornerRadius="25,25,25,25" Margin="399,356,309,356" Visibility ="Hidden">
+            <Button Name="WhiteKnight" Click="ChooseAdvancePiece" Style="{StaticResource MyButtonStyle}" Tag="Choice" Margin="17,6">
+                <Button.Background>
+                    <ImageBrush ImageSource="/Chess;component/images/WhiteKnight.png"/>
+                </Button.Background>
+            </Button>
+        </Border>
+        <Border Name="AdvanceWhiteBishop" Background="BurlyWood" BorderBrush="SaddleBrown" BorderThickness="4" Height="59" CornerRadius="25,25,25,25" Margin="490,356,218,356" Visibility ="Hidden">
+            <Button Name="WhiteBishop" Click="ChooseAdvancePiece" Style="{StaticResource MyButtonStyle}" Tag="Choice" Margin="17,6">
+                <Button.Background>
+                    <ImageBrush ImageSource="/Chess;component/images/WhiteBishop.png"/>
                 </Button.Background>
             </Button>
         </Border>

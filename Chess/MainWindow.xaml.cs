@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -23,6 +24,8 @@ namespace Chess
     {
         bool buttonClicked = false;
         Button pressedButton;
+        Piece selectedAdvancePiece;
+        bool advancePieceSelected = false;
         string turn = "White";
         int movesCounter = 0;
         ChessBoard chessBoard = new ChessBoard();
@@ -34,7 +37,6 @@ namespace Chess
         bool blackLongCastling = false;
         bool whiteKingUnderCheck = false;
         bool blackKingUnderCheck = false;
-
 
         ArrayList whitePiecesNoKing = new ArrayList{ "WhitePawn", "WhiteKnight", "WhiteBishop", "WhiteRook", "WhiteQueen" };
         ArrayList whitePiecesWithKing = new ArrayList { "WhitePawn", "WhiteKnight", "WhiteBishop", "WhiteRook", "WhiteQueen", "WhiteKing" };
@@ -69,6 +71,38 @@ namespace Chess
                 TestModeButton.Content = "TestMode: ON";
             else
                 TestModeButton.Content = "TestMode: OFF";
+        }
+        void ChooseAdvancePiece(object sender, RoutedEventArgs e)
+        {
+            Button button = e.Source as Button;
+            string tag = button.Tag.ToString();
+            string pieceType = button.Name.ToString();
+
+            if (tag != "Choice")
+            {
+                MessageBox.Show("Choose a piece for advance!");
+                advancePieceSelected = false;
+            }
+            else
+            {
+                selectedAdvancePiece = getPieceFromPieceType(pieceType);
+                advancePieceSelected = true;
+            }
+
+            if (advancePieceSelected)
+            {
+                int pieceRow = Grid.GetRow(pressedButton);
+                int pieceColumn = Grid.GetColumn(pressedButton);
+
+                advancePawn(pieceRow, pieceColumn, pieceType);
+                var brush = new ImageBrush();
+                brush.ImageSource = new BitmapImage(new Uri($"C:/Users/user/Desktop/Chess/Chess/images/{pieceType}.png", UriKind.Relative));
+                pressedButton.Background = brush;
+                pressedButton.Tag = selectedAdvancePiece.color + selectedAdvancePiece.type;
+                chessBoard.board[pieceRow, pieceColumn] = selectedAdvancePiece;
+                chessBoard.board[pieceRow, pieceColumn].firstMove = false;
+                advancePieceSelected = false;
+            }
         }
         void selectPiece(Button button, string piece)
         {
@@ -112,7 +146,6 @@ namespace Chess
             if (fieldColumn == pieceColumn && fieldRow == pieceRow)
             {
                 changeChessBoardOpacity(1);
-
                 buttonClicked = false;
                 return;
             }
@@ -131,10 +164,10 @@ namespace Chess
                     break;
                 }
             }
-
             if (correctFieldSelected)
             {
                 movePieceToField(selectedField, pieceType, fieldType, fieldColumn, fieldRow, pieceColumn, pieceRow);
+                advancePawn(fieldRow, fieldColumn, pieceType);
                 chessBoard.Print();
                 checkIfAnyKingUnderCheck(chessBoard.board);
             }
@@ -607,7 +640,7 @@ namespace Chess
                 return true;
             return false;
         }
-        void advancePawn(int row, int column)
+        void advancePawn(int row, int column, string pieceType)
         {
             string type = GetPieceTypeFromField(row, column);
             string color = getPieceColorFromField(row, column);
@@ -615,11 +648,41 @@ namespace Chess
             {
                 if(color == "White" && row == 0)
                 {
-                    
+                    if (!advancePieceSelected)
+                    {
+                        AdvanceWhiteBishop.Visibility = Visibility.Visible;
+                        AdvanceWhiteKnight.Visibility = Visibility.Visible;
+                        AdvanceWhiteQueen.Visibility = Visibility.Visible;
+                        AdvanceWhiteRook.Visibility = Visibility.Visible;
+                        changeChessBoardOpacity(0.5);
+                    }
+                    else
+                    {
+                        AdvanceWhiteBishop.Visibility = Visibility.Hidden;
+                        AdvanceWhiteKnight.Visibility = Visibility.Hidden;
+                        AdvanceWhiteQueen.Visibility = Visibility.Hidden;
+                        AdvanceWhiteRook.Visibility = Visibility.Hidden;
+                        changeChessBoardOpacity(1);
+                    }
                 }
                 if(color == "Black" && row == 7)
                 {
-
+                    if(!advancePieceSelected)
+                    {
+                        AdvanceBlackBishop.Visibility = Visibility.Visible;
+                        AdvanceBlackKnight.Visibility = Visibility.Visible;
+                        AdvanceBlackQueen.Visibility = Visibility.Visible;
+                        AdvanceBlackRook.Visibility = Visibility.Visible;
+                        changeChessBoardOpacity(0.5);
+                    }
+                    else
+                    {
+                        AdvanceBlackBishop.Visibility = Visibility.Hidden;
+                        AdvanceBlackKnight.Visibility = Visibility.Hidden;
+                        AdvanceBlackQueen.Visibility = Visibility.Hidden;
+                        AdvanceBlackRook.Visibility = Visibility.Hidden;
+                        changeChessBoardOpacity(1);
+                    }
                 }
             }
         }
