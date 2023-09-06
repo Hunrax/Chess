@@ -25,6 +25,7 @@ namespace Chess
 
         private const int CHESSBOARD_MINIMUM_INDEX = 0;
         private const int CHESSBOARD_MAXIMUM_INDEX = 7;
+        private const int CHESSBOARD_SIZE = 8;
 
         Button pressedButton;
         Piece selectedPromotionPiece;
@@ -80,17 +81,16 @@ namespace Chess
         void ChoosePromotionPiece(object sender, RoutedEventArgs e)
         {
             Button button = e.Source as Button;
-            string tag = button.Tag.ToString();
             string pieceType = button.Name.ToString();
 
             selectedPromotionPiece = getPieceFromPieceType(pieceType);
             promotionPieceSelected = true;
-                int pieceRow = Grid.GetRow(pressedButton);
-                int pieceColumn = Grid.GetColumn(pressedButton);
+            int pieceRow = Grid.GetRow(pressedButton);
+            int pieceColumn = Grid.GetColumn(pressedButton);
 
             promotePawn(pieceRow, pieceColumn);
             var brush = new ImageBrush();
-            brush.ImageSource = new BitmapImage(new Uri($"C:/Users/user/Desktop/Chess/Chess/images/{pieceType}.png", UriKind.Relative));
+            brush.ImageSource = new BitmapImage(new Uri($"images/{pieceType}.png", UriKind.Relative));
             pressedButton.Background = brush;
             pressedButton.Tag = selectedPromotionPiece.color + selectedPromotionPiece.type;
             chessBoard.board[pieceRow, pieceColumn] = selectedPromotionPiece;
@@ -431,7 +431,7 @@ namespace Chess
         {
             int newPieceColumn = pieceColumn + 1;
             int newPieceRow = pieceRow + 1;
-            while (newPieceColumn < 8 && newPieceRow < 8)
+            while (newPieceColumn < CHESSBOARD_SIZE && newPieceRow < CHESSBOARD_SIZE)
             {
                 if(canPieceMoveHere(newPieceRow, newPieceColumn, getPieceColorFromPieceType(pieceType)))
                     possibleMoves.Add(new Point(newPieceRow, newPieceColumn));
@@ -442,7 +442,7 @@ namespace Chess
             }
             newPieceColumn = pieceColumn - 1;
             newPieceRow = pieceRow - 1;
-            while (newPieceColumn >= 0 && newPieceRow >= 0)
+            while (newPieceColumn >= CHESSBOARD_MINIMUM_INDEX && newPieceRow >= CHESSBOARD_MINIMUM_INDEX)
             {
                 if (canPieceMoveHere(newPieceRow, newPieceColumn, getPieceColorFromPieceType(pieceType)))
                     possibleMoves.Add(new Point(newPieceRow, newPieceColumn));
@@ -453,7 +453,7 @@ namespace Chess
             }
             newPieceColumn = pieceColumn + 1;
             newPieceRow = pieceRow - 1;
-            while (newPieceColumn < 8 && newPieceRow >= 0)
+            while (newPieceColumn < CHESSBOARD_SIZE && newPieceRow >= CHESSBOARD_MINIMUM_INDEX)
             {
                 if (canPieceMoveHere(newPieceRow, newPieceColumn, getPieceColorFromPieceType(pieceType)))
                     possibleMoves.Add(new Point(newPieceRow, newPieceColumn));
@@ -464,7 +464,7 @@ namespace Chess
             }
             newPieceColumn = pieceColumn - 1;
             newPieceRow = pieceRow + 1;
-            while (newPieceColumn >= 0 && newPieceRow < 8)
+            while (newPieceColumn >= CHESSBOARD_MINIMUM_INDEX && newPieceRow < CHESSBOARD_SIZE)
             {
                 if (canPieceMoveHere(newPieceRow, newPieceColumn, getPieceColorFromPieceType(pieceType)))
                     possibleMoves.Add(new Point(newPieceRow, newPieceColumn));
@@ -478,7 +478,7 @@ namespace Chess
         {
             int newPieceRow = pieceRow;
             int newPieceColumn = pieceColumn;
-            for (int i = pieceColumn + 1; i < 8; i++)
+            for (int i = pieceColumn + 1; i < CHESSBOARD_SIZE; i++)
             {
                 newPieceColumn += 1;
                 if (canPieceMoveHere(pieceRow, newPieceColumn, getPieceColorFromPieceType(pieceType)))
@@ -487,7 +487,7 @@ namespace Chess
                     break;
             }
             newPieceColumn = pieceColumn;
-            for (int i = pieceColumn - 1; i >= 0; i--)
+            for (int i = pieceColumn - 1; i >= CHESSBOARD_MINIMUM_INDEX; i--)
             {
                 newPieceColumn -= 1;
                 if (canPieceMoveHere(pieceRow, newPieceColumn, getPieceColorFromPieceType(pieceType)))
@@ -495,7 +495,7 @@ namespace Chess
                 if (!isFieldEmpty(pieceRow, newPieceColumn))
                     break;
             }
-            for (int i = pieceRow + 1; i < 8; i++)
+            for (int i = pieceRow + 1; i < CHESSBOARD_SIZE; i++)
             {
                 newPieceRow += 1;
                 if (canPieceMoveHere(newPieceRow, pieceColumn, getPieceColorFromPieceType(pieceType)))
@@ -504,7 +504,7 @@ namespace Chess
                     break;
             }
             newPieceRow = pieceRow;
-            for (int i = pieceRow - 1; i >= 0; i--)
+            for (int i = pieceRow - 1; i >= CHESSBOARD_MINIMUM_INDEX; i--)
             {
                 newPieceRow -= 1;
                 if (canPieceMoveHere(newPieceRow, pieceColumn, getPieceColorFromPieceType(pieceType)))
@@ -569,9 +569,9 @@ namespace Chess
         List<Point> generateAllPossibleMoves(Piece[,] chessBoard)
         {
             List<Point> possibleMoves = new List<Point>();
-            for (int i = 0; i < 8; i++)
+            for (int i = 0; i < CHESSBOARD_SIZE; i++)
             {
-                for (int j = 0; j < 8; j++)
+                for (int j = 0; j < CHESSBOARD_SIZE; j++)
                 {
                     if (!isFieldEmpty(i, j))
                     {
@@ -622,7 +622,7 @@ namespace Chess
                 Piece piece = chessBoard.board[pieceRow, pieceColumn];
                 Piece piece2 = chessBoard.board[fieldRow, fieldColumn];
 
-                Piece[,] tempBoard = new Piece[8,8];
+                Piece[,] tempBoard = new Piece[CHESSBOARD_SIZE, CHESSBOARD_SIZE];
                 tempBoard = cloneChessboard(chessBoard.board);
 
                 tempBoard[fieldRow, fieldColumn] = piece;
@@ -691,9 +691,9 @@ namespace Chess
         }
         Piece[,] cloneChessboard(Piece[,] board)
         {
-            for(int i = 0; i < 8; i++)
+            for(int i = 0; i < CHESSBOARD_SIZE; i++)
             {
-                for(int j = 0; j < 8; j++)
+                for(int j = 0; j < CHESSBOARD_SIZE; j++)
                 {
                     board[i, j] = DeepClone(chessBoard.board[i, j]);
                 }
