@@ -1,41 +1,47 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Data.Common;
 using System.Diagnostics;
 using System.IO;
-using System.IO.Ports;
 using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace Chess
 {
     public partial class MainWindow : Window
     {
-        bool buttonClicked = false;
+        private const int LONG_CASTLING_KING_COLUMN = 2;
+        private const int SHORT_CASTLING_KING_COLUMN = 6;
+        private const int WHITE_CASTLING_ROOK_ROW = 7;
+        private const int BLACK_CASTLING_ROOK_ROW = 0;
+        private const int SHORT_CASTLING_ROOK_COLUMN = 7;
+        private const int SHORT_CASTLING_EMPTYFIELD_COLUMN = 5;
+        private const int LONG_CASTLING_ROOK_COLUMN = 0;
+        private const int LONG_CASTLING_EMPTYFIELD_COLUMN = 3;
+
+        private const int CHESSBOARD_MINIMUM_INDEX = 0;
+        private const int CHESSBOARD_MAXIMUM_INDEX = 7;
+
         Button pressedButton;
         Piece selectedPromotionPiece;
-        bool promotionPieceSelected = false;
+        ChessBoard chessBoard = new ChessBoard();
+        bool buttonClicked = false;
+
+        bool testMode = false;
         string turn = "White";
         int movesCounter = 0;
-        ChessBoard chessBoard = new ChessBoard();
-        bool testMode = false;
+
+        bool promotionPieceSelected = false;
 
         bool whiteShortCastling = false;
         bool whiteLongCastling = false;
         bool blackShortCastling = false;
         bool blackLongCastling = false;
+
         bool whiteKingUnderCheck = false;
         bool blackKingUnderCheck = false;
 
@@ -183,25 +189,25 @@ namespace Chess
             Grid.SetRow(selectedField, pieceRow);
             chessBoard.board[pieceRow, pieceColumn] = new Piece("None", "Empty", '.');
 
-            if (whiteShortCastling && pieceType == "WhiteKing" && fieldColumn == 6)
+            if (whiteShortCastling && pieceType == "WhiteKing" && fieldColumn == SHORT_CASTLING_KING_COLUMN)
             {
-                performCastling(7, 7, 7, 5);
+                performCastling(WHITE_CASTLING_ROOK_ROW, SHORT_CASTLING_ROOK_COLUMN, WHITE_CASTLING_ROOK_ROW, SHORT_CASTLING_EMPTYFIELD_COLUMN);
                 whiteShortCastling = false;
             }
-            if (whiteLongCastling && pieceType == "WhiteKing" && fieldColumn == 2)
+            if (whiteLongCastling && pieceType == "WhiteKing" && fieldColumn == LONG_CASTLING_KING_COLUMN)
             {
-                performCastling(7, 0, 7, 3);
+                performCastling(WHITE_CASTLING_ROOK_ROW, LONG_CASTLING_ROOK_COLUMN, WHITE_CASTLING_ROOK_ROW, LONG_CASTLING_EMPTYFIELD_COLUMN);
                 whiteLongCastling = false;
             }
 
-            if (blackShortCastling && pieceType == "BlackKing" && fieldColumn == 6)
+            if (blackShortCastling && pieceType == "BlackKing" && fieldColumn == SHORT_CASTLING_KING_COLUMN)
             {
-                performCastling(0, 7, 0, 5);
+                performCastling(BLACK_CASTLING_ROOK_ROW, SHORT_CASTLING_ROOK_COLUMN, BLACK_CASTLING_ROOK_ROW, SHORT_CASTLING_EMPTYFIELD_COLUMN);
                 blackShortCastling = false;
             }
-            if (blackLongCastling && pieceType == "BlackKing" && fieldColumn == 2)
+            if (blackLongCastling && pieceType == "BlackKing" && fieldColumn == LONG_CASTLING_KING_COLUMN)
             {
-                performCastling(0, 0, 0, 3);
+                performCastling(BLACK_CASTLING_ROOK_ROW, LONG_CASTLING_ROOK_COLUMN, BLACK_CASTLING_ROOK_ROW, LONG_CASTLING_EMPTYFIELD_COLUMN);
                 blackLongCastling = false;
             }
 
@@ -357,7 +363,7 @@ namespace Chess
         }
         bool isFieldEmpty(int row, int column)
         {
-            if (row < 0 || row > 7 || column < 0 || column > 7)
+            if (row < CHESSBOARD_MINIMUM_INDEX || row > CHESSBOARD_MAXIMUM_INDEX || column < CHESSBOARD_MINIMUM_INDEX || column > CHESSBOARD_MAXIMUM_INDEX)
                 return false;
             if (chessBoard.board[row, column].type == "Empty")
                 return true;
@@ -365,7 +371,7 @@ namespace Chess
         }
         bool isFieldPossibleToCapture(int row, int column, string pieceColor)
         {
-            if (row < 0 || row > 7 || column < 0 || column > 7)
+            if (row < CHESSBOARD_MINIMUM_INDEX || row > CHESSBOARD_MAXIMUM_INDEX || column < CHESSBOARD_MINIMUM_INDEX || column > CHESSBOARD_MAXIMUM_INDEX)
                 return false;
             if (chessBoard.board[row, column].type != "Empty" && pieceColor != chessBoard.board[row, column].color)
                 return true;
@@ -389,7 +395,7 @@ namespace Chess
         }
         void generateMovesPawn(string pieceType, int pieceRow, int pieceColumn, List<Point> possibleMoves, int value1, int value2)
         {
-            if(isFieldEmpty(pieceRow + value1, pieceColumn) /*&& isKingSafeAfterMove(pieceRow, pieceColumn, pieceRow + value1, pieceColumn)*/)
+            if(isFieldEmpty(pieceRow + value1, pieceColumn)/* && isKingSafeAfterMove(pieceRow, pieceColumn, pieceRow + value1, pieceColumn)*/)
                 possibleMoves.Add(new Point(pieceRow + value1, pieceColumn));
             if(isFieldEmpty(pieceRow + (2 * value1), pieceColumn) && firstMoveOfPiece(pieceRow, pieceColumn)/* && isKingSafeAfterMove(pieceRow, pieceColumn, pieceRow + (2 * value1), pieceColumn)*/)
                 possibleMoves.Add(new Point(pieceRow + (2 * value1), pieceColumn));
@@ -535,12 +541,12 @@ namespace Chess
 
             if(getPieceColorFromPieceType(pieceType) == "White")
             {
-                if (checkCastling(pieceRow, pieceColumn, 7, 7) && isFieldEmpty(pieceRow, pieceColumn + 1) && isFieldEmpty(pieceRow, pieceColumn + 2))
+                if (checkCastling(pieceRow, pieceColumn, WHITE_CASTLING_ROOK_ROW, SHORT_CASTLING_ROOK_COLUMN) && isFieldEmpty(pieceRow, pieceColumn + 1) && isFieldEmpty(pieceRow, pieceColumn + 2))
                 {
                     possibleMoves.Add(new Point(pieceRow, pieceColumn + 2));
                     whiteShortCastling = true;
                 }
-                if(checkCastling(pieceRow, pieceColumn, 7, 0) && isFieldEmpty(pieceRow, pieceColumn - 1) && isFieldEmpty(pieceRow, pieceColumn - 2) && isFieldEmpty(pieceRow, pieceColumn - 3))
+                if(checkCastling(pieceRow, pieceColumn, WHITE_CASTLING_ROOK_ROW, LONG_CASTLING_ROOK_COLUMN) && isFieldEmpty(pieceRow, pieceColumn - 1) && isFieldEmpty(pieceRow, pieceColumn - 2) && isFieldEmpty(pieceRow, pieceColumn - 3))
                 {
                     possibleMoves.Add(new Point(pieceRow, pieceColumn - 2));
                     whiteLongCastling = true;
@@ -548,12 +554,12 @@ namespace Chess
             }
             if(getPieceColorFromPieceType(pieceType) == "Black")
             {
-                if (checkCastling(pieceRow, pieceColumn, 0, 7) && isFieldEmpty(pieceRow, pieceColumn + 1) && isFieldEmpty(pieceRow, pieceColumn + 2))
+                if (checkCastling(pieceRow, pieceColumn, BLACK_CASTLING_ROOK_ROW, SHORT_CASTLING_ROOK_COLUMN) && isFieldEmpty(pieceRow, pieceColumn + 1) && isFieldEmpty(pieceRow, pieceColumn + 2))
                 {
                     possibleMoves.Add(new Point(pieceRow, pieceColumn + 2));
                     blackShortCastling = true;
                 }
-                if (checkCastling(pieceRow, pieceColumn, 0, 0) && isFieldEmpty(pieceRow, pieceColumn - 1) && isFieldEmpty(pieceRow, pieceColumn - 2) && isFieldEmpty(pieceRow, pieceColumn - 3))
+                if (checkCastling(pieceRow, pieceColumn, BLACK_CASTLING_ROOK_ROW, LONG_CASTLING_ROOK_COLUMN) && isFieldEmpty(pieceRow, pieceColumn - 1) && isFieldEmpty(pieceRow, pieceColumn - 2) && isFieldEmpty(pieceRow, pieceColumn - 3))
                 {
                     possibleMoves.Add(new Point(pieceRow, pieceColumn - 2));
                     blackLongCastling = true;
@@ -643,7 +649,7 @@ namespace Chess
             string color = getPieceColorFromField(row, column);
             if (type == "Pawn")
             {
-                if(color == "White" && row == 0)
+                if(color == "White" && row == CHESSBOARD_MINIMUM_INDEX)
                 {
                     if (!promotionPieceSelected)
                     {
@@ -662,7 +668,7 @@ namespace Chess
                         changeChessBoardOpacity(1);
                     }
                 }
-                if(color == "Black" && row == 7)
+                if(color == "Black" && row == CHESSBOARD_MAXIMUM_INDEX)
                 {
                     if(!promotionPieceSelected)
                     {
