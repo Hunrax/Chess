@@ -408,58 +408,58 @@
         <TextBox Margin="715,158,10,535" Text="7" TextAlignment="Center" FontSize="40" Background="Transparent" Foreground="#4E3524" FontWeight="Bold" BorderThickness="0" IsReadOnly="True"/>
         <TextBox Margin="714,82,10,611" Text="8" TextAlignment="Center" FontSize="40" Background="Transparent" Foreground="#4E3524" FontWeight="Bold" BorderThickness="0" IsReadOnly="True"/>
 
-        <Border Name="AdvanceBlackQueen" Background="BurlyWood" BorderBrush="SaddleBrown" BorderThickness="4" Height="59" CornerRadius="25,25,25,25" Margin="217,356,491,356" Visibility ="Hidden">
-            <Button Name="BlackQueen" Click="ChooseAdvancePiece" Style="{StaticResource MyButtonStyle}" Tag="Choice" Margin="17,6">
+        <Border Name="PromoteBlackQueen" Background="BurlyWood" BorderBrush="SaddleBrown" BorderThickness="4" Height="59" CornerRadius="25,25,25,25" Margin="217,356,491,356" Visibility ="Hidden">
+            <Button Name="BlackQueen" Click="ChoosePromotionPiece" Style="{StaticResource MyButtonStyle}" Tag="Choice" Margin="17,6">
                 <Button.Background>
                     <ImageBrush ImageSource="/Chess;component/images/BlackQueen.png"/>
                 </Button.Background>
             </Button>
         </Border>
-        <Border Name="AdvanceBlackRook" Background="BurlyWood" BorderBrush="SaddleBrown" BorderThickness="4" Height="59" CornerRadius="25,25,25,25" Margin="308,356,400,356" Visibility ="Hidden">
-            <Button Name="BlackRook" Click="ChooseAdvancePiece" Style="{StaticResource MyButtonStyle}" Tag="Choice" Margin="17,6">
+        <Border Name="PromoteBlackRook" Background="BurlyWood" BorderBrush="SaddleBrown" BorderThickness="4" Height="59" CornerRadius="25,25,25,25" Margin="308,356,400,356" Visibility ="Hidden">
+            <Button Name="BlackRook" Click="ChoosePromotionPiece" Style="{StaticResource MyButtonStyle}" Tag="Choice" Margin="17,6">
                 <Button.Background>
                     <ImageBrush ImageSource="/Chess;component/images/BlackRook.png"/>
                 </Button.Background>
             </Button>
         </Border>
-        <Border Name="AdvanceBlackKnight" Background="BurlyWood" BorderBrush="SaddleBrown" BorderThickness="4" Height="59" CornerRadius="25,25,25,25" Margin="399,356,309,356" Visibility ="Hidden">
-            <Button Name="BlackKnight" Click="ChooseAdvancePiece" Style="{StaticResource MyButtonStyle}" Tag="Choice" Margin="17,6">
+        <Border Name="PromoteBlackKnight" Background="BurlyWood" BorderBrush="SaddleBrown" BorderThickness="4" Height="59" CornerRadius="25,25,25,25" Margin="399,356,309,356" Visibility ="Hidden">
+            <Button Name="BlackKnight" Click="ChoosePromotionPiece" Style="{StaticResource MyButtonStyle}" Tag="Choice" Margin="17,6">
                 <Button.Background>
                     <ImageBrush ImageSource="/Chess;component/images/BlackKnight.png"/>
                 </Button.Background>
             </Button>
         </Border>
-        <Border Name="AdvanceBlackBishop" Background="BurlyWood" BorderBrush="SaddleBrown" BorderThickness="4" Height="59" CornerRadius="25,25,25,25" Margin="490,356,218,356" Visibility ="Hidden">
-            <Button Name="BlackBishop" Click="ChooseAdvancePiece" Style="{StaticResource MyButtonStyle}" Tag="Choice" Margin="17,6">
+        <Border Name="PromoteBlackBishop" Background="BurlyWood" BorderBrush="SaddleBrown" BorderThickness="4" Height="59" CornerRadius="25,25,25,25" Margin="490,356,218,356" Visibility ="Hidden">
+            <Button Name="BlackBishop" Click="ChoosePromotionPiece" Style="{StaticResource MyButtonStyle}" Tag="Choice" Margin="17,6">
                 <Button.Background>
                     <ImageBrush ImageSource="/Chess;component/images/BlackBishop.png"/>
                 </Button.Background>
             </Button>
         </Border>
 
-        <Border Name="AdvanceWhiteQueen" Background="BurlyWood" BorderBrush="SaddleBrown" BorderThickness="4" Height="59" CornerRadius="25,25,25,25" Margin="217,356,491,356" Visibility ="Hidden">
-            <Button Name="WhiteQueen" Click="ChooseAdvancePiece" Style="{StaticResource MyButtonStyle}" Tag="Choice" Margin="17,6">
+        <Border Name="PromoteWhiteQueen" Background="BurlyWood" BorderBrush="SaddleBrown" BorderThickness="4" Height="59" CornerRadius="25,25,25,25" Margin="217,356,491,356" Visibility ="Hidden">
+            <Button Name="WhiteQueen" Click="ChoosePromotionPiece" Style="{StaticResource MyButtonStyle}" Tag="Choice" Margin="17,6">
                 <Button.Background>
                     <ImageBrush ImageSource="/Chess;component/images/WhiteQueen.png"/>
                 </Button.Background>
             </Button>
         </Border>
-        <Border Name="AdvanceWhiteRook" Background="BurlyWood" BorderBrush="SaddleBrown" BorderThickness="4" Height="59" CornerRadius="25,25,25,25" Margin="308,356,400,356" Visibility ="Hidden">
-            <Button Name="WhiteRook" Click="ChooseAdvancePiece" Style="{StaticResource MyButtonStyle}" Tag="Choice" Margin="17,6">
+        <Border Name="PromoteWhiteRook" Background="BurlyWood" BorderBrush="SaddleBrown" BorderThickness="4" Height="59" CornerRadius="25,25,25,25" Margin="308,356,400,356" Visibility ="Hidden">
+            <Button Name="WhiteRook" Click="ChoosePromotionPiece" Style="{StaticResource MyButtonStyle}" Tag="Choice" Margin="17,6">
                 <Button.Background>
                     <ImageBrush ImageSource="/Chess;component/images/WhiteRook.png"/>
                 </Button.Background>
             </Button>
         </Border>
-        <Border Name="AdvanceWhiteKnight" Background="BurlyWood" BorderBrush="SaddleBrown" BorderThickness="4" Height="59" CornerRadius="25,25,25,25" Margin="399,356,309,356" Visibility ="Hidden">
-            <Button Name="WhiteKnight" Click="ChooseAdvancePiece" Style="{StaticResource MyButtonStyle}" Tag="Choice" Margin="17,6">
+        <Border Name="PromoteWhiteKnight" Background="BurlyWood" BorderBrush="SaddleBrown" BorderThickness="4" Height="59" CornerRadius="25,25,25,25" Margin="399,356,309,356" Visibility ="Hidden">
+            <Button Name="WhiteKnight" Click="ChoosePromotionPiece" Style="{StaticResource MyButtonStyle}" Tag="Choice" Margin="17,6">
                 <Button.Background>
                     <ImageBrush ImageSource="/Chess;component/images/WhiteKnight.png"/>
                 </Button.Background>
             </Button>
         </Border>
-        <Border Name="AdvanceWhiteBishop" Background="BurlyWood" BorderBrush="SaddleBrown" BorderThickness="4" Height="59" CornerRadius="25,25,25,25" Margin="490,356,218,356" Visibility ="Hidden">
-            <Button Name="WhiteBishop" Click="ChooseAdvancePiece" Style="{StaticResource MyButtonStyle}" Tag="Choice" Margin="17,6">
+        <Border Name="PromoteWhiteBishop" Background="BurlyWood" BorderBrush="SaddleBrown" BorderThickness="4" Height="59" CornerRadius="25,25,25,25" Margin="490,356,218,356" Visibility ="Hidden">
+            <Button Name="WhiteBishop" Click="ChoosePromotionPiece" Style="{StaticResource MyButtonStyle}" Tag="Choice" Margin="17,6">
                 <Button.Background>
                     <ImageBrush ImageSource="/Chess;component/images/WhiteBishop.png"/>
                 </Button.Background>
