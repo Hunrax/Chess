@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -9,6 +10,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 
 namespace Chess
 {
@@ -37,6 +39,7 @@ namespace Chess
         int movesCounter = 0;
 
         bool promotionPieceSelected = false;
+        int enPassantStatus = 0;
 
         bool whiteShortCastling = false;
         bool whiteLongCastling = false;
@@ -156,6 +159,8 @@ namespace Chess
             }
             if (correctFieldSelected)
             {
+                checkPawnDoubleMove(pieceRow, pieceColumn, fieldRow);
+                checkEnPassantStatus(pieceType, fieldType, pieceRow, pieceColumn, fieldRow, fieldColumn);
                 movePieceToField(selectedField, pieceType, fieldType, fieldColumn, fieldRow, pieceColumn, pieceRow);
                 promotePawn(fieldRow, fieldColumn);
                 chessBoard.Print();
@@ -184,10 +189,26 @@ namespace Chess
             Grid.SetRow(pressedButton, fieldRow);
             chessBoard.board[fieldRow, fieldColumn] = getPieceFromPieceType(pieceType);
             chessBoard.board[fieldRow, fieldColumn].firstMove = false;
+            chessBoard.board[fieldRow, fieldColumn].pawnDoubleMoveTurn = chessBoard.board[pieceRow, pieceColumn].pawnDoubleMoveTurn;
 
             Grid.SetColumn(selectedField, pieceColumn); // set former piece field to empty
             Grid.SetRow(selectedField, pieceRow);
             chessBoard.board[pieceRow, pieceColumn] = new Piece("None", "Empty", '.');
+
+            if(enPassantStatus != 0) // remove pawn captured en passant
+            {
+                int pawnToDeleteColumn = pieceColumn + enPassantStatus;
+
+                Button pawnToDelete = gornaWarstwa.Children.Cast<UIElement>()
+                    .FirstOrDefault(e => Grid.GetRow(e) == pieceRow && Grid.GetColumn(e) == pawnToDeleteColumn) as Button;
+
+                pawnToDelete.Tag = "Empty";
+                pawnToDelete.Background = Brushes.Transparent;
+
+                Grid.SetColumn(pawnToDelete, pawnToDeleteColumn);
+                Grid.SetRow(pawnToDelete, pieceRow);
+                chessBoard.board[pieceRow, pawnToDeleteColumn] = new Piece("None", "Empty", '.');
+            }
 
             if (whiteShortCastling && pieceType == "WhiteKing" && fieldColumn == SHORT_CASTLING_KING_COLUMN)
             {
@@ -404,6 +425,50 @@ namespace Chess
                 possibleMoves.Add(new Point(pieceRow + value1, pieceColumn + value1));
             if (isFieldPossibleToCapture(pieceRow + value1, pieceColumn + value2, getPieceColorFromPieceType(pieceType))/* && isKingSafeAfterMove(pieceRow, pieceColumn, pieceRow + value1, pieceColumn + value2)*/)
                 possibleMoves.Add(new Point(pieceRow + value1, pieceColumn + value2));
+
+            if(isFieldEmpty(pieceRow + value1, pieceColumn + value1) && enPassant(pieceRow, pieceColumn, value1))
+                possibleMoves.Add(new Point(pieceRow + value1, pieceColumn + value1));
+
+            if(isFieldEmpty(pieceRow + value1, pieceColumn + value2) && enPassant(pieceRow, pieceColumn, value2))
+                possibleMoves.Add(new Point(pieceRow + value1, pieceColumn + value2));
+        }
+        bool enPassant(int pieceRow, int pieceColumn, int columnShift)
+        {
+            if (chessBoard.board[pieceRow, pieceColumn + columnShift].type == "Pawn" && getPieceColorFromField(pieceRow, pieceColumn) != getPieceColorFromField(pieceRow, pieceColumn + columnShift))
+            {
+                if(chessBoard.board[pieceRow, pieceColumn + columnShift].pawnDoubleMoveTurn == movesCounter && getPieceColorFromField(pieceRow, pieceColumn) == "White")
+                        return true;
+                if (chessBoard.board[pieceRow, pieceColumn + columnShift].pawnDoubleMoveTurn == movesCounter - 1 && getPieceColorFromField(pieceRow, pieceColumn) == "Black")
+                    return true;
+            }        
+            return false;
+        }
+        int checkEnPassantStatus(string pieceType, string fieldType, int pieceRow, int pieceColumn, int fieldRow, int fieldColumn)
+        {
+            if(fieldType == "Empty" && pieceType.EndsWith("Pawn"))
+            {
+                if(pieceType.StartsWith("White"))
+                {
+                    if (fieldRow < pieceRow && fieldColumn < pieceColumn)
+                        enPassantStatus = - 1;
+                    else if (fieldRow < pieceRow && fieldColumn > pieceColumn)
+                        enPassantStatus = + 1;
+                    else
+                        enPassantStatus = 0;
+                }
+                if (pieceType.StartsWith("Black"))
+                {
+                    if (fieldRow > pieceRow && fieldColumn < pieceColumn)
+                        enPassantStatus = - 1;
+                    else if (fieldRow > pieceRow && fieldColumn > pieceColumn)
+                        enPassantStatus = + 1;
+                    else
+                        enPassantStatus = 0;
+                }
+            }
+            else
+                enPassantStatus = 0;
+            return enPassantStatus;
         }
         void generateMovesKnight(string pieceType, int pieceRow, int pieceColumn, List<Point> possibleMoves)
         {
@@ -642,6 +707,15 @@ namespace Chess
             if (firstMoveOfPiece(kingRow, kingColumn) && GetPieceTypeFromField(kingRow, kingColumn) == "King" && firstMoveOfPiece(rookRow, rookColumn) && GetPieceTypeFromField(rookRow, rookColumn) == "Rook")
                 return true;
             return false;
+        }
+        void checkPawnDoubleMove(int pieceRow, int pieceColumn, int fieldRow)
+        {
+            string pieceType = GetPieceTypeFromField(pieceRow, pieceColumn);
+            if(pieceType == "Pawn")
+            {
+                if (Math.Abs(pieceRow - fieldRow) == 2)
+                    chessBoard.board[pieceRow, pieceColumn].pawnDoubleMoveTurn = movesCounter;
+            }
         }
         void promotePawn(int row, int column)
         {
