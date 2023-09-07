@@ -653,18 +653,12 @@ namespace Chess
                 {
                     if (!promotionPieceSelected)
                     {
-                        PromoteWhiteBishop.Visibility = Visibility.Visible;
-                        PromoteWhiteKnight.Visibility = Visibility.Visible;
-                        PromoteWhiteQueen.Visibility = Visibility.Visible;
-                        PromoteWhiteRook.Visibility = Visibility.Visible;
+                        setWhitePromotionButtonsVisibility(Visibility.Visible);
                         changeChessBoardOpacity(0.5);
                     }
                     else
                     {
-                        PromoteWhiteBishop.Visibility = Visibility.Hidden;
-                        PromoteWhiteKnight.Visibility = Visibility.Hidden;
-                        PromoteWhiteQueen.Visibility = Visibility.Hidden;
-                        PromoteWhiteRook.Visibility = Visibility.Hidden;
+                        setWhitePromotionButtonsVisibility(Visibility.Hidden);
                         changeChessBoardOpacity(1);
                     }
                 }
@@ -672,22 +666,30 @@ namespace Chess
                 {
                     if(!promotionPieceSelected)
                     {
-                        PromoteBlackBishop.Visibility = Visibility.Visible;
-                        PromoteBlackKnight.Visibility = Visibility.Visible;
-                        PromoteBlackQueen.Visibility = Visibility.Visible;
-                        PromoteBlackRook.Visibility = Visibility.Visible;
+                        setBlackPromotionButtonsVisibility(Visibility.Visible);
                         changeChessBoardOpacity(0.5);
                     }
                     else
                     {
-                        PromoteBlackBishop.Visibility = Visibility.Hidden;
-                        PromoteBlackKnight.Visibility = Visibility.Hidden;
-                        PromoteBlackQueen.Visibility = Visibility.Hidden;
-                        PromoteBlackRook.Visibility = Visibility.Hidden;
+                        setBlackPromotionButtonsVisibility(Visibility.Hidden);
                         changeChessBoardOpacity(1);
                     }
                 }
             }
+        }
+        void setWhitePromotionButtonsVisibility(Visibility visibility)
+        {
+            PromoteWhiteBishop.Visibility = visibility;
+            PromoteWhiteKnight.Visibility = visibility;
+            PromoteWhiteQueen.Visibility = visibility;
+            PromoteWhiteRook.Visibility = visibility;
+        }
+        void setBlackPromotionButtonsVisibility(Visibility visibility)
+        {
+            PromoteBlackBishop.Visibility = visibility;
+            PromoteBlackKnight.Visibility = visibility;
+            PromoteBlackQueen.Visibility = visibility;
+            PromoteBlackRook.Visibility = visibility;
         }
         Piece[,] cloneChessboard(Piece[,] board)
         {
