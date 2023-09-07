@@ -160,11 +160,12 @@ namespace Chess
             if (correctFieldSelected)
             {
                 checkPawnDoubleMove(pieceRow, pieceColumn, fieldRow);
-                checkEnPassantStatus(pieceType, fieldType, pieceRow, pieceColumn, fieldRow, fieldColumn);
+                updateEnPassantStatus(pieceType, fieldType, pieceRow, pieceColumn, fieldRow, fieldColumn);
                 movePieceToField(selectedField, pieceType, fieldType, fieldColumn, fieldRow, pieceColumn, pieceRow);
                 promotePawn(fieldRow, fieldColumn);
                 chessBoard.Print();
                 checkIfAnyKingUnderCheck(chessBoard.board);
+                highlightKingUnderCheck();
             }
         }
         void performCastling(int rookRow, int rookColumn, int emptyFieldRow, int emptyFieldColumn)
@@ -175,41 +176,18 @@ namespace Chess
             Button empty = gornaWarstwa.Children.Cast<UIElement>()
                 .FirstOrDefault(e => Grid.GetRow(e) == emptyFieldRow && Grid.GetColumn(e) == emptyFieldColumn) as Button;
 
+            string pieceColor = getPieceColorFromField(rookRow, rookColumn);
+
             Grid.SetColumn(rook, emptyFieldColumn);
             Grid.SetRow(rook, emptyFieldRow);
-            chessBoard.board[emptyFieldRow, emptyFieldColumn] = new Piece("White", "Rook", 'W');
+            chessBoard.board[emptyFieldRow, emptyFieldColumn] = new Piece(pieceColor, "Rook", 'W');
 
             Grid.SetColumn(empty, rookColumn);
             Grid.SetRow(empty, rookRow);
             chessBoard.board[rookRow, rookColumn] = new Piece("None", "Empty", '.');
         }
-        void movePieceToField(Button selectedField, string pieceType, string fieldType, int fieldColumn, int fieldRow, int pieceColumn, int pieceRow)
+        void checkAllCastlings(string pieceType, int fieldColumn)
         {
-            Grid.SetColumn(pressedButton, fieldColumn); // move piece to field
-            Grid.SetRow(pressedButton, fieldRow);
-            chessBoard.board[fieldRow, fieldColumn] = getPieceFromPieceType(pieceType);
-            chessBoard.board[fieldRow, fieldColumn].firstMove = false;
-            chessBoard.board[fieldRow, fieldColumn].pawnDoubleMoveTurn = chessBoard.board[pieceRow, pieceColumn].pawnDoubleMoveTurn;
-
-            Grid.SetColumn(selectedField, pieceColumn); // set former piece field to empty
-            Grid.SetRow(selectedField, pieceRow);
-            chessBoard.board[pieceRow, pieceColumn] = new Piece("None", "Empty", '.');
-
-            if(enPassantStatus != 0) // remove pawn captured en passant
-            {
-                int pawnToDeleteColumn = pieceColumn + enPassantStatus;
-
-                Button pawnToDelete = gornaWarstwa.Children.Cast<UIElement>()
-                    .FirstOrDefault(e => Grid.GetRow(e) == pieceRow && Grid.GetColumn(e) == pawnToDeleteColumn) as Button;
-
-                pawnToDelete.Tag = "Empty";
-                pawnToDelete.Background = Brushes.Transparent;
-
-                Grid.SetColumn(pawnToDelete, pawnToDeleteColumn);
-                Grid.SetRow(pawnToDelete, pieceRow);
-                chessBoard.board[pieceRow, pawnToDeleteColumn] = new Piece("None", "Empty", '.');
-            }
-
             if (whiteShortCastling && pieceType == "WhiteKing" && fieldColumn == SHORT_CASTLING_KING_COLUMN)
             {
                 performCastling(WHITE_CASTLING_ROOK_ROW, SHORT_CASTLING_ROOK_COLUMN, WHITE_CASTLING_ROOK_ROW, SHORT_CASTLING_EMPTYFIELD_COLUMN);
@@ -231,6 +209,37 @@ namespace Chess
                 performCastling(BLACK_CASTLING_ROOK_ROW, LONG_CASTLING_ROOK_COLUMN, BLACK_CASTLING_ROOK_ROW, LONG_CASTLING_EMPTYFIELD_COLUMN);
                 blackLongCastling = false;
             }
+        }
+        void deletePawnEnPassant(int pieceColumn, int pieceRow)
+        {
+            int pawnToDeleteColumn = pieceColumn + enPassantStatus;
+
+            Button pawnToDelete = gornaWarstwa.Children.Cast<UIElement>()
+                .FirstOrDefault(e => Grid.GetRow(e) == pieceRow && Grid.GetColumn(e) == pawnToDeleteColumn) as Button;
+
+            pawnToDelete.Tag = "Empty";
+            pawnToDelete.Background = Brushes.Transparent;
+
+            Grid.SetColumn(pawnToDelete, pawnToDeleteColumn);
+            Grid.SetRow(pawnToDelete, pieceRow);
+            chessBoard.board[pieceRow, pawnToDeleteColumn] = new Piece("None", "Empty", '.');
+        }
+        void movePieceToField(Button selectedField, string pieceType, string fieldType, int fieldColumn, int fieldRow, int pieceColumn, int pieceRow)
+        {
+            Grid.SetColumn(pressedButton, fieldColumn); // move piece to field
+            Grid.SetRow(pressedButton, fieldRow);
+            chessBoard.board[fieldRow, fieldColumn] = getPieceFromPieceType(pieceType);
+            chessBoard.board[fieldRow, fieldColumn].firstMove = false;
+            chessBoard.board[fieldRow, fieldColumn].pawnDoubleMoveTurn = chessBoard.board[pieceRow, pieceColumn].pawnDoubleMoveTurn;
+
+            Grid.SetColumn(selectedField, pieceColumn); // set former piece field to empty
+            Grid.SetRow(selectedField, pieceRow);
+            chessBoard.board[pieceRow, pieceColumn] = new Piece("None", "Empty", '.');
+
+            if (enPassantStatus != 0) // remove pawn captured en passant
+                deletePawnEnPassant(pieceColumn, pieceRow);
+
+            checkAllCastlings(pieceType, fieldColumn);
 
             if (fieldType != "Empty")
             {
@@ -437,13 +446,13 @@ namespace Chess
             if (chessBoard.board[pieceRow, pieceColumn + columnShift].type == "Pawn" && getPieceColorFromField(pieceRow, pieceColumn) != getPieceColorFromField(pieceRow, pieceColumn + columnShift))
             {
                 if(chessBoard.board[pieceRow, pieceColumn + columnShift].pawnDoubleMoveTurn == movesCounter && getPieceColorFromField(pieceRow, pieceColumn) == "White")
-                        return true;
+                    return true;
                 if (chessBoard.board[pieceRow, pieceColumn + columnShift].pawnDoubleMoveTurn == movesCounter - 1 && getPieceColorFromField(pieceRow, pieceColumn) == "Black")
                     return true;
             }        
             return false;
         }
-        int checkEnPassantStatus(string pieceType, string fieldType, int pieceRow, int pieceColumn, int fieldRow, int fieldColumn)
+        int updateEnPassantStatus(string pieceType, string fieldType, int pieceRow, int pieceColumn, int fieldRow, int fieldColumn)
         {
             if(fieldType == "Empty" && pieceType.EndsWith("Pawn"))
             {
@@ -468,6 +477,7 @@ namespace Chess
             }
             else
                 enPassantStatus = 0;
+
             return enPassantStatus;
         }
         void generateMovesKnight(string pieceType, int pieceRow, int pieceColumn, List<Point> possibleMoves)
@@ -702,6 +712,71 @@ namespace Chess
             }
             return true;
         } 
+        void highlightKingUnderCheck()
+        {
+            int blackKingRow = (int)getKingPosition("Black").X;
+            int blackKingColumn = (int)getKingPosition("Black").Y;
+
+            int whiteKingRow = (int)getKingPosition("White").X;
+            int whiteKingColumn = (int)getKingPosition("White").Y;
+
+            Grid blackKing = dolnaWarstwa.Children.Cast<UIElement>()
+                .FirstOrDefault(e => Grid.GetRow(e) == blackKingRow && Grid.GetColumn(e) == blackKingColumn) as Grid;
+
+            Grid whiteKing = dolnaWarstwa.Children.Cast<UIElement>()
+                .FirstOrDefault(e => Grid.GetRow(e) == whiteKingRow && Grid.GetColumn(e) == whiteKingColumn) as Grid;
+
+            if (blackKingUnderCheck)
+                blackKing.Background = Brushes.DarkRed;
+
+            if (whiteKingUnderCheck)
+                whiteKing.Background = Brushes.DarkRed;
+
+            else if (!whiteKingUnderCheck && !blackKingUnderCheck)
+                unhighlightRedFields();
+        }
+        void unhighlightRedFields()
+        {
+            for (int i = 0; i < CHESSBOARD_SIZE; i++)
+            {
+                for (int j = 0; j < CHESSBOARD_SIZE; j++)
+                {
+                    Grid field = dolnaWarstwa.Children.Cast<UIElement>()
+                        .FirstOrDefault(e => Grid.GetRow(e) == i && Grid.GetColumn(e) == j) as Grid;
+
+                    if(field.Background == Brushes.DarkRed)
+                    {
+                        Grid fieldNeighbour;
+                        if (i < CHESSBOARD_MAXIMUM_INDEX)
+                            fieldNeighbour = dolnaWarstwa.Children.Cast<UIElement>()
+                                .FirstOrDefault(e => Grid.GetRow(e) == i + 1 && Grid.GetColumn(e) == j) as Grid;
+                        else
+                            fieldNeighbour = dolnaWarstwa.Children.Cast<UIElement>()
+                                .FirstOrDefault(e => Grid.GetRow(e) == i - 1 && Grid.GetColumn(e) == j) as Grid;
+
+                        if (fieldNeighbour.Background == Brushes.Wheat)
+                        {
+                            var converter = new BrushConverter();
+                            field.Background = (Brush)converter.ConvertFromString("#4E3524");
+                        }
+                        else
+                            field.Background = Brushes.Wheat;
+                    }
+                }
+            }
+        }
+        Point getKingPosition(string kingColor)
+        {
+            for (int i = 0; i < CHESSBOARD_SIZE; i++)
+            {
+                for (int j = 0; j < CHESSBOARD_SIZE; j++)
+                {
+                    if (isFieldAKing(i, j) && getPieceColorFromField(i, j) == kingColor)
+                        return new Point(i, j);
+                }
+            }
+            return new Point(-1, -1);
+        }
         bool checkCastling(int kingRow, int kingColumn, int rookRow, int rookColumn)
         {
             if (firstMoveOfPiece(kingRow, kingColumn) && GetPieceTypeFromField(kingRow, kingColumn) == "King" && firstMoveOfPiece(rookRow, rookColumn) && GetPieceTypeFromField(rookRow, rookColumn) == "Rook")
