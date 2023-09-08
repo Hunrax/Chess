@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace Chess
 {
@@ -46,6 +47,46 @@ namespace Chess
 
             for (int i = 0; i < 8; i++)
                 board[6, i] = new Piece("White", "Pawn", 'P');
+        }
+        public string GetPieceTypeFromField(int row, int column)
+        {
+            return board[row, column].type;
+        }
+        public string getPieceColorFromField(int row, int column)
+        {
+            return board[row, column].color;
+        }
+        public bool isFieldEmpty(int row, int column)
+        {
+            if (row < 0 || row > 7 || column < 0 || column > 7)
+                return false;
+            if (board[row, column].type == "Empty")
+                return true;
+            return false;
+        }
+        public bool isFieldPossibleToCapture(int row, int column, string pieceColor)
+        {
+            if (row < 0 || row > 7 || column < 0 || column > 7)
+                return false;
+            if (board[row, column].type != "Empty" && pieceColor != board[row, column].color)
+                return true;
+            return false;
+        }
+        public bool isFieldAKing(int row, int column)
+        {
+            if (board[row, column].type == "King")
+                return true;
+            return false;
+        }
+        public bool firstMoveOfPiece(int pieceRow, int pieceColumn)
+        {
+            return board[pieceRow, pieceColumn].firstMove;
+        }
+        public bool arePointsEqual(Point point, int x, int y)
+        {
+            if (point.X == x && point.Y == y)
+                return true;
+            return false;
         }
         public void Print()
         {

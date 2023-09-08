@@ -22,6 +22,5 @@ namespace Chess
             firstMove = true;
             pawnDoubleMoveTurn = -1;
         }
-
     }
 }
