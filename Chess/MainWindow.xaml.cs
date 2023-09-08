@@ -32,6 +32,7 @@ namespace Chess
         Button pressedButton;
         Piece selectedPromotionPiece;
         ChessBoard chessBoard = new ChessBoard();
+        Game game = new Game(GameState.IN_PROGRESS);
         bool buttonClicked = false;
 
         bool testMode = false;
@@ -124,7 +125,7 @@ namespace Chess
                 int pieceColumn = Grid.GetColumn(pressedButton);
 
                 List<Point> possibleMoves = new List<Point>();
-                generatePossibleMoves(pieceType, pieceRow, pieceColumn, possibleMoves);
+                generatePossibleMoves(pieceType, pieceRow, pieceColumn, possibleMoves, true);
                 highlightPossibleFields(possibleMoves);
             }
         }
@@ -146,7 +147,7 @@ namespace Chess
             string fieldType = selectedField.Tag.ToString();
 
             List<Point> possibleMoves = new List<Point>();
-            generatePossibleMoves(pieceType, pieceRow, pieceColumn, possibleMoves);
+            generatePossibleMoves(pieceType, pieceRow, pieceColumn, possibleMoves, true);
 
             bool correctFieldSelected = false;
             for(int i = 0; i < possibleMoves.Count; i++)
@@ -164,9 +165,32 @@ namespace Chess
                 movePieceToField(selectedField, pieceType, fieldType, fieldColumn, fieldRow, pieceColumn, pieceRow);
                 promotePawn(fieldRow, fieldColumn);
                 chessBoard.Print();
-                checkIfAnyKingUnderCheck(chessBoard.board);
+                checkIfAnyKingUnderCheck(turn);
                 highlightKingUnderCheck();
+                checkGameState();
+                checkIfGameOver();
             }
+        }
+        void checkGameState()
+        {
+            if (generateAllPossibleMoves2("Black").Count == 0 && blackKingUnderCheck)
+                game.gameState = GameState.WHITE_WON;
+            if (generateAllPossibleMoves2("Black").Count == 0 && !blackKingUnderCheck)
+                game.gameState = GameState.STALEMATE;
+
+            if (generateAllPossibleMoves2("White").Count == 0 && whiteKingUnderCheck)
+                game.gameState = GameState.BLACK_WON;
+            if (generateAllPossibleMoves2("White").Count == 0 && !whiteKingUnderCheck)
+                game.gameState = GameState.STALEMATE;
+        }
+        void checkIfGameOver()
+        {
+            if (game.gameState == GameState.STALEMATE)
+                Trace.WriteLine("GAME OVER: STALEMATE!");
+            if (game.gameState == GameState.WHITE_WON)
+                Trace.WriteLine("GAME OVER: WHITE WINS!");
+            if (game.gameState == GameState.BLACK_WON)
+                Trace.WriteLine("GAME OVER: BLACK WINS!");
         }
         void performCastling(int rookRow, int rookColumn, int emptyFieldRow, int emptyFieldColumn)
         {
@@ -228,9 +252,8 @@ namespace Chess
         {
             Grid.SetColumn(pressedButton, fieldColumn); // move piece to field
             Grid.SetRow(pressedButton, fieldRow);
-            chessBoard.board[fieldRow, fieldColumn] = getPieceFromPieceType(pieceType);
+            chessBoard.board[fieldRow, fieldColumn] = chessBoard.board[pieceRow, pieceColumn];
             chessBoard.board[fieldRow, fieldColumn].firstMove = false;
-            chessBoard.board[fieldRow, fieldColumn].pawnDoubleMoveTurn = chessBoard.board[pieceRow, pieceColumn].pawnDoubleMoveTurn;
 
             Grid.SetColumn(selectedField, pieceColumn); // set former piece field to empty
             Grid.SetRow(selectedField, pieceRow);
@@ -282,41 +305,41 @@ namespace Chess
                     field.IsEnabled = true;
             }
         }
-        void generatePossibleMoves(string pieceType, int pieceRow, int pieceColumn, List<Point> possibleMoves)
+        void generatePossibleMoves(string pieceType, int pieceRow, int pieceColumn, List<Point> possibleMoves, bool checkForChecks)
         {
             switch (pieceType)
             {
                 case "WhitePawn":
-                    generateMovesPawn(pieceType, pieceRow, pieceColumn, possibleMoves, -1, 1);
+                    generateMovesPawn(pieceType, pieceRow, pieceColumn, possibleMoves, -1, 1, checkForChecks);
                     break;
 
                 case "BlackPawn":
-                    generateMovesPawn(pieceType, pieceRow, pieceColumn, possibleMoves, 1, -1);
+                    generateMovesPawn(pieceType, pieceRow, pieceColumn, possibleMoves, 1, -1, checkForChecks);
                     break;
 
                 case "WhiteRook":
                 case "BlackRook":
-                    generateMovesRook(pieceType, pieceRow, pieceColumn, possibleMoves);
+                    generateMovesRook(pieceType, pieceRow, pieceColumn, possibleMoves, checkForChecks);
                     break;
 
                 case "WhiteKnight":
                 case "BlackKnight":
-                    generateMovesKnight(pieceType, pieceRow, pieceColumn, possibleMoves);
+                    generateMovesKnight(pieceType, pieceRow, pieceColumn, possibleMoves, checkForChecks);
                     break;
 
                 case "WhiteBishop":
                 case "BlackBishop":
-                    generateMovesBishop(pieceType, pieceRow, pieceColumn, possibleMoves);
+                    generateMovesBishop(pieceType, pieceRow, pieceColumn, possibleMoves, checkForChecks);
                     break;
 
                 case "WhiteQueen":
                 case "BlackQueen":
-                    generateMovesQueen(pieceType, pieceRow, pieceColumn, possibleMoves);
+                    generateMovesQueen(pieceType, pieceRow, pieceColumn, possibleMoves, checkForChecks);
                     break;
 
                 case "WhiteKing":
                 case "BlackKing":
-                    generateMovesKing(pieceType, pieceRow, pieceColumn, possibleMoves);
+                    generateMovesKing(pieceType, pieceRow, pieceColumn, possibleMoves, checkForChecks);
                     break;
             }
         }
@@ -407,10 +430,14 @@ namespace Chess
                 return true;
             return false;
         }
-        bool canPieceMoveHere(int fieldRow, int fieldColumn, string pieceColor)
+        bool canPieceMoveHere(int fieldRow, int fieldColumn, string pieceColor, bool checkForChecks, int pieceRow, int pieceColumn)
         {
             if (isFieldEmpty(fieldRow, fieldColumn) || isFieldPossibleToCapture(fieldRow, fieldColumn, pieceColor))
-                return true;
+            {
+                if((checkForChecks && isKingSafeAfterMove(pieceRow, pieceColumn, fieldRow, fieldColumn)) || !checkForChecks)
+                    return true;
+                return false;
+            }
             return false;
         }
         bool isFieldAKing(int row, int column)
@@ -423,23 +450,41 @@ namespace Chess
         {
             return chessBoard.board[pieceRow, pieceColumn].firstMove;
         }
-        void generateMovesPawn(string pieceType, int pieceRow, int pieceColumn, List<Point> possibleMoves, int value1, int value2)
+        void generateMovesPawn(string pieceType, int pieceRow, int pieceColumn, List<Point> possibleMoves, int value1, int value2, bool checkForChecks)
         {
-            if(isFieldEmpty(pieceRow + value1, pieceColumn)/* && isKingSafeAfterMove(pieceRow, pieceColumn, pieceRow + value1, pieceColumn)*/)
-                possibleMoves.Add(new Point(pieceRow + value1, pieceColumn));
-            if(isFieldEmpty(pieceRow + (2 * value1), pieceColumn) && firstMoveOfPiece(pieceRow, pieceColumn)/* && isKingSafeAfterMove(pieceRow, pieceColumn, pieceRow + (2 * value1), pieceColumn)*/)
-                possibleMoves.Add(new Point(pieceRow + (2 * value1), pieceColumn));
+            if (isFieldEmpty(pieceRow + value1, pieceColumn))
+            {
+                if ((checkForChecks && isKingSafeAfterMove(pieceRow, pieceColumn, pieceRow + value1, pieceColumn)) || !checkForChecks)
+                    possibleMoves.Add(new Point(pieceRow + value1, pieceColumn));
 
-            if(isFieldPossibleToCapture(pieceRow + value1, pieceColumn + value1, getPieceColorFromPieceType(pieceType))/* && isKingSafeAfterMove(pieceRow, pieceColumn, pieceRow + value1, pieceColumn + value1)*/)
-                possibleMoves.Add(new Point(pieceRow + value1, pieceColumn + value1));
-            if (isFieldPossibleToCapture(pieceRow + value1, pieceColumn + value2, getPieceColorFromPieceType(pieceType))/* && isKingSafeAfterMove(pieceRow, pieceColumn, pieceRow + value1, pieceColumn + value2)*/)
-                possibleMoves.Add(new Point(pieceRow + value1, pieceColumn + value2));
+                if (isFieldEmpty(pieceRow + (2 * value1), pieceColumn) && firstMoveOfPiece(pieceRow, pieceColumn))
+                {
+                    if ((checkForChecks && isKingSafeAfterMove(pieceRow, pieceColumn, pieceRow + (2 * value1), pieceColumn)) || !checkForChecks)
+                        possibleMoves.Add(new Point(pieceRow + (2 * value1), pieceColumn));
+                }
+            }
 
-            if(isFieldEmpty(pieceRow + value1, pieceColumn + value1) && enPassant(pieceRow, pieceColumn, value1))
-                possibleMoves.Add(new Point(pieceRow + value1, pieceColumn + value1));
-
-            if(isFieldEmpty(pieceRow + value1, pieceColumn + value2) && enPassant(pieceRow, pieceColumn, value2))
-                possibleMoves.Add(new Point(pieceRow + value1, pieceColumn + value2));
+            if (isFieldPossibleToCapture(pieceRow + value1, pieceColumn + value1, getPieceColorFromPieceType(pieceType)))
+            {
+                if ((checkForChecks && isKingSafeAfterMove(pieceRow, pieceColumn, pieceRow + value1, pieceColumn + value1)) || !checkForChecks)
+                    possibleMoves.Add(new Point(pieceRow + value1, pieceColumn + value1));
+            }                
+            if (isFieldPossibleToCapture(pieceRow + value1, pieceColumn + value2, getPieceColorFromPieceType(pieceType)))
+            {
+                if ((checkForChecks && isKingSafeAfterMove(pieceRow, pieceColumn, pieceRow + value1, pieceColumn + value2)) || !checkForChecks)
+                    possibleMoves.Add(new Point(pieceRow + value1, pieceColumn + value2));
+            } 
+            
+            if (isFieldEmpty(pieceRow + value1, pieceColumn + value1) && enPassant(pieceRow, pieceColumn, value1))
+            {
+                if ((checkForChecks && isKingSafeAfterMove(pieceRow, pieceColumn, pieceRow + value1, pieceColumn + value1)) || !checkForChecks)
+                    possibleMoves.Add(new Point(pieceRow + value1, pieceColumn + value1));
+            }
+            if (isFieldEmpty(pieceRow + value1, pieceColumn + value2) && enPassant(pieceRow, pieceColumn, value2))
+            {
+                if ((checkForChecks && isKingSafeAfterMove(pieceRow, pieceColumn, pieceRow + value1, pieceColumn + value2)) || !checkForChecks)
+                    possibleMoves.Add(new Point(pieceRow + value1, pieceColumn + value2));
+            }
         }
         bool enPassant(int pieceRow, int pieceColumn, int columnShift)
         {
@@ -480,35 +525,35 @@ namespace Chess
 
             return enPassantStatus;
         }
-        void generateMovesKnight(string pieceType, int pieceRow, int pieceColumn, List<Point> possibleMoves)
+        void generateMovesKnight(string pieceType, int pieceRow, int pieceColumn, List<Point> possibleMoves, bool checkForChecks)
         {
-            if(canPieceMoveHere(pieceRow - 1, pieceColumn - 2, getPieceColorFromPieceType(pieceType)))
+            if(canPieceMoveHere(pieceRow - 1, pieceColumn - 2, getPieceColorFromPieceType(pieceType), checkForChecks, pieceRow, pieceColumn))
                 possibleMoves.Add(new Point(pieceRow - 1, pieceColumn - 2));
-            if(canPieceMoveHere(pieceRow + 1, pieceColumn - 2, getPieceColorFromPieceType(pieceType)))
+            if(canPieceMoveHere(pieceRow + 1, pieceColumn - 2, getPieceColorFromPieceType(pieceType), checkForChecks, pieceRow, pieceColumn))
                 possibleMoves.Add(new Point(pieceRow + 1, pieceColumn - 2));
 
-            if (canPieceMoveHere(pieceRow - 1, pieceColumn + 2, getPieceColorFromPieceType(pieceType)))
+            if (canPieceMoveHere(pieceRow - 1, pieceColumn + 2, getPieceColorFromPieceType(pieceType), checkForChecks, pieceRow, pieceColumn))
                 possibleMoves.Add(new Point(pieceRow - 1, pieceColumn + 2));
-            if (canPieceMoveHere(pieceRow + 1, pieceColumn + 2, getPieceColorFromPieceType(pieceType)))
+            if (canPieceMoveHere(pieceRow + 1, pieceColumn + 2, getPieceColorFromPieceType(pieceType), checkForChecks, pieceRow, pieceColumn))
                 possibleMoves.Add(new Point(pieceRow + 1, pieceColumn + 2));
 
-            if (canPieceMoveHere(pieceRow - 2, pieceColumn + 1, getPieceColorFromPieceType(pieceType)))
+            if (canPieceMoveHere(pieceRow - 2, pieceColumn + 1, getPieceColorFromPieceType(pieceType), checkForChecks, pieceRow, pieceColumn))
                 possibleMoves.Add(new Point(pieceRow - 2, pieceColumn + 1));
-            if (canPieceMoveHere(pieceRow + 2, pieceColumn + 1, getPieceColorFromPieceType(pieceType)))
+            if (canPieceMoveHere(pieceRow + 2, pieceColumn + 1, getPieceColorFromPieceType(pieceType), checkForChecks, pieceRow, pieceColumn))
                 possibleMoves.Add(new Point(pieceRow + 2, pieceColumn + 1));
 
-            if (canPieceMoveHere(pieceRow - 2, pieceColumn - 1, getPieceColorFromPieceType(pieceType)))
+            if (canPieceMoveHere(pieceRow - 2, pieceColumn - 1, getPieceColorFromPieceType(pieceType), checkForChecks, pieceRow, pieceColumn))
                 possibleMoves.Add(new Point(pieceRow - 2, pieceColumn - 1));
-            if (canPieceMoveHere(pieceRow + 2, pieceColumn - 1, getPieceColorFromPieceType(pieceType)))
+            if (canPieceMoveHere(pieceRow + 2, pieceColumn - 1, getPieceColorFromPieceType(pieceType), checkForChecks, pieceRow, pieceColumn))
                 possibleMoves.Add(new Point(pieceRow + 2, pieceColumn - 1));
         }
-        void generateMovesBishop(string pieceType, int pieceRow, int pieceColumn, List<Point> possibleMoves)
+        void generateMovesBishop(string pieceType, int pieceRow, int pieceColumn, List<Point> possibleMoves, bool checkForChecks)
         {
             int newPieceColumn = pieceColumn + 1;
             int newPieceRow = pieceRow + 1;
             while (newPieceColumn < CHESSBOARD_SIZE && newPieceRow < CHESSBOARD_SIZE)
             {
-                if(canPieceMoveHere(newPieceRow, newPieceColumn, getPieceColorFromPieceType(pieceType)))
+                if(canPieceMoveHere(newPieceRow, newPieceColumn, getPieceColorFromPieceType(pieceType), checkForChecks, pieceRow, pieceColumn))
                     possibleMoves.Add(new Point(newPieceRow, newPieceColumn));
                 if (!isFieldEmpty(newPieceRow, newPieceColumn)) 
                     break;
@@ -519,7 +564,7 @@ namespace Chess
             newPieceRow = pieceRow - 1;
             while (newPieceColumn >= CHESSBOARD_MINIMUM_INDEX && newPieceRow >= CHESSBOARD_MINIMUM_INDEX)
             {
-                if (canPieceMoveHere(newPieceRow, newPieceColumn, getPieceColorFromPieceType(pieceType)))
+                if (canPieceMoveHere(newPieceRow, newPieceColumn, getPieceColorFromPieceType(pieceType), checkForChecks, pieceRow, pieceColumn))
                     possibleMoves.Add(new Point(newPieceRow, newPieceColumn));
                 if (!isFieldEmpty(newPieceRow, newPieceColumn))
                     break;
@@ -530,7 +575,7 @@ namespace Chess
             newPieceRow = pieceRow - 1;
             while (newPieceColumn < CHESSBOARD_SIZE && newPieceRow >= CHESSBOARD_MINIMUM_INDEX)
             {
-                if (canPieceMoveHere(newPieceRow, newPieceColumn, getPieceColorFromPieceType(pieceType)))
+                if (canPieceMoveHere(newPieceRow, newPieceColumn, getPieceColorFromPieceType(pieceType), checkForChecks, pieceRow, pieceColumn))
                     possibleMoves.Add(new Point(newPieceRow, newPieceColumn));
                 if (!isFieldEmpty(newPieceRow, newPieceColumn))
                     break;
@@ -541,7 +586,7 @@ namespace Chess
             newPieceRow = pieceRow + 1;
             while (newPieceColumn >= CHESSBOARD_MINIMUM_INDEX && newPieceRow < CHESSBOARD_SIZE)
             {
-                if (canPieceMoveHere(newPieceRow, newPieceColumn, getPieceColorFromPieceType(pieceType)))
+                if (canPieceMoveHere(newPieceRow, newPieceColumn, getPieceColorFromPieceType(pieceType), checkForChecks, pieceRow, pieceColumn))
                     possibleMoves.Add(new Point(newPieceRow, newPieceColumn));
                 if (!isFieldEmpty(newPieceRow, newPieceColumn))
                     break;
@@ -549,14 +594,14 @@ namespace Chess
                 newPieceRow++;
             }
         }
-        void generateMovesRook(string pieceType, int pieceRow, int pieceColumn, List<Point> possibleMoves)
+        void generateMovesRook(string pieceType, int pieceRow, int pieceColumn, List<Point> possibleMoves, bool checkForChecks)
         {
             int newPieceRow = pieceRow;
             int newPieceColumn = pieceColumn;
             for (int i = pieceColumn + 1; i < CHESSBOARD_SIZE; i++)
             {
                 newPieceColumn += 1;
-                if (canPieceMoveHere(pieceRow, newPieceColumn, getPieceColorFromPieceType(pieceType)))
+                if (canPieceMoveHere(pieceRow, newPieceColumn, getPieceColorFromPieceType(pieceType), checkForChecks, pieceRow, pieceColumn))
                     possibleMoves.Add(new Point(pieceRow, newPieceColumn));
                 if (!isFieldEmpty(pieceRow, newPieceColumn))
                     break;
@@ -565,7 +610,7 @@ namespace Chess
             for (int i = pieceColumn - 1; i >= CHESSBOARD_MINIMUM_INDEX; i--)
             {
                 newPieceColumn -= 1;
-                if (canPieceMoveHere(pieceRow, newPieceColumn, getPieceColorFromPieceType(pieceType)))
+                if (canPieceMoveHere(pieceRow, newPieceColumn, getPieceColorFromPieceType(pieceType), checkForChecks, pieceRow, pieceColumn))
                     possibleMoves.Add(new Point(pieceRow, newPieceColumn));
                 if (!isFieldEmpty(pieceRow, newPieceColumn))
                     break;
@@ -573,7 +618,7 @@ namespace Chess
             for (int i = pieceRow + 1; i < CHESSBOARD_SIZE; i++)
             {
                 newPieceRow += 1;
-                if (canPieceMoveHere(newPieceRow, pieceColumn, getPieceColorFromPieceType(pieceType)))
+                if (canPieceMoveHere(newPieceRow, pieceColumn, getPieceColorFromPieceType(pieceType), checkForChecks, pieceRow, pieceColumn))
                     possibleMoves.Add(new Point(newPieceRow, pieceColumn));
                 if (!isFieldEmpty(newPieceRow, pieceColumn))
                     break;
@@ -582,36 +627,36 @@ namespace Chess
             for (int i = pieceRow - 1; i >= CHESSBOARD_MINIMUM_INDEX; i--)
             {
                 newPieceRow -= 1;
-                if (canPieceMoveHere(newPieceRow, pieceColumn, getPieceColorFromPieceType(pieceType)))
+                if (canPieceMoveHere(newPieceRow, pieceColumn, getPieceColorFromPieceType(pieceType), checkForChecks, pieceRow, pieceColumn))
                     possibleMoves.Add(new Point(newPieceRow, pieceColumn));
                 if (!isFieldEmpty(newPieceRow, pieceColumn))
                     break;
             }
         }
-        void generateMovesQueen(string pieceType, int pieceRow, int pieceColumn, List<Point> possibleMoves)
+        void generateMovesQueen(string pieceType, int pieceRow, int pieceColumn, List<Point> possibleMoves, bool checkForChecks)
         {
-            generateMovesRook(pieceType, pieceRow, pieceColumn, possibleMoves);
-            generateMovesBishop(pieceType, pieceRow, pieceColumn, possibleMoves);
+            generateMovesRook(pieceType, pieceRow, pieceColumn, possibleMoves, checkForChecks);
+            generateMovesBishop(pieceType, pieceRow, pieceColumn, possibleMoves, checkForChecks);
         }
-        void generateMovesKing(string pieceType, int pieceRow, int pieceColumn, List<Point> possibleMoves)
+        void generateMovesKing(string pieceType, int pieceRow, int pieceColumn, List<Point> possibleMoves, bool checkForChecks)
         {
-            if (canPieceMoveHere(pieceRow, pieceColumn - 1, getPieceColorFromPieceType(pieceType)))
+            if (canPieceMoveHere(pieceRow, pieceColumn - 1, getPieceColorFromPieceType(pieceType), checkForChecks, pieceRow, pieceColumn))
                 possibleMoves.Add(new Point(pieceRow, pieceColumn - 1));
-            if (canPieceMoveHere(pieceRow - 1, pieceColumn - 1, getPieceColorFromPieceType(pieceType)))
+            if (canPieceMoveHere(pieceRow - 1, pieceColumn - 1, getPieceColorFromPieceType(pieceType), checkForChecks, pieceRow, pieceColumn))
                 possibleMoves.Add(new Point(pieceRow - 1, pieceColumn - 1));
-            if (canPieceMoveHere(pieceRow + 1, pieceColumn - 1, getPieceColorFromPieceType(pieceType)))
+            if (canPieceMoveHere(pieceRow + 1, pieceColumn - 1, getPieceColorFromPieceType(pieceType), checkForChecks, pieceRow, pieceColumn))
                 possibleMoves.Add(new Point(pieceRow + 1, pieceColumn - 1));
 
-            if (canPieceMoveHere(pieceRow, pieceColumn + 1, getPieceColorFromPieceType(pieceType)))
+            if (canPieceMoveHere(pieceRow, pieceColumn + 1, getPieceColorFromPieceType(pieceType), checkForChecks, pieceRow, pieceColumn))
                 possibleMoves.Add(new Point(pieceRow, pieceColumn + 1));
-            if (canPieceMoveHere(pieceRow - 1, pieceColumn + 1, getPieceColorFromPieceType(pieceType)))
+            if (canPieceMoveHere(pieceRow - 1, pieceColumn + 1, getPieceColorFromPieceType(pieceType), checkForChecks, pieceRow, pieceColumn))
                 possibleMoves.Add(new Point(pieceRow - 1, pieceColumn + 1));
-            if (canPieceMoveHere(pieceRow + 1, pieceColumn + 1, getPieceColorFromPieceType(pieceType)))
+            if (canPieceMoveHere(pieceRow + 1, pieceColumn + 1, getPieceColorFromPieceType(pieceType), checkForChecks, pieceRow, pieceColumn))
                 possibleMoves.Add(new Point(pieceRow + 1, pieceColumn + 1));
 
-            if (canPieceMoveHere(pieceRow + 1, pieceColumn, getPieceColorFromPieceType(pieceType)))
+            if (canPieceMoveHere(pieceRow + 1, pieceColumn, getPieceColorFromPieceType(pieceType), checkForChecks, pieceRow, pieceColumn))
                 possibleMoves.Add(new Point(pieceRow + 1, pieceColumn));
-            if (canPieceMoveHere(pieceRow - 1, pieceColumn, getPieceColorFromPieceType(pieceType)))
+            if (canPieceMoveHere(pieceRow - 1, pieceColumn, getPieceColorFromPieceType(pieceType), checkForChecks, pieceRow, pieceColumn))
                 possibleMoves.Add(new Point(pieceRow - 1, pieceColumn));
 
             if(getPieceColorFromPieceType(pieceType) == "White")
@@ -641,72 +686,85 @@ namespace Chess
                 }
             }
         }
-        List<Point> generateAllPossibleMoves(Piece[,] chessBoard)
+        List<Point> generateAllPossibleMoves(string pieceColor)
         {
             List<Point> possibleMoves = new List<Point>();
             for (int i = 0; i < CHESSBOARD_SIZE; i++)
             {
                 for (int j = 0; j < CHESSBOARD_SIZE; j++)
                 {
-                    if (!isFieldEmpty(i, j))
+                    if (!isFieldEmpty(i, j) && getPieceColorFromField(i, j) == pieceColor)
                     {
-                        string pieceColor = chessBoard[i, j].color;
                         string pieceType = GetPieceTypeFromField(i, j);
                         string type = pieceColor + pieceType;
-                        generatePossibleMoves(type, i, j, possibleMoves);
+                        generatePossibleMoves(type, i, j, possibleMoves, false);
                     }
                 }
             }
             return possibleMoves;
         }
-        bool checkIfAnyKingUnderCheck(Piece[,] chessBoard)
+        List<Point> generateAllPossibleMoves2(string pieceColor)
         {
-            List<Point> possibleMoves = generateAllPossibleMoves(chessBoard);
+            List<Point> possibleMoves = new List<Point>();
+            for (int i = 0; i < CHESSBOARD_SIZE; i++)
+            {
+                for (int j = 0; j < CHESSBOARD_SIZE; j++)
+                {
+                    if (!isFieldEmpty(i, j) && getPieceColorFromField(i, j) == pieceColor)
+                    {
+                        string pieceType = GetPieceTypeFromField(i, j);
+                        string type = pieceColor + pieceType;
+                        generatePossibleMoves(type, i, j, possibleMoves, true);
+                    }
+                }
+            }
+            return possibleMoves;
+        }
+        bool checkIfAnyKingUnderCheck(string pieceColor)
+        {
+            if (pieceColor == "White")
+                pieceColor = "Black";
+            else if (pieceColor == "Black")
+                pieceColor = "White"; 
+
+            List<Point> possibleMoves = generateAllPossibleMoves(pieceColor);
             bool check = false;
             foreach (Point possibleMove in possibleMoves)
             {
-                if (isFieldAKing((int)possibleMove.X, (int)possibleMove.Y))
+                int row = (int)possibleMove.X;
+                int column = (int)possibleMove.Y;
+                if (isFieldAKing(row, column) && pieceColor == "White"/* getPieceColorFromField(row, column) == "Black" && turn == "Black"*/)
                 {
-                    check = true;
-                    string color = getPieceColorFromField((int)possibleMove.X, (int)possibleMove.Y);
-                    if(color == "Black")
-                    {
-                        blackKingUnderCheck = true;
-                        Trace.WriteLine("Black king under check!");
-                    }
-                    else
-                    {
-                        whiteKingUnderCheck = true;
-                        Trace.WriteLine("White king under check!");
-                    }
+                    blackKingUnderCheck = true;
+                    return true;
+                }
+                else if (isFieldAKing(row, column) && pieceColor == "Black"/* getPieceColorFromField(row, column) == "White" && turn == "White"*/)
+                {
+                    whiteKingUnderCheck = true;
+                    return true;
                 }
             }
             if(!check)
             {
                 whiteKingUnderCheck = false;
                 blackKingUnderCheck = false;
-                Trace.WriteLine("No check!");
             }
             return check;
         }
         bool isKingSafeAfterMove(int pieceRow, int pieceColumn, int fieldRow, int fieldColumn)
         {
-            string pieceType = GetPieceTypeFromField(pieceRow, pieceColumn);
-            if (pieceType != "Empty")
+            Piece piece = chessBoard.board[pieceRow, pieceColumn];
+            if (piece.type != "Empty")
             {
-                Piece piece = chessBoard.board[pieceRow, pieceColumn];
-                Piece piece2 = chessBoard.board[fieldRow, fieldColumn];
+                Piece field = chessBoard.board[fieldRow, fieldColumn];
 
-                Piece[,] tempBoard = new Piece[CHESSBOARD_SIZE, CHESSBOARD_SIZE];
-                tempBoard = cloneChessboard(chessBoard.board);
+                chessBoard.board[fieldRow, fieldColumn] = piece;
+                chessBoard.board[pieceRow, pieceColumn] = new Piece("None", "Empty", '.');
 
-                tempBoard[fieldRow, fieldColumn] = piece;
-                tempBoard[pieceRow, pieceColumn] = new Piece("None", "Empty", '.');
+                bool kingSafe = !checkIfAnyKingUnderCheck(piece.color);
 
-                bool kingSafe = !checkIfAnyKingUnderCheck(tempBoard);
-
-                tempBoard[fieldRow, fieldColumn] = piece2;
-                tempBoard[pieceRow, pieceColumn] = piece;
+                chessBoard.board[fieldRow, fieldColumn] = field;
+                chessBoard.board[pieceRow, pieceColumn] = piece;
 
                 return kingSafe;
             }
@@ -839,28 +897,6 @@ namespace Chess
             PromoteBlackKnight.Visibility = visibility;
             PromoteBlackQueen.Visibility = visibility;
             PromoteBlackRook.Visibility = visibility;
-        }
-        Piece[,] cloneChessboard(Piece[,] board)
-        {
-            for(int i = 0; i < CHESSBOARD_SIZE; i++)
-            {
-                for(int j = 0; j < CHESSBOARD_SIZE; j++)
-                {
-                    board[i, j] = DeepClone(chessBoard.board[i, j]);
-                }
-            }
-            return board;
-        }
-        public static Piece DeepClone<Piece>(Piece obj)
-        {
-            using (var ms = new MemoryStream())
-            {
-                var formatter = new BinaryFormatter();
-                formatter.Serialize(ms, obj);
-                ms.Position = 0;
-
-                return (Piece)formatter.Deserialize(ms);
-            }
         }
     }
 }
