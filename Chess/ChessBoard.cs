@@ -1,88 +1,100 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Diagnostics;
 using System.Windows;
 
 namespace Chess
 {
-    class ChessBoard
+    public class ChessBoard
     {
         public Piece[,] board = new Piece[8,8];
 
-        public void Clear()
+        public int minimumIndex = 0;
+        public int maximumIndex = 7;
+        public int size = 8;
+
+        public int LONG_CASTLING_KING_COLUMN = 2;
+        public int SHORT_CASTLING_KING_COLUMN = 6;
+        public int WHITE_CASTLING_ROOK_ROW = 7;
+        public int BLACK_CASTLING_ROOK_ROW = 0;
+        public int SHORT_CASTLING_ROOK_COLUMN = 7;
+        public int SHORT_CASTLING_EMPTYFIELD_COLUMN = 5;
+        public int LONG_CASTLING_ROOK_COLUMN = 0;
+        public int LONG_CASTLING_EMPTYFIELD_COLUMN = 3;
+
+        public void Clear(MainWindow window, Game game)
         {
             for (int i = 0; i < 8; i++)
             {
                 for (int j = 0; j < 8; j++)
                 {
-                    board[i, j] = new Piece("None", "Empty", '.');
+                    board[i, j] = new Empty(window, this, game, PieceColor.NONE);
                 }
             }
         }
-        public void Initialize()
+        public void Initialize(MainWindow window, Game game)
         {
-            board[0, 0] = new Piece("Black", "Rook", 'W');
-            board[0, 1] = new Piece("Black", "Knight", 'S');
-            board[0, 2] = new Piece("Black", "Bishop", 'G');
-            board[0, 3] = new Piece("Black", "Queen", 'H');
-            board[0, 4] = new Piece("Black", "King", 'K');
-            board[0, 5] = new Piece("Black", "Bishop", 'G');
-            board[0, 6] = new Piece("Black", "Knight", 'S');
-            board[0, 7] = new Piece("Black", "Rook", 'W');
-
-            for(int i = 0; i < 8; i++)
-                board[1, i] = new Piece("Black", "Pawn", 'P');
-
-            board[7, 0] = new Piece("White", "Rook", 'W');
-            board[7, 1] = new Piece("White", "Knight", 'S');
-            board[7, 2] = new Piece("White", "Bishop", 'G');
-            board[7, 3] = new Piece("White", "Queen", 'H');
-            board[7, 4] = new Piece("White", "King", 'K');
-            board[7, 5] = new Piece("White", "Bishop", 'G');
-            board[7, 6] = new Piece("White", "Knight", 'S');
-            board[7, 7] = new Piece("White", "Rook", 'W');
+            board[0, 0] = new Rook(window, this, game, PieceColor.BLACK);
+            board[0, 1] = new Knight(window, this, game, PieceColor.BLACK);
+            board[0, 2] = new Bishop(window, this, game, PieceColor.BLACK);
+            board[0, 3] = new Queen(window, this, game, PieceColor.BLACK);
+            board[0, 4] = new King(window, this, game, PieceColor.BLACK);
+            board[0, 5] = new Bishop(window, this, game, PieceColor.BLACK);
+            board[0, 6] = new Knight(window, this, game, PieceColor.BLACK);
+            board[0, 7] = new Rook(window, this, game, PieceColor.BLACK);
 
             for (int i = 0; i < 8; i++)
-                board[6, i] = new Piece("White", "Pawn", 'P');
+                board[1, i] = new Pawn(window, this, game, PieceColor.BLACK);
+
+            board[7, 0] = new Rook(window, this, game, PieceColor.WHITE);
+            board[7, 1] = new Knight(window, this, game, PieceColor.WHITE);
+            board[7, 2] = new Bishop(window, this, game, PieceColor.WHITE);
+            board[7, 3] = new Queen(window, this, game, PieceColor.WHITE);
+            board[7, 4] = new King(window, this, game, PieceColor.WHITE);
+            board[7, 5] = new Bishop(window, this, game, PieceColor.WHITE);
+            board[7, 6] = new Knight(window, this, game, PieceColor.WHITE);
+            board[7, 7] = new Rook(window, this, game, PieceColor.WHITE);
+
+            for (int i = 0; i < 8; i++)
+                board[6, i] = new Pawn(window, this, game, PieceColor.WHITE);
         }
-        public string GetPieceTypeFromField(int row, int column)
+        public Piece GetPieceFromField(int row, int column)
+        {
+            return board[row, column];
+        }
+        public PieceType GetPieceTypeFromField(int row, int column)
         {
             return board[row, column].type;
         }
-        public string getPieceColorFromField(int row, int column)
+        public PieceColor GetPieceColorFromField(int row, int column)
         {
             return board[row, column].color;
         }
-        public bool isFieldEmpty(int row, int column)
+        public bool IsFieldEmpty(int row, int column)
         {
             if (row < 0 || row > 7 || column < 0 || column > 7)
                 return false;
-            if (board[row, column].type == "Empty")
+            if (board[row, column].type == PieceType.EMPTY)
                 return true;
             return false;
         }
-        public bool isFieldPossibleToCapture(int row, int column, string pieceColor)
+        public bool IsFieldPossibleToCapture(int row, int column, PieceColor pieceColor)
         {
             if (row < 0 || row > 7 || column < 0 || column > 7)
                 return false;
-            if (board[row, column].type != "Empty" && pieceColor != board[row, column].color)
+            if (board[row, column].type != PieceType.EMPTY && pieceColor != board[row, column].color)
                 return true;
             return false;
         }
-        public bool isFieldAKing(int row, int column)
+        public bool IsFieldAKing(int row, int column)
         {
-            if (board[row, column].type == "King")
+            if (board[row, column].type == PieceType.KING)
                 return true;
             return false;
         }
-        public bool firstMoveOfPiece(int pieceRow, int pieceColumn)
+        public bool FirstMoveOfPiece(int pieceRow, int pieceColumn)
         {
             return board[pieceRow, pieceColumn].firstMove;
         }
-        public bool arePointsEqual(Point point, int x, int y)
+        public bool ArePointsEqual(Point point, int x, int y)
         {
             if (point.X == x && point.Y == y)
                 return true;

@@ -1,20 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Controls;
+﻿using System.Diagnostics;
 using System.Windows.Media;
 
 namespace Chess
 {
-    class Game
+    public class Game
     {
         public GameState gameState;
         public bool gameOver;
         public MainWindow window;
-        public string turn;
+        public PieceColor turn;
         public int movesCounter;
         public bool testMode;
         public Game(GameState setGameState) 
@@ -22,10 +16,10 @@ namespace Chess
             gameState = setGameState;
             gameOver = false;
             testMode = false;
-            turn = "White";
+            turn = PieceColor.WHITE;
             movesCounter = 0;
         }
-        public bool checkIfGameOver()
+        public bool CheckIfGameOver()
         {
             if (gameState != GameState.IN_PROGRESS)
             {
@@ -39,30 +33,30 @@ namespace Chess
             }
             return false;
         }
-        public void checkGameState()
+        public void CheckGameState()
         {
-            if (window.checkForKingsDefence("Black").Count == 0 && window.checkIfAnyKingUnderCheck("Black"))
+            if (window.CheckForKingsDefence(PieceColor.BLACK).Count == 0 && window.CheckIfAnyKingUnderCheck(PieceColor.BLACK))
                 gameState = GameState.WHITE_WON;
-            if (window.checkForKingsDefence("Black").Count == 0 && !window.checkIfAnyKingUnderCheck("Black"))
+            if (window.CheckForKingsDefence(PieceColor.BLACK).Count == 0 && !window.CheckIfAnyKingUnderCheck(PieceColor.BLACK))
                 gameState = GameState.STALEMATE;
 
-            if (window.checkForKingsDefence("White").Count == 0 && window.checkIfAnyKingUnderCheck("White"))
+            if (window.CheckForKingsDefence(PieceColor.WHITE).Count == 0 && window.CheckIfAnyKingUnderCheck(PieceColor.WHITE))
                 gameState = GameState.BLACK_WON;
-            if (window.checkForKingsDefence("White").Count == 0 && !window.checkIfAnyKingUnderCheck("White"))
+            if (window.CheckForKingsDefence(PieceColor.WHITE).Count == 0 && !window.CheckIfAnyKingUnderCheck(PieceColor.WHITE))
                 gameState = GameState.STALEMATE;
         }
-        public void changeTurn()
+        public void ChangeTurn()
         {
-            if (turn == "White")
+            if (turn == PieceColor.WHITE)
             {
                 movesCounter++;
-                turn = "Black";
+                turn = PieceColor.BLACK;
                 window.turnTextBox.Background = Brushes.Black;
                 window.turnTextBox.Foreground = Brushes.White;
             }
-            else
+            else if (turn == PieceColor.BLACK)
             {
-                turn = "White";
+                turn = PieceColor.WHITE;
                 window.turnTextBox.Background = Brushes.White;
                 window.turnTextBox.Foreground = Brushes.Black;
             }
