@@ -20,7 +20,7 @@ namespace Chess
             int newPieceRow = pieceRow + 1;
             while (newPieceColumn < chessBoard.size && newPieceRow < chessBoard.size)
             {
-                if (window.CanPieceMoveHere(newPieceRow, newPieceColumn, color, checkForChecks, pieceRow, pieceColumn))
+                if (chessBoard.CanPieceMoveHere(newPieceRow, newPieceColumn, color, checkForChecks, pieceRow, pieceColumn))
                     possibleMoves.Add(new Point(newPieceRow, newPieceColumn));
                 if (!chessBoard.IsFieldEmpty(newPieceRow, newPieceColumn))
                     break;
@@ -31,7 +31,7 @@ namespace Chess
             newPieceRow = pieceRow - 1;
             while (newPieceColumn >= chessBoard.minimumIndex && newPieceRow >= chessBoard.minimumIndex)
             {
-                if (window.CanPieceMoveHere(newPieceRow, newPieceColumn, color, checkForChecks, pieceRow, pieceColumn))
+                if (chessBoard.CanPieceMoveHere(newPieceRow, newPieceColumn, color, checkForChecks, pieceRow, pieceColumn))
                     possibleMoves.Add(new Point(newPieceRow, newPieceColumn));
                 if (!chessBoard.IsFieldEmpty(newPieceRow, newPieceColumn))
                     break;
@@ -42,7 +42,7 @@ namespace Chess
             newPieceRow = pieceRow - 1;
             while (newPieceColumn < chessBoard.size && newPieceRow >= chessBoard.minimumIndex)
             {
-                if (window.CanPieceMoveHere(newPieceRow, newPieceColumn, color, checkForChecks, pieceRow, pieceColumn))
+                if (chessBoard.CanPieceMoveHere(newPieceRow, newPieceColumn, color, checkForChecks, pieceRow, pieceColumn))
                     possibleMoves.Add(new Point(newPieceRow, newPieceColumn));
                 if (!chessBoard.IsFieldEmpty(newPieceRow, newPieceColumn))
                     break;
@@ -53,7 +53,7 @@ namespace Chess
             newPieceRow = pieceRow + 1;
             while (newPieceColumn >= chessBoard.minimumIndex && newPieceRow < chessBoard.size)
             {
-                if (window.CanPieceMoveHere(newPieceRow, newPieceColumn, color, checkForChecks, pieceRow, pieceColumn))
+                if (chessBoard.CanPieceMoveHere(newPieceRow, newPieceColumn, color, checkForChecks, pieceRow, pieceColumn))
                     possibleMoves.Add(new Point(newPieceRow, newPieceColumn));
                 if (!chessBoard.IsFieldEmpty(newPieceRow, newPieceColumn))
                     break;

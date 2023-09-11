@@ -16,24 +16,24 @@ namespace Chess
         }
         public override void GeneratePossibleMoves(int pieceRow, int pieceColumn, List<Point> possibleMoves, bool checkForChecks)
         {
-            if (window.CanPieceMoveHere(pieceRow - 1, pieceColumn - 2, color, checkForChecks, pieceRow, pieceColumn))
+            if (chessBoard.CanPieceMoveHere(pieceRow - 1, pieceColumn - 2, color, checkForChecks, pieceRow, pieceColumn))
                 possibleMoves.Add(new Point(pieceRow - 1, pieceColumn - 2));
-            if (window.CanPieceMoveHere(pieceRow + 1, pieceColumn - 2, color, checkForChecks, pieceRow, pieceColumn))
+            if (chessBoard.CanPieceMoveHere(pieceRow + 1, pieceColumn - 2, color, checkForChecks, pieceRow, pieceColumn))
                 possibleMoves.Add(new Point(pieceRow + 1, pieceColumn - 2));
 
-            if (window.CanPieceMoveHere(pieceRow - 1, pieceColumn + 2, color, checkForChecks, pieceRow, pieceColumn))
+            if (chessBoard.CanPieceMoveHere(pieceRow - 1, pieceColumn + 2, color, checkForChecks, pieceRow, pieceColumn))
                 possibleMoves.Add(new Point(pieceRow - 1, pieceColumn + 2));
-            if (window.CanPieceMoveHere(pieceRow + 1, pieceColumn + 2, color, checkForChecks, pieceRow, pieceColumn))
+            if (chessBoard.CanPieceMoveHere(pieceRow + 1, pieceColumn + 2, color, checkForChecks, pieceRow, pieceColumn))
                 possibleMoves.Add(new Point(pieceRow + 1, pieceColumn + 2));
 
-            if (window.CanPieceMoveHere(pieceRow - 2, pieceColumn + 1, color, checkForChecks, pieceRow, pieceColumn))
+            if (chessBoard.CanPieceMoveHere(pieceRow - 2, pieceColumn + 1, color, checkForChecks, pieceRow, pieceColumn))
                 possibleMoves.Add(new Point(pieceRow - 2, pieceColumn + 1));
-            if (window.CanPieceMoveHere(pieceRow + 2, pieceColumn + 1, color, checkForChecks, pieceRow, pieceColumn))
+            if (chessBoard.CanPieceMoveHere(pieceRow + 2, pieceColumn + 1, color, checkForChecks, pieceRow, pieceColumn))
                 possibleMoves.Add(new Point(pieceRow + 2, pieceColumn + 1));
 
-            if (window.CanPieceMoveHere(pieceRow - 2, pieceColumn - 1, color, checkForChecks, pieceRow, pieceColumn))
+            if (chessBoard.CanPieceMoveHere(pieceRow - 2, pieceColumn - 1, color, checkForChecks, pieceRow, pieceColumn))
                 possibleMoves.Add(new Point(pieceRow - 2, pieceColumn - 1));
-            if (window.CanPieceMoveHere(pieceRow + 2, pieceColumn - 1, color, checkForChecks, pieceRow, pieceColumn))
+            if (chessBoard.CanPieceMoveHere(pieceRow + 2, pieceColumn - 1, color, checkForChecks, pieceRow, pieceColumn))
                 possibleMoves.Add(new Point(pieceRow + 2, pieceColumn - 1));
         }
     }

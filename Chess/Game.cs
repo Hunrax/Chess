@@ -8,6 +8,7 @@ namespace Chess
         public GameState gameState;
         public bool gameOver;
         public MainWindow window;
+        public ChessBoard chessBoard;
         public PieceColor turn;
         public int movesCounter;
         public bool testMode;
@@ -61,6 +62,46 @@ namespace Chess
                 window.turnTextBox.Foreground = Brushes.Black;
             }
             window.movesCounterTextBox.Text = movesCounter.ToString();
+        }
+        public Piece GetPieceFromPieceType(string pieceType)
+        {
+            switch (pieceType)
+            {
+                case "WhitePawn":
+                    return new Pawn(window, chessBoard, this, PieceColor.WHITE);
+                case "BlackPawn":
+                    return new Pawn(window, chessBoard, this, PieceColor.BLACK);
+                case "WhiteRook":
+                    return new Rook(window, chessBoard, this, PieceColor.WHITE);
+                case "BlackRook":
+                    return new Rook(window, chessBoard, this, PieceColor.BLACK);
+                case "WhiteKnight":
+                    return new Knight(window, chessBoard, this, PieceColor.WHITE);
+                case "BlackKnight":
+                    return new Knight(window, chessBoard, this, PieceColor.BLACK);
+                case "WhiteBishop":
+                    return new Bishop(window, chessBoard, this, PieceColor.WHITE);
+                case "BlackBishop":
+                    return new Bishop(window, chessBoard, this, PieceColor.BLACK);
+                case "WhiteQueen":
+                    return new Queen(window, chessBoard, this, PieceColor.WHITE);
+                case "BlackQueen":
+                    return new Queen(window, chessBoard, this, PieceColor.BLACK);
+                case "WhiteKing":
+                    return new King(window, chessBoard, this, PieceColor.WHITE);
+                case "BlackKing":
+                    return new King(window, chessBoard, this, PieceColor.BLACK);
+                default:
+                    return new Empty(window, chessBoard, this, PieceColor.NONE);
+            }
+        }
+        public PieceColor GetPieceColorFromPieceType(string pieceType)
+        {
+            if (pieceType.StartsWith("White"))
+                return PieceColor.WHITE;
+            else if (pieceType.StartsWith("Black"))
+                return PieceColor.BLACK;
+            return PieceColor.NONE;
         }
     }
     public enum GameState
