@@ -42,7 +42,7 @@ namespace Chess
                 {
                     if ((checkForChecks && window.IsKingSafeAfterMove(pieceRow, pieceColumn, pieceRow, pieceColumn + 2) && window.IsKingSafeAfterMove(pieceRow, pieceColumn, pieceRow, pieceColumn + 1)) || !checkForChecks)
                     {
-                        //if(!CheckIfAnyKingUnderCheck("White"))
+                        //if(!window.CheckIfKingUnderCheck(PieceColor.WHITE))
                         {
                             possibleMoves.Add(new Point(pieceRow, pieceColumn + 2));
                             chessBoard.whiteShortCastling = true;
@@ -53,7 +53,7 @@ namespace Chess
                 {
                     if ((checkForChecks && window.IsKingSafeAfterMove(pieceRow, pieceColumn, pieceRow, pieceColumn - 2) && window.IsKingSafeAfterMove(pieceRow, pieceColumn, pieceRow, pieceColumn - 1)) || !checkForChecks)
                     {
-                        //if (!CheckIfAnyKingUnderCheck("White"))
+                        //if (!window.CheckIfKingUnderCheck(PieceColor.WHITE))
                         {
                             possibleMoves.Add(new Point(pieceRow, pieceColumn - 2));
                             chessBoard.whiteLongCastling = true;
@@ -67,7 +67,7 @@ namespace Chess
                 {
                     if ((checkForChecks && window.IsKingSafeAfterMove(pieceRow, pieceColumn, pieceRow, pieceColumn + 2) && window.IsKingSafeAfterMove(pieceRow, pieceColumn, pieceRow, pieceColumn + 1)) || !checkForChecks)
                     {
-                        //if (!CheckIfAnyKingUnderCheck("Black"))
+                        //if (!window.CheckIfKingUnderCheck(PieceColor.BLACK))
                         {
                             possibleMoves.Add(new Point(pieceRow, pieceColumn + 2));
                             chessBoard.blackShortCastling = true;
@@ -78,7 +78,7 @@ namespace Chess
                 {
                     if ((checkForChecks && window.IsKingSafeAfterMove(pieceRow, pieceColumn, pieceRow, pieceColumn - 2) && window.IsKingSafeAfterMove(pieceRow, pieceColumn, pieceRow, pieceColumn - 1)) || !checkForChecks)
                     {
-                        //if (!CheckIfAnyKingUnderCheck("Black"))
+                        //if (!window.CheckIfKingUnderCheck(PieceColor.BLACK))
                         {
                             possibleMoves.Add(new Point(pieceRow, pieceColumn - 2));
                             chessBoard.blackLongCastling = true;

@@ -140,7 +140,7 @@ namespace Chess
                 MovePieceToField(selectedField, pieceType, fieldType, fieldColumn, fieldRow, pieceColumn, pieceRow);
                 PromotePawn(fieldRow, fieldColumn);
                 chessBoard.Print();
-                CheckIfAnyKingUnderCheck(game.turn);
+                CheckBothKingsForChecks();
                 chessBoard.HighlightKingUnderCheck();
                 game.CheckGameState();
                 if (game.CheckIfGameOver())
@@ -268,32 +268,29 @@ namespace Chess
             }
             return possibleMoves;
         }
-        public bool CheckIfAnyKingUnderCheck(PieceColor pieceColor)
+        public bool CheckIfKingUnderCheck(PieceColor pieceColor)
         {
-            if (pieceColor == PieceColor.WHITE)
-                pieceColor = PieceColor.BLACK;
-            else if (pieceColor == PieceColor.BLACK)
-                pieceColor = PieceColor.WHITE;
-
-            List<Point> possibleMoves = GenerateAllPossibleMoves(pieceColor);
-            foreach (Point possibleMove in possibleMoves)
+            List<Point> possibleMoves = new List<Point>();
+            for (int i = 0; i < chessBoard.size; i++)
             {
-                int row = (int)possibleMove.X;
-                int column = (int)possibleMove.Y;
-                if (chessBoard.IsFieldAKing(row, column) && pieceColor == PieceColor.WHITE)
+                for (int j = 0; j < chessBoard.size; j++)
                 {
-                    blackKingUnderCheck = true;
-                    return true;
-                }
-                if (chessBoard.IsFieldAKing(row, column) && pieceColor == PieceColor.BLACK)
-                {
-                    whiteKingUnderCheck = true;
-                    return true;
+                    if (!chessBoard.IsFieldEmpty(i, j) && chessBoard.GetPieceColorFromField(i, j) != pieceColor)
+                    {
+                        GeneratePossibleMovesForPiece(i, j, possibleMoves, false);
+                        if(possibleMoves.Contains(chessBoard.GetKingPosition(pieceColor)))
+                        {
+                            return true;
+                        }
+                    } 
                 }
             }
-            whiteKingUnderCheck = false;
-            blackKingUnderCheck = false;
             return false;
+        }
+        private void CheckBothKingsForChecks()
+        {
+            blackKingUnderCheck = CheckIfKingUnderCheck(PieceColor.BLACK);
+            whiteKingUnderCheck = CheckIfKingUnderCheck(PieceColor.WHITE);
         }
         public bool IsKingSafeAfterMove(int pieceRow, int pieceColumn, int fieldRow, int fieldColumn)
         {
@@ -305,7 +302,7 @@ namespace Chess
                 chessBoard.board[fieldRow, fieldColumn] = piece;
                 chessBoard.board[pieceRow, pieceColumn] = new Empty(mainWindow, chessBoard, game, PieceColor.NONE);
 
-                bool kingSafe = !CheckIfAnyKingUnderCheck(piece.color);
+                bool kingSafe = !CheckIfKingUnderCheck(piece.color);
 
                 chessBoard.board[fieldRow, fieldColumn] = field;
                 chessBoard.board[pieceRow, pieceColumn] = piece;

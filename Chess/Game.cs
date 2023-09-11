@@ -36,14 +36,14 @@ namespace Chess
         }
         public void CheckGameState()
         {
-            if (window.CheckForKingsDefence(PieceColor.BLACK).Count == 0 && window.CheckIfAnyKingUnderCheck(PieceColor.BLACK))
+            if (window.CheckForKingsDefence(PieceColor.BLACK).Count == 0 && window.CheckIfKingUnderCheck(PieceColor.BLACK))
                 gameState = GameState.WHITE_WON;
-            if (window.CheckForKingsDefence(PieceColor.BLACK).Count == 0 && !window.CheckIfAnyKingUnderCheck(PieceColor.BLACK))
+            if (window.CheckForKingsDefence(PieceColor.BLACK).Count == 0 && !window.CheckIfKingUnderCheck(PieceColor.BLACK))
                 gameState = GameState.STALEMATE;
 
-            if (window.CheckForKingsDefence(PieceColor.WHITE).Count == 0 && window.CheckIfAnyKingUnderCheck(PieceColor.WHITE))
+            if (window.CheckForKingsDefence(PieceColor.WHITE).Count == 0 && window.CheckIfKingUnderCheck(PieceColor.WHITE))
                 gameState = GameState.BLACK_WON;
-            if (window.CheckForKingsDefence(PieceColor.WHITE).Count == 0 && !window.CheckIfAnyKingUnderCheck(PieceColor.WHITE))
+            if (window.CheckForKingsDefence(PieceColor.WHITE).Count == 0 && !window.CheckIfKingUnderCheck(PieceColor.WHITE))
                 gameState = GameState.STALEMATE;
         }
         public void ChangeTurn()
