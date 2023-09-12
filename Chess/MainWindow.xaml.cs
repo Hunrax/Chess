@@ -238,21 +238,6 @@ namespace Chess
             else
                 enPassantStatus = 0;
         }
-        private List<Point> GenerateAllPossibleMoves(PieceColor pieceColor)
-        {
-            List<Point> possibleMoves = new List<Point>();
-            for (int i = 0; i < chessBoard.size; i++)
-            {
-                for (int j = 0; j < chessBoard.size; j++)
-                {
-                    if (!chessBoard.IsFieldEmpty(i, j) && chessBoard.GetPieceColorFromField(i, j) == pieceColor)
-                    {
-                        GeneratePossibleMovesForPiece(i, j, possibleMoves, false);
-                    }
-                }
-            }
-            return possibleMoves;
-        }
         public List<Point> CheckForKingsDefence(PieceColor pieceColor)
         {
             List<Point> possibleMoves = new List<Point>();
