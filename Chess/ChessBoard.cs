@@ -301,7 +301,7 @@ namespace Chess
                     counter++;
                 }
             }
-            return chessBoardToString.ToString();
+            return new string(chessBoardToString);
         }
     }
 }

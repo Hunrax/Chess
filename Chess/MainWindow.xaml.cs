@@ -155,7 +155,7 @@ namespace Chess
         {
             CheckBothKingsForChecks();
             chessBoard.HighlightKingUnderCheck();
-            game.CheckGameState();
+            game.CheckGameState(chessBoard.ChessboardToString());
             if (game.CheckIfGameOver())
             {
                 foreach (Button field in gornaWarstwa.Children)

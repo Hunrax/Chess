@@ -34,13 +34,15 @@ namespace Chess
                     Trace.WriteLine("GAME OVER: WHITE WINS!");
                 if (gameState == GameState.BLACK_WON)
                     Trace.WriteLine("GAME OVER: BLACK WINS!");
-                if (gameState == GameState.DRAW)
+                if (gameState == GameState.DRAW_INSUFFICIENT_MATERIAL)
                     Trace.WriteLine("GAME OVER: DRAW - INSUFFICIENT MATERIAL!");
+                if (gameState == GameState.DRAW_THREEFOLD_REPETITION)
+                    Trace.WriteLine("GAME OVER: DRAW - THREEFOLD REPETITION!");
                 return true;
             }
             return false;
         }
-        public void CheckGameState()
+        public void CheckGameState(string currentState)
         {
             if (window.CheckForKingsDefence(PieceColor.BLACK).Count == 0 && window.CheckIfKingUnderCheck(PieceColor.BLACK))
                 gameState = GameState.WHITE_WON;
@@ -52,10 +54,12 @@ namespace Chess
             if (window.CheckForKingsDefence(PieceColor.WHITE).Count == 0 && !window.CheckIfKingUnderCheck(PieceColor.WHITE))
                 gameState = GameState.STALEMATE;
 
-            if (CheckForinsufficientMaterial())
-                gameState = GameState.DRAW;
+            if (CheckForInsufficientMaterial())
+                gameState = GameState.DRAW_INSUFFICIENT_MATERIAL;
+            if (CheckThreefoldRepetition(currentState))
+                gameState = GameState.DRAW_THREEFOLD_REPETITION;
         }
-        public bool CheckForinsufficientMaterial()
+        public bool CheckForInsufficientMaterial()
         {
             chessBoard.CountAllPiecesOnBoard();
             if (chessBoard.whitePawns == 0 && chessBoard.blackPawns == 0)
@@ -95,6 +99,19 @@ namespace Chess
                 window.turnTextBox.Foreground = Brushes.Black;
             }
             window.movesCounterTextBox.Text = movesCounter.ToString();
+        }
+        public bool CheckThreefoldRepetition(string currentState)
+        {
+            int repetitionCounter = 0;
+            foreach (string chessBoardState in gameHistory)
+            {
+                if(currentState == chessBoardState)
+                    repetitionCounter++;
+
+                if (repetitionCounter == 3)
+                    return true;
+            }
+            return false;
         }
         public Piece GetPieceFromPieceType(string pieceType)
         {
@@ -143,6 +160,7 @@ namespace Chess
         WHITE_WON,
         BLACK_WON,
         STALEMATE,
-        DRAW
+        DRAW_INSUFFICIENT_MATERIAL,
+        DRAW_THREEFOLD_REPETITION
     }
 }
