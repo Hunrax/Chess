@@ -31,7 +31,7 @@ namespace Chess
             game.chessBoard = chessBoard;
             chessBoard.window = mainWindow;
             chessBoard.game = game;
-            chessBoard.Clear();
+
             chessBoard.Initialize();
             chessBoard.Print();
         }
@@ -75,6 +75,10 @@ namespace Chess
             chessBoard.board[pieceRow, pieceColumn] = selectedPromotionPiece;
             chessBoard.board[pieceRow, pieceColumn].firstMove = false;
             promotionPieceSelected = false;
+
+            chessBoard.Print();
+            game.gameHistory.Add(chessBoard.ChessboardToString());
+            CheckForChecksAndGameOver();
         }
         private void SelectPiece(Button button, string pieceType)
         {
@@ -138,16 +142,24 @@ namespace Chess
 
                 UpdateEnPassantStatus(pieceType, fieldType, pieceRow, pieceColumn, fieldRow, fieldColumn);
                 MovePieceToField(selectedField, pieceType, fieldType, fieldColumn, fieldRow, pieceColumn, pieceRow);
-                PromotePawn(fieldRow, fieldColumn);
-                chessBoard.Print();
-                CheckBothKingsForChecks();
-                chessBoard.HighlightKingUnderCheck();
-                game.CheckGameState();
-                if (game.CheckIfGameOver())
+
+                if (!PromotePawn(fieldRow, fieldColumn))
                 {
-                    foreach (Button field in gornaWarstwa.Children)
-                        field.IsEnabled = false;
+                    chessBoard.Print();
+                    game.gameHistory.Add(chessBoard.ChessboardToString());
                 }
+                CheckForChecksAndGameOver();
+            }
+        }
+        private void CheckForChecksAndGameOver()
+        {
+            CheckBothKingsForChecks();
+            chessBoard.HighlightKingUnderCheck();
+            game.CheckGameState();
+            if (game.CheckIfGameOver())
+            {
+                foreach (Button field in gornaWarstwa.Children)
+                    field.IsEnabled = false;
             }
         }
         public void PerformCastling(int rookRow, int rookColumn, int emptyFieldRow, int emptyFieldColumn)
@@ -296,7 +308,7 @@ namespace Chess
             }
             return true;
         }
-        private void PromotePawn(int row, int column)
+        private bool PromotePawn(int row, int column)
         {
             PieceType type = chessBoard.GetPieceTypeFromField(row, column);
             PieceColor color = chessBoard.GetPieceColorFromField(row, column);
@@ -308,11 +320,13 @@ namespace Chess
                     {
                         SetWhitePromotionButtonsVisibility(Visibility.Visible);
                         chessBoard.ChangeChessBoardOpacity(0.5);
+                        return true;
                     }
                     else
                     {
                         SetWhitePromotionButtonsVisibility(Visibility.Hidden);
                         chessBoard.ChangeChessBoardOpacity(1);
+                        return true;
                     }
                 }
                 if (color == PieceColor.BLACK && row == chessBoard.maximumIndex)
@@ -321,14 +335,17 @@ namespace Chess
                     {
                         SetBlackPromotionButtonsVisibility(Visibility.Visible);
                         chessBoard.ChangeChessBoardOpacity(0.5);
+                        return true;
                     }
                     else
                     {
                         SetBlackPromotionButtonsVisibility(Visibility.Hidden);
                         chessBoard.ChangeChessBoardOpacity(1);
+                        return true;
                     }
                 }
             }
+            return false;
         }
         private void SetWhitePromotionButtonsVisibility(Visibility visibility)
         {

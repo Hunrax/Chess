@@ -32,6 +32,8 @@ namespace Chess
         public int LONG_CASTLING_ROOK_COLUMN = 0;
         public int LONG_CASTLING_EMPTYFIELD_COLUMN = 3;
 
+        public int whitePawns, blackPawns, whiteKnights, blackKnights, whiteBishops, blackBishops, whiteRooks, blackRooks, whiteQueens, blackQueens;
+
         public void Clear()
         {
             for (int i = 0; i < 8; i++)
@@ -44,6 +46,7 @@ namespace Chess
         }
         public void Initialize()
         {
+            Clear();
             board[0, 0] = new Rook(window, this, game, PieceColor.BLACK);
             board[0, 1] = new Knight(window, this, game, PieceColor.BLACK);
             board[0, 2] = new Bishop(window, this, game, PieceColor.BLACK);
@@ -79,6 +82,10 @@ namespace Chess
         public PieceColor GetPieceColorFromField(int row, int column)
         {
             return board[row, column].color;
+        }
+        public char GetPieceSymbolFromField(int row, int column)
+        {
+            return board[row, column].symbol;
         }
         public bool IsFieldEmpty(int row, int column)
         {
@@ -133,6 +140,32 @@ namespace Chess
                 }
             }
             return new Point(-1, -1);
+        }
+        public int CountPieces(PieceType pieceType, PieceColor pieceColor)
+        {
+            int counter = 0;
+            for (int i = 0; i < size; i++)
+            {
+                for (int j = 0; j < size; j++)
+                {
+                    if(GetPieceTypeFromField(i, j) == pieceType && GetPieceColorFromField(i, j) == pieceColor)
+                        counter++;
+                }
+            }
+            return counter;
+        }
+        public void CountAllPiecesOnBoard()
+        {
+            whitePawns = CountPieces(PieceType.PAWN, PieceColor.WHITE);
+            blackPawns = CountPieces(PieceType.PAWN, PieceColor.BLACK);
+            whiteKnights = CountPieces(PieceType.KNIGHT, PieceColor.WHITE);
+            blackKnights = CountPieces(PieceType.KNIGHT, PieceColor.BLACK);
+            whiteBishops = CountPieces(PieceType.BISHOP, PieceColor.WHITE);
+            blackBishops = CountPieces(PieceType.BISHOP, PieceColor.BLACK);
+            whiteRooks = CountPieces(PieceType.ROOK, PieceColor.WHITE);
+            blackRooks = CountPieces(PieceType.ROOK, PieceColor.BLACK);
+            whiteQueens = CountPieces(PieceType.QUEEN, PieceColor.WHITE);
+            blackQueens = CountPieces(PieceType.QUEEN, PieceColor.BLACK);
         }
         public void CheckAllCastlings(string pieceType, int fieldColumn)
         {
@@ -245,15 +278,30 @@ namespace Chess
         }
         public void Print()
         {
-            for(int i = 0; i < 8; i++)
+            for(int i = 0; i < size; i++)
             {
-                for(int j = 0; j < 8; j++)
+                for(int j = 0; j < size; j++)
                 {
                     Trace.Write(board[i, j].symbol + " ");
                 }
                 Trace.WriteLine("");
             }
             Trace.WriteLine("");
+        }
+        public string ChessboardToString()
+        {
+            char[] chessBoardToString = new char[64];
+
+            int counter = 0;
+            for (int i = 0; i < size; i++)
+            {
+                for (int j = 0; j < size; j++)
+                {
+                    chessBoardToString[counter] = GetPieceSymbolFromField(i, j);
+                    counter++;
+                }
+            }
+            return chessBoardToString.ToString();
         }
     }
 }

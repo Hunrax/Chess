@@ -1,4 +1,6 @@
-﻿using System.Diagnostics;
+﻿using System.Collections.Generic;
+using System.Diagnostics;
+using System.Windows.Documents;
 using System.Windows.Media;
 
 namespace Chess
@@ -12,6 +14,7 @@ namespace Chess
         public PieceColor turn;
         public int movesCounter;
         public bool testMode;
+        public List<string> gameHistory;
         public Game(GameState setGameState) 
         {
             gameState = setGameState;
@@ -19,6 +22,7 @@ namespace Chess
             testMode = false;
             turn = PieceColor.WHITE;
             movesCounter = 0;
+            gameHistory = new List<string>();
         }
         public bool CheckIfGameOver()
         {
@@ -30,6 +34,8 @@ namespace Chess
                     Trace.WriteLine("GAME OVER: WHITE WINS!");
                 if (gameState == GameState.BLACK_WON)
                     Trace.WriteLine("GAME OVER: BLACK WINS!");
+                if (gameState == GameState.DRAW)
+                    Trace.WriteLine("GAME OVER: DRAW - INSUFFICIENT MATERIAL!");
                 return true;
             }
             return false;
@@ -45,6 +51,33 @@ namespace Chess
                 gameState = GameState.BLACK_WON;
             if (window.CheckForKingsDefence(PieceColor.WHITE).Count == 0 && !window.CheckIfKingUnderCheck(PieceColor.WHITE))
                 gameState = GameState.STALEMATE;
+
+            if (CheckForinsufficientMaterial())
+                gameState = GameState.DRAW;
+        }
+        public bool CheckForinsufficientMaterial()
+        {
+            chessBoard.CountAllPiecesOnBoard();
+            if (chessBoard.whitePawns == 0 && chessBoard.blackPawns == 0)
+            {
+                if (chessBoard.whiteQueens == 0 && chessBoard.blackQueens == 0)
+                {
+                    if (chessBoard.whiteRooks == 0 && chessBoard.blackRooks == 0)
+                    {
+                        if (chessBoard.whiteBishops == 2 || chessBoard.blackBishops == 2)
+                            return false;
+                        else if ((chessBoard.whiteBishops == 1 && chessBoard.whiteKnights == 1) || (chessBoard.blackBishops == 1 && chessBoard.blackKnights == 1))
+                            return false;
+                        else if ((chessBoard.whiteKnights == 2 && (chessBoard.blackBishops > 0 || chessBoard.blackKnights > 0)))
+                            return false;
+                        else if ((chessBoard.blackKnights == 2 && (chessBoard.whiteBishops > 0 || chessBoard.whiteKnights > 0)))
+                            return false;
+                        else
+                            return true;
+                    }
+                }
+            }
+            return false;
         }
         public void ChangeTurn()
         {
@@ -109,6 +142,7 @@ namespace Chess
         IN_PROGRESS,
         WHITE_WON,
         BLACK_WON,
-        STALEMATE
+        STALEMATE,
+        DRAW
     }
 }
