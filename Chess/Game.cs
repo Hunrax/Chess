@@ -9,7 +9,6 @@ namespace Chess
     public class Game
     {
         public GameState gameState;
-        public bool gameOver;
         public MainWindow window;
         public ChessBoard chessBoard;
         public PieceColor turn;
@@ -19,7 +18,6 @@ namespace Chess
         public Game(GameState setGameState) 
         {
             gameState = setGameState;
-            gameOver = false;
             testMode = false;
             turn = PieceColor.WHITE;
             movesCounter = 0;
@@ -62,24 +60,27 @@ namespace Chess
         }
         public void DisablePieces()
         {
-            if(!testMode)
+            if(gameState == GameState.IN_PROGRESS)
             {
-                foreach (Button field in window.gornaWarstwa.Children)
+                if (!testMode)
                 {
-                    if (chessBoard.GetPieceColorFromField(Grid.GetRow(field), Grid.GetColumn(field)) == turn)
-                        field.IsEnabled = true;
-                    else 
-                        field.IsEnabled = false;
+                    foreach (Button field in window.gornaWarstwa.Children)
+                    {
+                        if (chessBoard.GetPieceColorFromField(Grid.GetRow(field), Grid.GetColumn(field)) == turn)
+                            field.IsEnabled = true;
+                        else
+                            field.IsEnabled = false;
+                    }
                 }
-            }
-            else
-            {
-                foreach (Button field in window.gornaWarstwa.Children)
+                else
                 {
-                    if (chessBoard.GetPieceColorFromField(Grid.GetRow(field), Grid.GetColumn(field)) != PieceColor.NONE)
-                        field.IsEnabled = true;
-                    else
-                        field.IsEnabled = false;
+                    foreach (Button field in window.gornaWarstwa.Children)
+                    {
+                        if (chessBoard.GetPieceColorFromField(Grid.GetRow(field), Grid.GetColumn(field)) != PieceColor.NONE)
+                            field.IsEnabled = true;
+                        else
+                            field.IsEnabled = false;
+                    }
                 }
             }
         }
