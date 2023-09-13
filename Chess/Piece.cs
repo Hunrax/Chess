@@ -8,14 +8,12 @@ namespace Chess
         public PieceColor color;
         public PieceType type;
         public char symbol;
-        public MainWindow window;
         public ChessBoard chessBoard;
         public Game game;
         public bool firstMove;
-        public Piece(MainWindow setWindow, ChessBoard setChessBoard, Game setGame, PieceColor setColor)
+        public Piece(ChessBoard setChessBoard, Game setGame, PieceColor setColor)
         {
             chessBoard = setChessBoard;
-            window = setWindow;
             game = setGame;
             color = setColor;
         }

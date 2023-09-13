@@ -10,8 +10,7 @@ namespace Chess
     public class ChessBoard
     {
         public Piece[,] board = new Piece[8,8];
-
-        public MainWindow window;
+        public ChessBoardGUI chessBoardGUI;
         public Game game;
 
         public bool whiteShortCastling = false;
@@ -19,18 +18,21 @@ namespace Chess
         public bool blackShortCastling = false;
         public bool blackLongCastling = false;
 
-        public int minimumIndex = 0;
-        public int maximumIndex = 7;
-        public int size = 8;
+        public bool whiteKingUnderCheck = false;
+        public bool blackKingUnderCheck = false;
 
-        public int LONG_CASTLING_KING_COLUMN = 2;
-        public int SHORT_CASTLING_KING_COLUMN = 6;
-        public int WHITE_CASTLING_ROOK_ROW = 7;
-        public int BLACK_CASTLING_ROOK_ROW = 0;
-        public int SHORT_CASTLING_ROOK_COLUMN = 7;
-        public int SHORT_CASTLING_EMPTYFIELD_COLUMN = 5;
-        public int LONG_CASTLING_ROOK_COLUMN = 0;
-        public int LONG_CASTLING_EMPTYFIELD_COLUMN = 3;
+        public readonly int minimumIndex = 0;
+        public readonly int maximumIndex = 7;
+        public readonly int size = 8;
+
+        private readonly int LONG_CASTLING_KING_COLUMN = 2;
+        private readonly int SHORT_CASTLING_KING_COLUMN = 6;
+        public readonly int WHITE_CASTLING_ROOK_ROW = 7;
+        public readonly int BLACK_CASTLING_ROOK_ROW = 0;
+        public readonly int SHORT_CASTLING_ROOK_COLUMN = 7;
+        private readonly int SHORT_CASTLING_EMPTYFIELD_COLUMN = 5;
+        public readonly int LONG_CASTLING_ROOK_COLUMN = 0;
+        private readonly int LONG_CASTLING_EMPTYFIELD_COLUMN = 3;
 
         public int whitePawns, blackPawns, whiteKnights, blackKnights, whiteBishops, blackBishops, whiteRooks, blackRooks, whiteQueens, blackQueens;
 
@@ -40,36 +42,36 @@ namespace Chess
             {
                 for (int j = 0; j < 8; j++)
                 {
-                    board[i, j] = new Empty(window, this, game, PieceColor.NONE);
+                    board[i, j] = new Empty(this, game, PieceColor.NONE);
                 }
             }
         }
         public void Initialize()
         {
             Clear();
-            board[0, 0] = new Rook(window, this, game, PieceColor.BLACK);
-            board[0, 1] = new Knight(window, this, game, PieceColor.BLACK);
-            board[0, 2] = new Bishop(window, this, game, PieceColor.BLACK);
-            board[0, 3] = new Queen(window, this, game, PieceColor.BLACK);
-            board[0, 4] = new King(window, this, game, PieceColor.BLACK);
-            board[0, 5] = new Bishop(window, this, game, PieceColor.BLACK);
-            board[0, 6] = new Knight(window, this, game, PieceColor.BLACK);
-            board[0, 7] = new Rook(window, this, game, PieceColor.BLACK);
+            board[0, 0] = new Rook(this, game, PieceColor.BLACK);
+            board[0, 1] = new Knight(this, game, PieceColor.BLACK);
+            board[0, 2] = new Bishop(this, game, PieceColor.BLACK);
+            board[0, 3] = new Queen(this, game, PieceColor.BLACK);
+            board[0, 4] = new King(this, game, PieceColor.BLACK);
+            board[0, 5] = new Bishop(this, game, PieceColor.BLACK);
+            board[0, 6] = new Knight(this, game, PieceColor.BLACK);
+            board[0, 7] = new Rook(this, game, PieceColor.BLACK);
 
             for (int i = 0; i < 8; i++)
-                board[1, i] = new Pawn(window, this, game, PieceColor.BLACK);
+                board[1, i] = new Pawn(this, game, PieceColor.BLACK);
 
-            board[7, 0] = new Rook(window, this, game, PieceColor.WHITE);
-            board[7, 1] = new Knight(window, this, game, PieceColor.WHITE);
-            board[7, 2] = new Bishop(window, this, game, PieceColor.WHITE);
-            board[7, 3] = new Queen(window, this, game, PieceColor.WHITE);
-            board[7, 4] = new King(window, this, game, PieceColor.WHITE);
-            board[7, 5] = new Bishop(window, this, game, PieceColor.WHITE);
-            board[7, 6] = new Knight(window, this, game, PieceColor.WHITE);
-            board[7, 7] = new Rook(window, this, game, PieceColor.WHITE);
+            board[7, 0] = new Rook(this, game, PieceColor.WHITE);
+            board[7, 1] = new Knight(this, game, PieceColor.WHITE);
+            board[7, 2] = new Bishop(this, game, PieceColor.WHITE);
+            board[7, 3] = new Queen(this, game, PieceColor.WHITE);
+            board[7, 4] = new King(this, game, PieceColor.WHITE);
+            board[7, 5] = new Bishop(this, game, PieceColor.WHITE);
+            board[7, 6] = new Knight(this, game, PieceColor.WHITE);
+            board[7, 7] = new Rook(this, game, PieceColor.WHITE);
 
             for (int i = 0; i < 8; i++)
-                board[6, i] = new Pawn(window, this, game, PieceColor.WHITE);
+                board[6, i] = new Pawn(this, game, PieceColor.WHITE);
         }
         public Piece GetPieceFromField(int row, int column)
         {
@@ -123,7 +125,7 @@ namespace Chess
         {
             if (IsFieldEmpty(fieldRow, fieldColumn) || IsFieldPossibleToCapture(fieldRow, fieldColumn, pieceColor))
             {
-                if ((checkForChecks && window.IsKingSafeAfterMove(pieceRow, pieceColumn, fieldRow, fieldColumn)) || !checkForChecks)
+                if ((checkForChecks && IsKingSafeAfterMove(pieceRow, pieceColumn, fieldRow, fieldColumn)) || !checkForChecks)
                     return true;
                 return false;
             }
@@ -169,112 +171,95 @@ namespace Chess
         }
         public void CheckAllCastlings(string pieceType, int fieldColumn)
         {
-            if (whiteShortCastling && pieceType == "WhiteKing" && fieldColumn == SHORT_CASTLING_KING_COLUMN)
+            if(FirstMoveOfPiece((int)GetKingPosition(PieceColor.WHITE).X, (int)GetKingPosition(PieceColor.WHITE).Y))
             {
-                window.PerformCastling(WHITE_CASTLING_ROOK_ROW, SHORT_CASTLING_ROOK_COLUMN, WHITE_CASTLING_ROOK_ROW, SHORT_CASTLING_EMPTYFIELD_COLUMN);
-                whiteShortCastling = false;
-            }
-            if (whiteLongCastling && pieceType == "WhiteKing" && fieldColumn == LONG_CASTLING_KING_COLUMN)
-            {
-                window.PerformCastling(WHITE_CASTLING_ROOK_ROW, LONG_CASTLING_ROOK_COLUMN, WHITE_CASTLING_ROOK_ROW, LONG_CASTLING_EMPTYFIELD_COLUMN);
-                whiteLongCastling = false;
-            }
-
-            if (blackShortCastling && pieceType == "BlackKing" && fieldColumn == SHORT_CASTLING_KING_COLUMN)
-            {
-                window.PerformCastling(BLACK_CASTLING_ROOK_ROW, SHORT_CASTLING_ROOK_COLUMN, BLACK_CASTLING_ROOK_ROW, SHORT_CASTLING_EMPTYFIELD_COLUMN);
-                blackShortCastling = false;
-            }
-            if (blackLongCastling && pieceType == "BlackKing" && fieldColumn == LONG_CASTLING_KING_COLUMN)
-            {
-                window.PerformCastling(BLACK_CASTLING_ROOK_ROW, LONG_CASTLING_ROOK_COLUMN, BLACK_CASTLING_ROOK_ROW, LONG_CASTLING_EMPTYFIELD_COLUMN);
-                blackLongCastling = false;
-            }
-        }
-        public void ChangeChessBoardOpacity(double opacity)
-        {
-            foreach (Grid field in window.dolnaWarstwa.Children)
-            {
-                field.Opacity = opacity;
-            }
-            foreach (Button field in window.gornaWarstwa.Children)
-            {
-                field.Opacity = opacity;
-                if (field.Opacity < 1)
-                    field.IsEnabled = false;
-                else
-                    field.IsEnabled = true;
-            }
-        }
-        public void HighlightPossibleFields(List<Point> possibleMoves)
-        {
-            for (int i = 0; i < possibleMoves.Count; i++)
-            {
-                Grid gridDolnaWarstwa = window.dolnaWarstwa.Children.Cast<UIElement>()
-                    .FirstOrDefault(e => Grid.GetRow(e) == possibleMoves[i].X && Grid.GetColumn(e) == possibleMoves[i].Y) as Grid;
-
-                Button gridGornaWarstwa = window.gornaWarstwa.Children.Cast<UIElement>()
-                    .FirstOrDefault(e => Grid.GetRow(e) == Grid.GetRow(gridDolnaWarstwa) && Grid.GetColumn(e) == Grid.GetColumn(gridDolnaWarstwa)) as Button;
-
-                if (!IsFieldAKing((int)possibleMoves[i].X, (int)possibleMoves[i].Y))
+                if (whiteShortCastling && pieceType == "WhiteKing" && fieldColumn == SHORT_CASTLING_KING_COLUMN)
                 {
-                    gridDolnaWarstwa.Opacity = 1;
-                    gridGornaWarstwa.IsEnabled = true;
+                    chessBoardGUI.PerformCastling(WHITE_CASTLING_ROOK_ROW, SHORT_CASTLING_ROOK_COLUMN, WHITE_CASTLING_ROOK_ROW, SHORT_CASTLING_EMPTYFIELD_COLUMN);
+                    whiteShortCastling = false;
+                }
+                if (whiteLongCastling && pieceType == "WhiteKing" && fieldColumn == LONG_CASTLING_KING_COLUMN)
+                {
+                    chessBoardGUI.PerformCastling(WHITE_CASTLING_ROOK_ROW, LONG_CASTLING_ROOK_COLUMN, WHITE_CASTLING_ROOK_ROW, LONG_CASTLING_EMPTYFIELD_COLUMN);
+                    whiteLongCastling = false;
+                }
+            }
+            if (FirstMoveOfPiece((int)GetKingPosition(PieceColor.BLACK).X, (int)GetKingPosition(PieceColor.BLACK).Y))
+            {
+                if (blackShortCastling && pieceType == "BlackKing" && fieldColumn == SHORT_CASTLING_KING_COLUMN)
+                {
+                    chessBoardGUI.PerformCastling(BLACK_CASTLING_ROOK_ROW, SHORT_CASTLING_ROOK_COLUMN, BLACK_CASTLING_ROOK_ROW, SHORT_CASTLING_EMPTYFIELD_COLUMN);
+                    blackShortCastling = false;
+                }
+                if (blackLongCastling && pieceType == "BlackKing" && fieldColumn == LONG_CASTLING_KING_COLUMN)
+                {
+                    chessBoardGUI.PerformCastling(BLACK_CASTLING_ROOK_ROW, LONG_CASTLING_ROOK_COLUMN, BLACK_CASTLING_ROOK_ROW, LONG_CASTLING_EMPTYFIELD_COLUMN);
+                    blackLongCastling = false;
                 }
             }
         }
-        public void HighlightKingUnderCheck()
+        public void GeneratePossibleMovesForPiece(int pieceRow, int pieceColumn, List<Point> possibleMoves, bool checkForChecks)
         {
-            int blackKingRow = (int)GetKingPosition(PieceColor.BLACK).X;
-            int blackKingColumn = (int)GetKingPosition(PieceColor.BLACK).Y;
-
-            int whiteKingRow = (int)GetKingPosition(PieceColor.WHITE).X;
-            int whiteKingColumn = (int)GetKingPosition(PieceColor.WHITE).Y;
-
-            Grid blackKing = window.dolnaWarstwa.Children.Cast<UIElement>()
-                .FirstOrDefault(e => Grid.GetRow(e) == blackKingRow && Grid.GetColumn(e) == blackKingColumn) as Grid;
-
-            Grid whiteKing = window.dolnaWarstwa.Children.Cast<UIElement>()
-                .FirstOrDefault(e => Grid.GetRow(e) == whiteKingRow && Grid.GetColumn(e) == whiteKingColumn) as Grid;
-
-            if (window.blackKingUnderCheck)
-                blackKing.Background = Brushes.DarkRed;
-
-            if (window.whiteKingUnderCheck)
-                whiteKing.Background = Brushes.DarkRed;
-
-            else if (!window.whiteKingUnderCheck && !window.blackKingUnderCheck)
-                UnhighlightRedFields();
+            Piece piece = GetPieceFromField(pieceRow, pieceColumn);
+            piece.GeneratePossibleMoves(pieceRow, pieceColumn, possibleMoves, checkForChecks);
         }
-        private void UnhighlightRedFields()
+        public bool CheckIfKingUnderCheck(PieceColor pieceColor)
         {
+            List<Point> possibleMoves = new List<Point>();
             for (int i = 0; i < size; i++)
             {
                 for (int j = 0; j < size; j++)
                 {
-                    Grid field = window.dolnaWarstwa.Children.Cast<UIElement>()
-                        .FirstOrDefault(e => Grid.GetRow(e) == i && Grid.GetColumn(e) == j) as Grid;
-
-                    if (field.Background == Brushes.DarkRed)
+                    if (!IsFieldEmpty(i, j) && GetPieceColorFromField(i, j) != pieceColor)
                     {
-                        Grid fieldNeighbour;
-                        if (i < maximumIndex)
-                            fieldNeighbour = window.dolnaWarstwa.Children.Cast<UIElement>()
-                                .FirstOrDefault(e => Grid.GetRow(e) == i + 1 && Grid.GetColumn(e) == j) as Grid;
-                        else
-                            fieldNeighbour = window.dolnaWarstwa.Children.Cast<UIElement>()
-                                .FirstOrDefault(e => Grid.GetRow(e) == i - 1 && Grid.GetColumn(e) == j) as Grid;
-
-                        if (fieldNeighbour.Background == Brushes.Wheat)
+                        GeneratePossibleMovesForPiece(i, j, possibleMoves, false);
+                        if (possibleMoves.Contains(GetKingPosition(pieceColor)))
                         {
-                            BrushConverter converter = new BrushConverter();
-                            field.Background = (Brush)converter.ConvertFromString("#4E3524");
+                            return true;
                         }
-                        else
-                            field.Background = Brushes.Wheat;
                     }
                 }
             }
+            return false;
+        }
+        public void CheckBothKingsForChecks()
+        {
+            blackKingUnderCheck = CheckIfKingUnderCheck(PieceColor.BLACK);
+            whiteKingUnderCheck = CheckIfKingUnderCheck(PieceColor.WHITE);
+        }
+        public bool IsKingSafeAfterMove(int pieceRow, int pieceColumn, int fieldRow, int fieldColumn)
+        {
+            Piece piece = board[pieceRow, pieceColumn];
+            if (piece.type != PieceType.EMPTY)
+            {
+                Piece field = board[fieldRow, fieldColumn];
+
+                board[fieldRow, fieldColumn] = piece;
+                board[pieceRow, pieceColumn] = new Empty(this, game, PieceColor.NONE);
+
+                bool kingSafe = !CheckIfKingUnderCheck(piece.color);
+
+                board[fieldRow, fieldColumn] = field;
+                board[pieceRow, pieceColumn] = piece;
+
+                return kingSafe;
+            }
+            return true;
+        }
+        public List<Point> CheckForKingsDefence(PieceColor pieceColor)
+        {
+            List<Point> possibleMoves = new List<Point>();
+            for (int i = 0; i < size; i++)
+            {
+                for (int j = 0; j < size; j++)
+                {
+                    if (!IsFieldEmpty(i, j) && GetPieceColorFromField(i, j) == pieceColor)
+                    {
+                        GeneratePossibleMovesForPiece(i, j, possibleMoves, true);
+                    }
+                }
+            }
+            return possibleMoves;
         }
         public void Print()
         {

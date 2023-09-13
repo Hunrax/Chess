@@ -8,9 +8,8 @@ namespace Chess
     {
         public int pawnDoubleMoveTurn;
         public int moveDirection1, moveDirection2;
-        public Pawn(MainWindow setWindow, ChessBoard setChessBoard, Game setGame, PieceColor setColor) : base(setWindow, setChessBoard, setGame, setColor)
+        public Pawn(ChessBoard setChessBoard, Game setGame, PieceColor setColor) : base(setChessBoard, setGame, setColor)
         {
-            window = setWindow;
             chessBoard = setChessBoard;
             game = setGame;
             color = setColor;
@@ -24,34 +23,34 @@ namespace Chess
         {
             if (chessBoard.IsFieldEmpty(pieceRow + moveDirection1, pieceColumn))
             {
-                if ((checkForChecks && window.IsKingSafeAfterMove(pieceRow, pieceColumn, pieceRow + moveDirection1, pieceColumn)) || !checkForChecks)
+                if ((checkForChecks && chessBoard.IsKingSafeAfterMove(pieceRow, pieceColumn, pieceRow + moveDirection1, pieceColumn)) || !checkForChecks)
                     possibleMoves.Add(new Point(pieceRow + moveDirection1, pieceColumn));
 
                 if (chessBoard.IsFieldEmpty(pieceRow + (2 * moveDirection1), pieceColumn) && firstMove)
                 {
-                    if ((checkForChecks && window.IsKingSafeAfterMove(pieceRow, pieceColumn, pieceRow + (2 * moveDirection1), pieceColumn)) || !checkForChecks)
+                    if ((checkForChecks && chessBoard.IsKingSafeAfterMove(pieceRow, pieceColumn, pieceRow + (2 * moveDirection1), pieceColumn)) || !checkForChecks)
                         possibleMoves.Add(new Point(pieceRow + (2 * moveDirection1), pieceColumn));
                 }
             }
 
             if (chessBoard.IsFieldPossibleToCapture(pieceRow + moveDirection1, pieceColumn + moveDirection1, color))
             {
-                if ((checkForChecks && window.IsKingSafeAfterMove(pieceRow, pieceColumn, pieceRow + moveDirection1, pieceColumn + moveDirection1)) || !checkForChecks)
+                if ((checkForChecks && chessBoard.IsKingSafeAfterMove(pieceRow, pieceColumn, pieceRow + moveDirection1, pieceColumn + moveDirection1)) || !checkForChecks)
                     possibleMoves.Add(new Point(pieceRow + moveDirection1, pieceColumn + moveDirection1));
             }
             if (chessBoard.IsFieldPossibleToCapture(pieceRow + moveDirection1, pieceColumn + moveDirection2, color))
             {
-                if ((checkForChecks && window.IsKingSafeAfterMove(pieceRow, pieceColumn, pieceRow + moveDirection1, pieceColumn + moveDirection2)) || !checkForChecks)
+                if ((checkForChecks && chessBoard.IsKingSafeAfterMove(pieceRow, pieceColumn, pieceRow + moveDirection1, pieceColumn + moveDirection2)) || !checkForChecks)
                     possibleMoves.Add(new Point(pieceRow + moveDirection1, pieceColumn + moveDirection2));
             }
             if (chessBoard.IsFieldEmpty(pieceRow + moveDirection1, pieceColumn + moveDirection1) && EnPassant(pieceRow, pieceColumn, moveDirection1))
             {
-                if ((checkForChecks && window.IsKingSafeAfterMove(pieceRow, pieceColumn, pieceRow + moveDirection1, pieceColumn + moveDirection1)) || !checkForChecks)
+                if ((checkForChecks && chessBoard.IsKingSafeAfterMove(pieceRow, pieceColumn, pieceRow + moveDirection1, pieceColumn + moveDirection1)) || !checkForChecks)
                     possibleMoves.Add(new Point(pieceRow + moveDirection1, pieceColumn + moveDirection1));
             }
             if (chessBoard.IsFieldEmpty(pieceRow + moveDirection1, pieceColumn + moveDirection2) && EnPassant(pieceRow, pieceColumn, moveDirection2))
             {
-                if ((checkForChecks && window.IsKingSafeAfterMove(pieceRow, pieceColumn, pieceRow + moveDirection1, pieceColumn + moveDirection2)) || !checkForChecks)
+                if ((checkForChecks && chessBoard.IsKingSafeAfterMove(pieceRow, pieceColumn, pieceRow + moveDirection1, pieceColumn + moveDirection2)) || !checkForChecks)
                     possibleMoves.Add(new Point(pieceRow + moveDirection1, pieceColumn + moveDirection2));
             }
         }

@@ -1,13 +1,13 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.Windows;
 
 namespace Chess
 {
     public class King : Piece
     {
-        public King(MainWindow setWindow, ChessBoard setChessBoard, Game setGame, PieceColor setColor) : base(setWindow, setChessBoard, setGame, setColor)
+        public King(ChessBoard setChessBoard, Game setGame, PieceColor setColor) : base(setChessBoard, setGame, setColor)
         {
-            window = setWindow;
             chessBoard = setChessBoard;
             game = setGame;
             color = setColor;
@@ -40,9 +40,9 @@ namespace Chess
             {
                 if (CheckCastling(chessBoard.WHITE_CASTLING_ROOK_ROW, chessBoard.SHORT_CASTLING_ROOK_COLUMN) && chessBoard.IsFieldEmpty(pieceRow, pieceColumn + 1) && chessBoard.IsFieldEmpty(pieceRow, pieceColumn + 2))
                 {
-                    if ((checkForChecks && window.IsKingSafeAfterMove(pieceRow, pieceColumn, pieceRow, pieceColumn + 2) && window.IsKingSafeAfterMove(pieceRow, pieceColumn, pieceRow, pieceColumn + 1)) || !checkForChecks)
+                    if ((checkForChecks && chessBoard.IsKingSafeAfterMove(pieceRow, pieceColumn, pieceRow, pieceColumn + 2) && chessBoard.IsKingSafeAfterMove(pieceRow, pieceColumn, pieceRow, pieceColumn + 1)) || !checkForChecks)
                     {
-                        if (!window.whiteKingUnderCheck)
+                        if (!chessBoard.whiteKingUnderCheck)
                         {
                             possibleMoves.Add(new Point(pieceRow, pieceColumn + 2));
                             chessBoard.whiteShortCastling = true;
@@ -51,9 +51,9 @@ namespace Chess
                 }
                 if (CheckCastling(chessBoard.WHITE_CASTLING_ROOK_ROW, chessBoard.LONG_CASTLING_ROOK_COLUMN) && chessBoard.IsFieldEmpty(pieceRow, pieceColumn - 1) && chessBoard.IsFieldEmpty(pieceRow, pieceColumn - 2) && chessBoard.IsFieldEmpty(pieceRow, pieceColumn - 3))
                 {
-                    if ((checkForChecks && window.IsKingSafeAfterMove(pieceRow, pieceColumn, pieceRow, pieceColumn - 2) && window.IsKingSafeAfterMove(pieceRow, pieceColumn, pieceRow, pieceColumn - 1)) || !checkForChecks)
+                    if ((checkForChecks && chessBoard.IsKingSafeAfterMove(pieceRow, pieceColumn, pieceRow, pieceColumn - 2) && chessBoard.IsKingSafeAfterMove(pieceRow, pieceColumn, pieceRow, pieceColumn - 1)) || !checkForChecks)
                     {
-                        if (!window.whiteKingUnderCheck)
+                        if (!chessBoard.whiteKingUnderCheck)
                         {
                             possibleMoves.Add(new Point(pieceRow, pieceColumn - 2));
                             chessBoard.whiteLongCastling = true;
@@ -65,9 +65,9 @@ namespace Chess
             {
                 if (CheckCastling(chessBoard.BLACK_CASTLING_ROOK_ROW, chessBoard.SHORT_CASTLING_ROOK_COLUMN) && chessBoard.IsFieldEmpty(pieceRow, pieceColumn + 1) && chessBoard.IsFieldEmpty(pieceRow, pieceColumn + 2))
                 {
-                    if ((checkForChecks && window.IsKingSafeAfterMove(pieceRow, pieceColumn, pieceRow, pieceColumn + 2) && window.IsKingSafeAfterMove(pieceRow, pieceColumn, pieceRow, pieceColumn + 1)) || !checkForChecks)
+                    if ((checkForChecks && chessBoard.IsKingSafeAfterMove(pieceRow, pieceColumn, pieceRow, pieceColumn + 2) && chessBoard.IsKingSafeAfterMove(pieceRow, pieceColumn, pieceRow, pieceColumn + 1)) || !checkForChecks)
                     {
-                        if (!window.blackKingUnderCheck)
+                        if (!chessBoard.blackKingUnderCheck)
                         {
                             possibleMoves.Add(new Point(pieceRow, pieceColumn + 2));
                             chessBoard.blackShortCastling = true;
@@ -76,9 +76,9 @@ namespace Chess
                 }
                 if (CheckCastling(chessBoard.BLACK_CASTLING_ROOK_ROW, chessBoard.LONG_CASTLING_ROOK_COLUMN) && chessBoard.IsFieldEmpty(pieceRow, pieceColumn - 1) && chessBoard.IsFieldEmpty(pieceRow, pieceColumn - 2) && chessBoard.IsFieldEmpty(pieceRow, pieceColumn - 3))
                 {
-                    if ((checkForChecks && window.IsKingSafeAfterMove(pieceRow, pieceColumn, pieceRow, pieceColumn - 2) && window.IsKingSafeAfterMove(pieceRow, pieceColumn, pieceRow, pieceColumn - 1)) || !checkForChecks)
+                    if ((checkForChecks && chessBoard.IsKingSafeAfterMove(pieceRow, pieceColumn, pieceRow, pieceColumn - 2) && chessBoard.IsKingSafeAfterMove(pieceRow, pieceColumn, pieceRow, pieceColumn - 1)) || !checkForChecks)
                     {
-                        if (!window.blackKingUnderCheck)
+                        if (!chessBoard.blackKingUnderCheck)
                         {
                             possibleMoves.Add(new Point(pieceRow, pieceColumn - 2));
                             chessBoard.blackLongCastling = true;

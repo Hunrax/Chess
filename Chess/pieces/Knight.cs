@@ -5,9 +5,8 @@ namespace Chess
 {
     public class Knight : Piece
     {
-        public Knight(MainWindow setWindow, ChessBoard setChessBoard, Game setGame, PieceColor setColor) : base(setWindow, setChessBoard, setGame, setColor)
+        public Knight(ChessBoard setChessBoard, Game setGame, PieceColor setColor) : base(setChessBoard, setGame, setColor)
         {
-            window = setWindow;
             chessBoard = setChessBoard;
             game = setGame;
             color = setColor;

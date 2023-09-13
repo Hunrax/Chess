@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
+using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Media;
 
@@ -44,14 +45,14 @@ namespace Chess
         }
         public void CheckGameState(string currentState)
         {
-            if (window.CheckForKingsDefence(PieceColor.BLACK).Count == 0 && window.CheckIfKingUnderCheck(PieceColor.BLACK))
+            if (chessBoard.CheckForKingsDefence(PieceColor.BLACK).Count == 0 && chessBoard.CheckIfKingUnderCheck(PieceColor.BLACK))
                 gameState = GameState.WHITE_WON;
-            if (window.CheckForKingsDefence(PieceColor.BLACK).Count == 0 && !window.CheckIfKingUnderCheck(PieceColor.BLACK))
+            if (chessBoard.CheckForKingsDefence(PieceColor.BLACK).Count == 0 && !chessBoard.CheckIfKingUnderCheck(PieceColor.BLACK))
                 gameState = GameState.STALEMATE;
 
-            if (window.CheckForKingsDefence(PieceColor.WHITE).Count == 0 && window.CheckIfKingUnderCheck(PieceColor.WHITE))
+            if (chessBoard.CheckForKingsDefence(PieceColor.WHITE).Count == 0 && chessBoard.CheckIfKingUnderCheck(PieceColor.WHITE))
                 gameState = GameState.BLACK_WON;
-            if (window.CheckForKingsDefence(PieceColor.WHITE).Count == 0 && !window.CheckIfKingUnderCheck(PieceColor.WHITE))
+            if (chessBoard.CheckForKingsDefence(PieceColor.WHITE).Count == 0 && !chessBoard.CheckIfKingUnderCheck(PieceColor.WHITE))
                 gameState = GameState.STALEMATE;
 
             if (CheckForInsufficientMaterial())
@@ -59,7 +60,47 @@ namespace Chess
             if (CheckThreefoldRepetition(currentState))
                 gameState = GameState.DRAW_THREEFOLD_REPETITION;
         }
-        public bool CheckForInsufficientMaterial()
+        public void DisablePieces()
+        {
+            if(!testMode)
+            {
+                foreach (Button field in window.gornaWarstwa.Children)
+                {
+                    if (chessBoard.GetPieceColorFromField(Grid.GetRow(field), Grid.GetColumn(field)) == turn)
+                        field.IsEnabled = true;
+                    else 
+                        field.IsEnabled = false;
+                }
+            }
+            else
+            {
+                foreach (Button field in window.gornaWarstwa.Children)
+                {
+                    if (chessBoard.GetPieceColorFromField(Grid.GetRow(field), Grid.GetColumn(field)) != PieceColor.NONE)
+                        field.IsEnabled = true;
+                    else
+                        field.IsEnabled = false;
+                }
+            }
+        }
+        public void ChangeTurn()
+        {
+            if (turn == PieceColor.WHITE)
+            {
+                movesCounter++;
+                turn = PieceColor.BLACK;
+                window.turnTextBox.Background = Brushes.Black;
+                window.turnTextBox.Foreground = Brushes.White;
+            }
+            else if (turn == PieceColor.BLACK)
+            {
+                turn = PieceColor.WHITE;
+                window.turnTextBox.Background = Brushes.White;
+                window.turnTextBox.Foreground = Brushes.Black;
+            }
+            window.movesCounterTextBox.Text = movesCounter.ToString();
+        }
+        private bool CheckForInsufficientMaterial()
         {
             chessBoard.CountAllPiecesOnBoard();
             if (chessBoard.whitePawns == 0 && chessBoard.blackPawns == 0)
@@ -83,24 +124,7 @@ namespace Chess
             }
             return false;
         }
-        public void ChangeTurn()
-        {
-            if (turn == PieceColor.WHITE)
-            {
-                movesCounter++;
-                turn = PieceColor.BLACK;
-                window.turnTextBox.Background = Brushes.Black;
-                window.turnTextBox.Foreground = Brushes.White;
-            }
-            else if (turn == PieceColor.BLACK)
-            {
-                turn = PieceColor.WHITE;
-                window.turnTextBox.Background = Brushes.White;
-                window.turnTextBox.Foreground = Brushes.Black;
-            }
-            window.movesCounterTextBox.Text = movesCounter.ToString();
-        }
-        public bool CheckThreefoldRepetition(string currentState)
+        private bool CheckThreefoldRepetition(string currentState)
         {
             int repetitionCounter = 0;
             foreach (string chessBoardState in gameHistory)
@@ -118,31 +142,31 @@ namespace Chess
             switch (pieceType)
             {
                 case "WhitePawn":
-                    return new Pawn(window, chessBoard, this, PieceColor.WHITE);
+                    return new Pawn(chessBoard, this, PieceColor.WHITE);
                 case "BlackPawn":
-                    return new Pawn(window, chessBoard, this, PieceColor.BLACK);
+                    return new Pawn(chessBoard, this, PieceColor.BLACK);
                 case "WhiteRook":
-                    return new Rook(window, chessBoard, this, PieceColor.WHITE);
+                    return new Rook(chessBoard, this, PieceColor.WHITE);
                 case "BlackRook":
-                    return new Rook(window, chessBoard, this, PieceColor.BLACK);
+                    return new Rook(chessBoard, this, PieceColor.BLACK);
                 case "WhiteKnight":
-                    return new Knight(window, chessBoard, this, PieceColor.WHITE);
+                    return new Knight(chessBoard, this, PieceColor.WHITE);
                 case "BlackKnight":
-                    return new Knight(window, chessBoard, this, PieceColor.BLACK);
+                    return new Knight(chessBoard, this, PieceColor.BLACK);
                 case "WhiteBishop":
-                    return new Bishop(window, chessBoard, this, PieceColor.WHITE);
+                    return new Bishop(chessBoard, this, PieceColor.WHITE);
                 case "BlackBishop":
-                    return new Bishop(window, chessBoard, this, PieceColor.BLACK);
+                    return new Bishop(chessBoard, this, PieceColor.BLACK);
                 case "WhiteQueen":
-                    return new Queen(window, chessBoard, this, PieceColor.WHITE);
+                    return new Queen(chessBoard, this, PieceColor.WHITE);
                 case "BlackQueen":
-                    return new Queen(window, chessBoard, this, PieceColor.BLACK);
+                    return new Queen(chessBoard, this, PieceColor.BLACK);
                 case "WhiteKing":
-                    return new King(window, chessBoard, this, PieceColor.WHITE);
+                    return new King(chessBoard, this, PieceColor.WHITE);
                 case "BlackKing":
-                    return new King(window, chessBoard, this, PieceColor.BLACK);
+                    return new King(chessBoard, this, PieceColor.BLACK);
                 default:
-                    return new Empty(window, chessBoard, this, PieceColor.NONE);
+                    return new Empty(chessBoard, this, PieceColor.NONE);
             }
         }
         public PieceColor GetPieceColorFromPieceType(string pieceType)
