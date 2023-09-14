@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows;
@@ -114,11 +111,11 @@ namespace Chess
 
             Grid.SetColumn(rook, emptyFieldColumn);
             Grid.SetRow(rook, emptyFieldRow);
-            chessBoard.board[emptyFieldRow, emptyFieldColumn] = new Rook(chessBoard, chessBoard.game, pieceColor);
+            chessBoard.board[emptyFieldRow, emptyFieldColumn] = new Rook(chessBoard, pieceColor);
 
             Grid.SetColumn(empty, rookColumn);
             Grid.SetRow(empty, rookRow);
-            chessBoard.board[rookRow, rookColumn] = new Empty(chessBoard, chessBoard.game, PieceColor.NONE);
+            chessBoard.board[rookRow, rookColumn] = new Empty(chessBoard, PieceColor.NONE);
         }
         public void DeletePawnEnPassant(int pieceColumn, int pieceRow)
         {
@@ -132,7 +129,7 @@ namespace Chess
 
             Grid.SetColumn(pawnToDelete, pawnToDeleteColumn);
             Grid.SetRow(pawnToDelete, pieceRow);
-            chessBoard.board[pieceRow, pawnToDeleteColumn] = new Empty(chessBoard, window.game, PieceColor.NONE);
+            chessBoard.board[pieceRow, pawnToDeleteColumn] = new Empty(chessBoard, PieceColor.NONE);
         }
         public void MovePieceToField(Button selectedField, int fieldColumn, int fieldRow, int pieceColumn, int pieceRow)
         {
@@ -142,7 +139,7 @@ namespace Chess
 
             Grid.SetColumn(selectedField, pieceColumn); // set former piece field to empty
             Grid.SetRow(selectedField, pieceRow);
-            chessBoard.board[pieceRow, pieceColumn] = new Empty(chessBoard, window.game, PieceColor.NONE);
+            chessBoard.board[pieceRow, pieceColumn] = new Empty(chessBoard, PieceColor.NONE);
 
             if (window.enPassantStatus != 0) // remove pawn captured en passant
                 DeletePawnEnPassant(pieceColumn, pieceRow);

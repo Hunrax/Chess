@@ -8,10 +8,9 @@ namespace Chess
     {
         public int pawnDoubleMoveTurn;
         public int moveDirection1, moveDirection2;
-        public Pawn(ChessBoard setChessBoard, Game setGame, PieceColor setColor) : base(setChessBoard, setGame, setColor)
+        public Pawn(ChessBoard setChessBoard, PieceColor setColor) : base(setChessBoard, setColor)
         {
             chessBoard = setChessBoard;
-            game = setGame;
             color = setColor;
             type = PieceType.PAWN;
             symbol = (color == PieceColor.WHITE) ? 'P' : 'p';
@@ -73,9 +72,9 @@ namespace Chess
             if (piece.type == PieceType.PAWN && color != piece.color)
             {
                 Pawn pawn = (Pawn)piece;
-                if (pawn.pawnDoubleMoveTurn == game.movesCounter && color == PieceColor.WHITE)
+                if (pawn.pawnDoubleMoveTurn == chessBoard.game.movesCounter && color == PieceColor.WHITE)
                     return true;
-                if (pawn.pawnDoubleMoveTurn == game.movesCounter - 1 && color == PieceColor.BLACK)
+                if (pawn.pawnDoubleMoveTurn == chessBoard.game.movesCounter - 1 && color == PieceColor.BLACK)
                     return true;
             }
             return false;
@@ -83,7 +82,7 @@ namespace Chess
         public void CheckPawnDoubleMove(int pieceRow, int fieldRow)
         {
             if (Math.Abs(pieceRow - fieldRow) == 2)
-                pawnDoubleMoveTurn = game.movesCounter;
+                pawnDoubleMoveTurn = chessBoard.game.movesCounter;
         }
     }
 }

@@ -1,5 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Media.Imaging;
+using System.Windows.Media;
 
 namespace Chess
 {
@@ -9,12 +13,10 @@ namespace Chess
         public PieceType type;
         public char symbol;
         public ChessBoard chessBoard;
-        public Game game;
         public bool firstMove;
-        public Piece(ChessBoard setChessBoard, Game setGame, PieceColor setColor)
+        public Piece(ChessBoard setChessBoard, PieceColor setColor)
         {
             chessBoard = setChessBoard;
-            game = setGame;
             color = setColor;
         }
         public abstract void GeneratePossibleMoves(int pieceRow, int pieceColumn, List<Point> possibleMoves, bool checkForChecks);

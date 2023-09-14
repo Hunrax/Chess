@@ -13,7 +13,7 @@ namespace Chess
         private Piece selectedPromotionPiece;
         private readonly ChessBoard chessBoard = new ChessBoard();
         private readonly ChessBoardGUI chessBoardGUI = new ChessBoardGUI();
-        public readonly Game game = new Game(GameState.IN_PROGRESS);
+        public readonly Game game = new Game(GameState.IN_PROGRESS, false);
         private readonly MainWindow mainWindow;
         public bool buttonClicked = false;
 
@@ -35,7 +35,7 @@ namespace Chess
             chessBoard.Print();
             game.DisablePieces();
         }
-        private void PieceSelected(object sender, RoutedEventArgs e)
+        public void PieceSelected(object sender, RoutedEventArgs e)
         {
             if (!buttonClicked) // select piece you want to move
             {

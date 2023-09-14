@@ -5,10 +5,9 @@ namespace Chess
 {
     public class Rook : Piece
     {
-        public Rook(ChessBoard setChessBoard, Game setGame, PieceColor setColor) : base(setChessBoard, setGame, setColor)
+        public Rook(ChessBoard setChessBoard, PieceColor setColor) : base(setChessBoard, setColor)
         {
             chessBoard = setChessBoard;
-            game = setGame;
             color = setColor;
             type = PieceType.ROOK;
             symbol = (color == PieceColor.WHITE) ? 'W' : 'w';

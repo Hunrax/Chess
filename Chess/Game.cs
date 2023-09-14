@@ -1,25 +1,23 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.Windows.Controls;
-using System.Windows.Documents;
-using System.Windows.Media;
 
 namespace Chess
 {
     public class Game
     {
         public GameState gameState;
+        public PieceColor turn;
         public MainWindow window;
         public ChessBoard chessBoard;
-        public PieceColor turn;
         public int movesCounter;
         public bool testMode;
         public List<string> gameHistory;
         public string gameOverMessage;
-        public Game(GameState setGameState) 
+        public Game(GameState setGameState, bool setTestMode) 
         {
             gameState = setGameState;
-            testMode = false;
+            testMode = setTestMode;
             turn = PieceColor.WHITE;
             movesCounter = 0;
             gameHistory = new List<string>();
@@ -92,14 +90,10 @@ namespace Chess
             {
                 movesCounter++;
                 turn = PieceColor.BLACK;
-                window.turnTextBox.Background = Brushes.Black;
-                window.turnTextBox.Foreground = Brushes.White;
             }
             else if (turn == PieceColor.BLACK)
             {
                 turn = PieceColor.WHITE;
-                window.turnTextBox.Background = Brushes.White;
-                window.turnTextBox.Foreground = Brushes.Black;
             }
             window.movesCounterTextBox.Text = movesCounter.ToString();
         }
@@ -145,31 +139,31 @@ namespace Chess
             switch (pieceType)
             {
                 case "WhitePawn":
-                    return new Pawn(chessBoard, this, PieceColor.WHITE);
+                    return new Pawn(chessBoard, PieceColor.WHITE);
                 case "BlackPawn":
-                    return new Pawn(chessBoard, this, PieceColor.BLACK);
+                    return new Pawn(chessBoard, PieceColor.BLACK);
                 case "WhiteRook":
-                    return new Rook(chessBoard, this, PieceColor.WHITE);
+                    return new Rook(chessBoard, PieceColor.WHITE);
                 case "BlackRook":
-                    return new Rook(chessBoard, this, PieceColor.BLACK);
+                    return new Rook(chessBoard, PieceColor.BLACK);
                 case "WhiteKnight":
-                    return new Knight(chessBoard, this, PieceColor.WHITE);
+                    return new Knight(chessBoard, PieceColor.WHITE);
                 case "BlackKnight":
-                    return new Knight(chessBoard, this, PieceColor.BLACK);
+                    return new Knight(chessBoard, PieceColor.BLACK);
                 case "WhiteBishop":
-                    return new Bishop(chessBoard, this, PieceColor.WHITE);
+                    return new Bishop(chessBoard, PieceColor.WHITE);
                 case "BlackBishop":
-                    return new Bishop(chessBoard, this, PieceColor.BLACK);
+                    return new Bishop(chessBoard, PieceColor.BLACK);
                 case "WhiteQueen":
-                    return new Queen(chessBoard, this, PieceColor.WHITE);
+                    return new Queen(chessBoard, PieceColor.WHITE);
                 case "BlackQueen":
-                    return new Queen(chessBoard, this, PieceColor.BLACK);
+                    return new Queen(chessBoard, PieceColor.BLACK);
                 case "WhiteKing":
-                    return new King(chessBoard, this, PieceColor.WHITE);
+                    return new King(chessBoard, PieceColor.WHITE);
                 case "BlackKing":
-                    return new King(chessBoard, this, PieceColor.BLACK);
+                    return new King(chessBoard, PieceColor.BLACK);
                 default:
-                    return new Empty(chessBoard, this, PieceColor.NONE);
+                    return new Empty(chessBoard, PieceColor.NONE);
             }
         }
         public PieceColor GetPieceColorFromPieceType(string pieceType)

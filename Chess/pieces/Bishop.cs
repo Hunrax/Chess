@@ -5,10 +5,9 @@ namespace Chess
 {
     public class Bishop : Piece
     {
-        public Bishop(ChessBoard setChessBoard, Game setGame, PieceColor setColor) : base(setChessBoard, setGame, setColor)
+        public Bishop(ChessBoard setChessBoard, PieceColor setColor) : base(setChessBoard, setColor)
         {
             chessBoard = setChessBoard;
-            game = setGame;
             color = setColor;
             type = PieceType.BISHOP;
             symbol = (color == PieceColor.WHITE) ? 'G' : 'g' ;

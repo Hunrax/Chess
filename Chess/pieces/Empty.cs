@@ -5,10 +5,9 @@ namespace Chess
 {
     public class Empty : Piece
     {
-        public Empty(ChessBoard setChessBoard, Game setGame, PieceColor setColor) : base(setChessBoard, setGame, setColor)
+        public Empty(ChessBoard setChessBoard, PieceColor setColor) : base(setChessBoard, setColor)
         {
             chessBoard = setChessBoard;
-            game = setGame;
             color = setColor;
             type = PieceType.EMPTY;
             symbol = '.';

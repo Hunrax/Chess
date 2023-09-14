@@ -5,10 +5,9 @@ namespace Chess
 {
     public class Knight : Piece
     {
-        public Knight(ChessBoard setChessBoard, Game setGame, PieceColor setColor) : base(setChessBoard, setGame, setColor)
+        public Knight(ChessBoard setChessBoard, PieceColor setColor) : base(setChessBoard, setColor)
         {
             chessBoard = setChessBoard;
-            game = setGame;
             color = setColor;
             type = PieceType.KNIGHT;
             symbol = (color == PieceColor.WHITE) ? 'S' : 's';

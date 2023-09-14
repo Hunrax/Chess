@@ -1,9 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Media;
 
 namespace Chess
 {
@@ -42,36 +39,36 @@ namespace Chess
             {
                 for (int j = 0; j < 8; j++)
                 {
-                    board[i, j] = new Empty(this, game, PieceColor.NONE);
+                    board[i, j] = new Empty(this, PieceColor.NONE);
                 }
             }
         }
         public void Initialize()
         {
             Clear();
-            board[0, 0] = new Rook(this, game, PieceColor.BLACK);
-            board[0, 1] = new Knight(this, game, PieceColor.BLACK);
-            board[0, 2] = new Bishop(this, game, PieceColor.BLACK);
-            board[0, 3] = new Queen(this, game, PieceColor.BLACK);
-            board[0, 4] = new King(this, game, PieceColor.BLACK);
-            board[0, 5] = new Bishop(this, game, PieceColor.BLACK);
-            board[0, 6] = new Knight(this, game, PieceColor.BLACK);
-            board[0, 7] = new Rook(this, game, PieceColor.BLACK);
+            board[0, 0] = new Rook(this, PieceColor.BLACK);
+            board[0, 1] = new Knight(this, PieceColor.BLACK);
+            board[0, 2] = new Bishop(this, PieceColor.BLACK);
+            board[0, 3] = new Queen(this, PieceColor.BLACK);
+            board[0, 4] = new King(this, PieceColor.BLACK);
+            board[0, 5] = new Bishop(this, PieceColor.BLACK);
+            board[0, 6] = new Knight(this, PieceColor.BLACK);
+            board[0, 7] = new Rook(this, PieceColor.BLACK);
 
             for (int i = 0; i < 8; i++)
-                board[1, i] = new Pawn(this, game, PieceColor.BLACK);
+                board[1, i] = new Pawn(this, PieceColor.BLACK);
 
-            board[7, 0] = new Rook(this, game, PieceColor.WHITE);
-            board[7, 1] = new Knight(this, game, PieceColor.WHITE);
-            board[7, 2] = new Bishop(this, game, PieceColor.WHITE);
-            board[7, 3] = new Queen(this, game, PieceColor.WHITE);
-            board[7, 4] = new King(this, game, PieceColor.WHITE);
-            board[7, 5] = new Bishop(this, game, PieceColor.WHITE);
-            board[7, 6] = new Knight(this, game, PieceColor.WHITE);
-            board[7, 7] = new Rook(this, game, PieceColor.WHITE);
+            board[7, 0] = new Rook(this, PieceColor.WHITE);
+            board[7, 1] = new Knight(this, PieceColor.WHITE);
+            board[7, 2] = new Bishop(this, PieceColor.WHITE);
+            board[7, 3] = new Queen(this, PieceColor.WHITE);
+            board[7, 4] = new King(this, PieceColor.WHITE);
+            board[7, 5] = new Bishop(this, PieceColor.WHITE);
+            board[7, 6] = new Knight(this, PieceColor.WHITE);
+            board[7, 7] = new Rook(this, PieceColor.WHITE);
 
             for (int i = 0; i < 8; i++)
-                board[6, i] = new Pawn(this, game, PieceColor.WHITE);
+                board[6, i] = new Pawn(this, PieceColor.WHITE);
         }
         public Piece GetPieceFromField(int row, int column)
         {
@@ -214,9 +211,7 @@ namespace Chess
                     {
                         GeneratePossibleMovesForPiece(i, j, possibleMoves, false);
                         if (possibleMoves.Contains(GetKingPosition(pieceColor)))
-                        {
                             return true;
-                        }
                     }
                 }
             }
@@ -235,7 +230,7 @@ namespace Chess
                 Piece field = board[fieldRow, fieldColumn];
 
                 board[fieldRow, fieldColumn] = piece;
-                board[pieceRow, pieceColumn] = new Empty(this, game, PieceColor.NONE);
+                board[pieceRow, pieceColumn] = new Empty(this, PieceColor.NONE);
 
                 bool kingSafe = !CheckIfKingUnderCheck(piece.color);
 
@@ -254,9 +249,7 @@ namespace Chess
                 for (int j = 0; j < size; j++)
                 {
                     if (!IsFieldEmpty(i, j) && GetPieceColorFromField(i, j) == pieceColor)
-                    {
-                        GeneratePossibleMovesForPiece(i, j, possibleMoves, true);
-                    }
+                        GeneratePossibleMovesForPiece(i, j, possibleMoves, true); 
                 }
             }
             return possibleMoves;
@@ -266,9 +259,7 @@ namespace Chess
             for(int i = 0; i < size; i++)
             {
                 for(int j = 0; j < size; j++)
-                {
                     Trace.Write(board[i, j].symbol + " ");
-                }
                 Trace.WriteLine("");
             }
             Trace.WriteLine("");

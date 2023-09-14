@@ -358,11 +358,9 @@
                 </Border>
             </Grid>
         </Border>
-        <!-- Czyj ruch i ktory ruch-->
+        <!-- MoveCounter i TestMode-->
         <TextBox Margin="5,21,717,708" Text="  Move" Cursor="Arrow" TextAlignment="Center" FontSize="15" Background="Transparent" Foreground="#4E3524" FontWeight="Bold" BorderThickness="0" IsReadOnly="True"/>
         <TextBox Name="movesCounterTextBox" Cursor="Arrow"  Margin="15,39,717,692" Text="0" TextAlignment="Center" FontSize="15" Background="Transparent" Foreground="#4E3524" FontWeight="Bold" BorderThickness="0" IsReadOnly="True"/>
-        <TextBox Name="turnTextBox" Cursor="Arrow" Margin="720,15,15,697" Background="White" BorderThickness="0" FontSize="15" VerticalContentAlignment="Center" Text="Turn" TextAlignment="Center" FontWeight="Bold" IsReadOnly="True"/>
-
         <Button Name="TestModeButton" Margin="17,718,686,16" FontSize="10" FontWeight="Black" Click="TestMode">TestMode: OFF</Button>
 
         <!-- Oznakowania pol -->
