@@ -359,49 +359,54 @@
             </Grid>
         </Border>
         <!-- Czyj ruch i ktory ruch-->
-        <TextBox Margin="5,21,717,708" Text="  Move" TextAlignment="Center" FontSize="15" Background="Transparent" Foreground="#4E3524" FontWeight="Bold" BorderThickness="0" IsReadOnly="True"/>
-        <TextBox Name="movesCounterTextBox"  Margin="15,39,717,692" Text="0" TextAlignment="Center" FontSize="15" Background="Transparent" Foreground="#4E3524" FontWeight="Bold" BorderThickness="0" IsReadOnly="True"/>
-        <TextBox Name="turnTextBox" Margin="720,15,15,697" Background="White" BorderThickness="0" FontSize="15" VerticalContentAlignment="Center" Text="Turn" TextAlignment="Center" FontWeight="Bold" IsReadOnly="True"/>
+        <TextBox Margin="5,21,717,708" Text="  Move" Cursor="Arrow" TextAlignment="Center" FontSize="15" Background="Transparent" Foreground="#4E3524" FontWeight="Bold" BorderThickness="0" IsReadOnly="True"/>
+        <TextBox Name="movesCounterTextBox" Cursor="Arrow"  Margin="15,39,717,692" Text="0" TextAlignment="Center" FontSize="15" Background="Transparent" Foreground="#4E3524" FontWeight="Bold" BorderThickness="0" IsReadOnly="True"/>
+        <TextBox Name="turnTextBox" Cursor="Arrow" Margin="720,15,15,697" Background="White" BorderThickness="0" FontSize="15" VerticalContentAlignment="Center" Text="Turn" TextAlignment="Center" FontWeight="Bold" IsReadOnly="True"/>
 
         <Button Name="TestModeButton" Margin="17,718,686,16" FontSize="10" FontWeight="Black" Click="TestMode">TestMode: OFF</Button>
 
         <!-- Oznakowania pol -->
-        <TextBox Margin="82,692,633,16" Text="A" TextAlignment="Center" FontSize="40" Background="Transparent" Foreground="#4E3524" FontWeight="Bold" BorderThickness="0" IsReadOnly="True"/>
-        <TextBox Margin="166,692,556,16" Text="B" TextAlignment="Center" FontSize="40" Background="Transparent" Foreground="#4E3524" FontWeight="Bold" BorderThickness="0" IsReadOnly="True"/>
-        <TextBox Margin="236,692,473,16" Text="C" TextAlignment="Center" FontSize="40" Background="Transparent" Foreground="#4E3524" FontWeight="Bold" BorderThickness="0" IsReadOnly="True"/>
-        <TextBox Margin="319,692,396,16" Text="D" TextAlignment="Center" FontSize="40" Background="Transparent" Foreground="#4E3524" FontWeight="Bold" BorderThickness="0" IsReadOnly="True"/>
-        <TextBox Margin="396,692,314,16" Text="E" TextAlignment="Center" FontSize="40" Background="Transparent" Foreground="#4E3524" FontWeight="Bold" BorderThickness="0" IsReadOnly="True"/>
-        <TextBox Margin="478,692,237,16" Text="F" TextAlignment="Center" FontSize="40" Background="Transparent" Foreground="#4E3524" FontWeight="Bold" BorderThickness="0" IsReadOnly="True"/>
-        <TextBox Margin="555,692,157,16" Text="G" TextAlignment="Center" FontSize="40" Background="Transparent" Foreground="#4E3524" FontWeight="Bold" BorderThickness="0" IsReadOnly="True"/>
-        <TextBox Margin="635,692,80,16" Text="H" TextAlignment="Center" FontSize="40" Background="Transparent" Foreground="#4E3524" FontWeight="Bold" BorderThickness="0" IsReadOnly="True"/>
+        <TextBox Cursor="Arrow" Margin="82,692,633,16" Text="A" TextAlignment="Center" FontSize="40" Background="Transparent" Foreground="#4E3524" FontWeight="Bold" BorderThickness="0" IsReadOnly="True"/>
+        <TextBox Cursor="Arrow" Margin="166,692,556,16" Text="B" TextAlignment="Center" FontSize="40" Background="Transparent" Foreground="#4E3524" FontWeight="Bold" BorderThickness="0" IsReadOnly="True"/>
+        <TextBox Cursor="Arrow" Margin="236,692,473,16" Text="C" TextAlignment="Center" FontSize="40" Background="Transparent" Foreground="#4E3524" FontWeight="Bold" BorderThickness="0" IsReadOnly="True"/>
+        <TextBox Cursor="Arrow" Margin="319,692,396,16" Text="D" TextAlignment="Center" FontSize="40" Background="Transparent" Foreground="#4E3524" FontWeight="Bold" BorderThickness="0" IsReadOnly="True"/>
+        <TextBox Cursor="Arrow" Margin="396,692,314,16" Text="E" TextAlignment="Center" FontSize="40" Background="Transparent" Foreground="#4E3524" FontWeight="Bold" BorderThickness="0" IsReadOnly="True"/>
+        <TextBox Cursor="Arrow" Margin="478,692,237,16" Text="F" TextAlignment="Center" FontSize="40" Background="Transparent" Foreground="#4E3524" FontWeight="Bold" BorderThickness="0" IsReadOnly="True"/>
+        <TextBox Cursor="Arrow" Margin="555,692,157,16" Text="G" TextAlignment="Center" FontSize="40" Background="Transparent" Foreground="#4E3524" FontWeight="Bold" BorderThickness="0" IsReadOnly="True"/>
+        <TextBox Cursor="Arrow" Margin="635,692,80,16" Text="H" TextAlignment="Center" FontSize="40" Background="Transparent" Foreground="#4E3524" FontWeight="Bold" BorderThickness="0" IsReadOnly="True"/>
 
-        <TextBox Margin="82,12,633,694" Text="A" TextAlignment="Center" FontSize="40" Background="Transparent" Foreground="#4E3524" FontWeight="Bold" BorderThickness="0" IsReadOnly="True"/>
-        <TextBox Margin="161,12,554,694" Text="B" TextAlignment="Center" FontSize="40" Background="Transparent" Foreground="#4E3524" FontWeight="Bold" BorderThickness="0" IsReadOnly="True"/>
-        <TextBox Margin="236,12,473,694" Text="C" TextAlignment="Center" FontSize="40" Background="Transparent" Foreground="#4E3524" FontWeight="Bold" BorderThickness="0" IsReadOnly="True"/>
-        <TextBox Margin="319,12,396,694" Text="D" TextAlignment="Center" FontSize="40" Background="Transparent" Foreground="#4E3524" FontWeight="Bold" BorderThickness="0" IsReadOnly="True"/>
-        <TextBox Margin="396,12,314,694" Text="E" TextAlignment="Center" FontSize="40" Background="Transparent" Foreground="#4E3524" FontWeight="Bold" BorderThickness="0" IsReadOnly="True"/>
-        <TextBox Margin="478,12,237,694" Text="F" TextAlignment="Center" FontSize="40" Background="Transparent" Foreground="#4E3524" FontWeight="Bold" BorderThickness="0" IsReadOnly="True"/>
-        <TextBox Margin="555,12,157,694" Text="G" TextAlignment="Center" FontSize="40" Background="Transparent" Foreground="#4E3524" FontWeight="Bold" BorderThickness="0" IsReadOnly="True"/>
-        <TextBox Margin="635,12,80,694" Text="H" TextAlignment="Center" FontSize="40" Background="Transparent" Foreground="#4E3524" FontWeight="Bold" BorderThickness="0" IsReadOnly="True"/>
+        <TextBox Cursor="Arrow" Margin="82,12,633,694" Text="A" TextAlignment="Center" FontSize="40" Background="Transparent" Foreground="#4E3524" FontWeight="Bold" BorderThickness="0" IsReadOnly="True"/>
+        <TextBox Cursor="Arrow" Margin="161,12,554,694" Text="B" TextAlignment="Center" FontSize="40" Background="Transparent" Foreground="#4E3524" FontWeight="Bold" BorderThickness="0" IsReadOnly="True"/>
+        <TextBox Cursor="Arrow" Margin="236,12,473,694" Text="C" TextAlignment="Center" FontSize="40" Background="Transparent" Foreground="#4E3524" FontWeight="Bold" BorderThickness="0" IsReadOnly="True"/>
+        <TextBox Cursor="Arrow" Margin="319,12,396,694" Text="D" TextAlignment="Center" FontSize="40" Background="Transparent" Foreground="#4E3524" FontWeight="Bold" BorderThickness="0" IsReadOnly="True"/>
+        <TextBox Cursor="Arrow" Margin="396,12,314,694" Text="E" TextAlignment="Center" FontSize="40" Background="Transparent" Foreground="#4E3524" FontWeight="Bold" BorderThickness="0" IsReadOnly="True"/>
+        <TextBox Cursor="Arrow" Margin="478,12,237,694" Text="F" TextAlignment="Center" FontSize="40" Background="Transparent" Foreground="#4E3524" FontWeight="Bold" BorderThickness="0" IsReadOnly="True"/>
+        <TextBox Cursor="Arrow" Margin="555,12,157,694" Text="G" TextAlignment="Center" FontSize="40" Background="Transparent" Foreground="#4E3524" FontWeight="Bold" BorderThickness="0" IsReadOnly="True"/>
+        <TextBox Cursor="Arrow" Margin="635,12,80,694" Text="H" TextAlignment="Center" FontSize="40" Background="Transparent" Foreground="#4E3524" FontWeight="Bold" BorderThickness="0" IsReadOnly="True"/>
 
 
-        <TextBox Margin="0,614,705,80" Text="1" TextAlignment="Center" FontSize="40" Background="Transparent" Foreground="#4E3524" FontWeight="Bold" BorderThickness="0" IsReadOnly="True"/>
-        <TextBox Margin="0,539,705,155" Text="2" TextAlignment="Center" FontSize="40" Background="Transparent" Foreground="#4E3524" FontWeight="Bold" BorderThickness="0" IsReadOnly="True"/>
-        <TextBox Margin="0,462,705,230" Text="3" TextAlignment="Center" FontSize="40" Background="Transparent" Foreground="#4E3524" FontWeight="Bold" BorderThickness="0" IsReadOnly="True"/>
-        <TextBox Margin="0,385,705,307" Text="4" TextAlignment="Center" FontSize="40" Background="Transparent" Foreground="#4E3524" FontWeight="Bold" BorderThickness="0" IsReadOnly="True"/>
-        <TextBox Margin="0,310,705,386" Text="5" TextAlignment="Center" FontSize="40" Background="Transparent" Foreground="#4E3524" FontWeight="Bold" BorderThickness="0" IsReadOnly="True"/>
-        <TextBox Margin="0,234,705,459" Text="6" TextAlignment="Center" FontSize="40" Background="Transparent" Foreground="#4E3524" FontWeight="Bold" BorderThickness="0" IsReadOnly="True"/>
-        <TextBox Margin="0,158,705,535" Text="7" TextAlignment="Center" FontSize="40" Background="Transparent" Foreground="#4E3524" FontWeight="Bold" BorderThickness="0" IsReadOnly="True"/>
-        <TextBox Margin="0,82,705,611" Text="8" TextAlignment="Center" FontSize="40" Background="Transparent" Foreground="#4E3524" FontWeight="Bold" BorderThickness="0" IsReadOnly="True"/>
+        <TextBox Cursor="Arrow" Margin="0,614,705,80" Text="1" TextAlignment="Center" FontSize="40" Background="Transparent" Foreground="#4E3524" FontWeight="Bold" BorderThickness="0" IsReadOnly="True"/>
+        <TextBox Cursor="Arrow" Margin="0,539,705,155" Text="2" TextAlignment="Center" FontSize="40" Background="Transparent" Foreground="#4E3524" FontWeight="Bold" BorderThickness="0" IsReadOnly="True"/>
+        <TextBox Cursor="Arrow" Margin="0,462,705,230" Text="3" TextAlignment="Center" FontSize="40" Background="Transparent" Foreground="#4E3524" FontWeight="Bold" BorderThickness="0" IsReadOnly="True"/>
+        <TextBox Cursor="Arrow" Margin="0,385,705,307" Text="4" TextAlignment="Center" FontSize="40" Background="Transparent" Foreground="#4E3524" FontWeight="Bold" BorderThickness="0" IsReadOnly="True"/>
+        <TextBox Cursor="Arrow" Margin="0,310,705,386" Text="5" TextAlignment="Center" FontSize="40" Background="Transparent" Foreground="#4E3524" FontWeight="Bold" BorderThickness="0" IsReadOnly="True"/>
+        <TextBox Cursor="Arrow" Margin="0,234,705,459" Text="6" TextAlignment="Center" FontSize="40" Background="Transparent" Foreground="#4E3524" FontWeight="Bold" BorderThickness="0" IsReadOnly="True"/>
+        <TextBox Cursor="Arrow" Margin="0,158,705,535" Text="7" TextAlignment="Center" FontSize="40" Background="Transparent" Foreground="#4E3524" FontWeight="Bold" BorderThickness="0" IsReadOnly="True"/>
+        <TextBox Cursor="Arrow" Margin="0,82,705,611" Text="8" TextAlignment="Center" FontSize="40" Background="Transparent" Foreground="#4E3524" FontWeight="Bold" BorderThickness="0" IsReadOnly="True"/>
 
-        <TextBox Margin="714,615,10,80" Text="1" TextAlignment="Center" FontSize="40" Background="Transparent" Foreground="#4E3524" FontWeight="Bold" BorderThickness="0" IsReadOnly="True"/>
-        <TextBox Margin="714,539,10,155" Text="2" TextAlignment="Center" FontSize="40" Background="Transparent" Foreground="#4E3524" FontWeight="Bold" BorderThickness="0" IsReadOnly="True"/>
-        <TextBox Margin="714,462,10,230" Text="3" TextAlignment="Center" FontSize="40" Background="Transparent" Foreground="#4E3524" FontWeight="Bold" BorderThickness="0" IsReadOnly="True"/>
-        <TextBox Margin="714,385,10,307" Text="4" TextAlignment="Center" FontSize="40" Background="Transparent" Foreground="#4E3524" FontWeight="Bold" BorderThickness="0" IsReadOnly="True"/>
-        <TextBox Margin="714,310,10,386" Text="5" TextAlignment="Center" FontSize="40" Background="Transparent" Foreground="#4E3524" FontWeight="Bold" BorderThickness="0" IsReadOnly="True"/>
-        <TextBox Margin="715,234,10,459" Text="6" TextAlignment="Center" FontSize="40" Background="Transparent" Foreground="#4E3524" FontWeight="Bold" BorderThickness="0" IsReadOnly="True"/>
-        <TextBox Margin="715,158,10,535" Text="7" TextAlignment="Center" FontSize="40" Background="Transparent" Foreground="#4E3524" FontWeight="Bold" BorderThickness="0" IsReadOnly="True"/>
-        <TextBox Margin="714,82,10,611" Text="8" TextAlignment="Center" FontSize="40" Background="Transparent" Foreground="#4E3524" FontWeight="Bold" BorderThickness="0" IsReadOnly="True"/>
+        <TextBox Cursor="Arrow" Margin="714,615,10,80" Text="1" TextAlignment="Center" FontSize="40" Background="Transparent" Foreground="#4E3524" FontWeight="Bold" BorderThickness="0" IsReadOnly="True"/>
+        <TextBox Cursor="Arrow" Margin="714,539,10,155" Text="2" TextAlignment="Center" FontSize="40" Background="Transparent" Foreground="#4E3524" FontWeight="Bold" BorderThickness="0" IsReadOnly="True"/>
+        <TextBox Cursor="Arrow" Margin="714,462,10,230" Text="3" TextAlignment="Center" FontSize="40" Background="Transparent" Foreground="#4E3524" FontWeight="Bold" BorderThickness="0" IsReadOnly="True"/>
+        <TextBox Cursor="Arrow" Margin="714,385,10,307" Text="4" TextAlignment="Center" FontSize="40" Background="Transparent" Foreground="#4E3524" FontWeight="Bold" BorderThickness="0" IsReadOnly="True"/>
+        <TextBox Cursor="Arrow" Margin="714,310,10,386" Text="5" TextAlignment="Center" FontSize="40" Background="Transparent" Foreground="#4E3524" FontWeight="Bold" BorderThickness="0" IsReadOnly="True"/>
+        <TextBox Cursor="Arrow" Margin="715,234,10,459" Text="6" TextAlignment="Center" FontSize="40" Background="Transparent" Foreground="#4E3524" FontWeight="Bold" BorderThickness="0" IsReadOnly="True"/>
+        <TextBox Cursor="Arrow" Margin="715,158,10,535" Text="7" TextAlignment="Center" FontSize="40" Background="Transparent" Foreground="#4E3524" FontWeight="Bold" BorderThickness="0" IsReadOnly="True"/>
+        <TextBox Cursor="Arrow" Margin="714,82,10,611" Text="8" TextAlignment="Center" FontSize="40" Background="Transparent" Foreground="#4E3524" FontWeight="Bold" BorderThickness="0" IsReadOnly="True"/>
+
+        <!-- GameOver i PromotionPieces -->
+        <Border Name="GameOverBorder" Background="BurlyWood" BorderBrush="SaddleBrown" BorderThickness="4" Height="59" CornerRadius="25,25,25,25" Margin="217,0,218,500" Visibility ="Hidden">
+            <TextBox Name="GameOverTextBox" Cursor="Arrow" Margin="0,10,0,10" Text="" TextAlignment="Center" FontSize="20" Background="Transparent" Foreground="#4E3524" FontWeight="Bold" BorderThickness="0" IsReadOnly="True"/>
+        </Border>
 
         <Border Name="PromoteBlackQueen" Background="BurlyWood" BorderBrush="SaddleBrown" BorderThickness="4" Height="59" CornerRadius="25,25,25,25" Margin="217,326,491,326" Visibility ="Hidden">
             <Button Name="BlackQueen" Click="ChoosePromotionPiece" Style="{StaticResource MyButtonStyle}" Tag="Choice" Margin="17,6">

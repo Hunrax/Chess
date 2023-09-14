@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -38,16 +37,13 @@ namespace Chess
         }
         private void PieceSelected(object sender, RoutedEventArgs e)
         {
-            Button button = e.Source as Button;
-
             if (!buttonClicked) // select piece you want to move
             {
-                SelectPiece(button);
+                SelectPiece(e.Source as Button);
             }
             else // choose where you want to move your piece
             {
-                Button selectedField = e.Source as Button;
-                SelectField(selectedField);
+                SelectField(e.Source as Button);
             }
         }
         private void TestMode(object sender, RoutedEventArgs e)
@@ -57,12 +53,13 @@ namespace Chess
                 TestModeButton.Content = "TestMode: ON";
             else
                 TestModeButton.Content = "TestMode: OFF";
+
             game.DisablePieces();
         }
         private void ChoosePromotionPiece(object sender, RoutedEventArgs e)
         {
-            Button button = e.Source as Button;
-            string pieceType = button.Name.ToString();
+            Button promotionPiece = e.Source as Button;
+            string pieceType = promotionPiece.Name.ToString();
 
             selectedPromotionPiece = game.GetPieceFromPieceType(pieceType);
             promotionPieceSelected = true;
@@ -112,9 +109,6 @@ namespace Chess
                 game.DisablePieces();
                 return;
             }
-            string pieceType = pressedButton.Tag.ToString();
-            string fieldType = selectedField.Tag.ToString();
-
             List<Point> possibleMoves = new List<Point>();
             chessBoard.GeneratePossibleMovesForPiece(pieceRow, pieceColumn, possibleMoves, true);
 
@@ -132,8 +126,8 @@ namespace Chess
                 if (chessBoard.GetPieceTypeFromField(pieceRow, pieceColumn) == PieceType.PAWN)
                     (chessBoard.GetPieceFromField(pieceRow, pieceColumn) as Pawn).CheckPawnDoubleMove(pieceRow, fieldRow);
 
-                UpdateEnPassantStatus(pieceType, fieldType, pieceRow, pieceColumn, fieldRow, fieldColumn);
-                chessBoardGUI.MovePieceToField(selectedField, pieceType, fieldType, fieldColumn, fieldRow, pieceColumn, pieceRow);
+                UpdateEnPassantStatus(pieceRow, pieceColumn, fieldRow, fieldColumn);
+                chessBoardGUI.MovePieceToField(selectedField, fieldColumn, fieldRow, pieceColumn, pieceRow);
 
                 if (!chessBoardGUI.PromotePawn(fieldRow, fieldColumn))
                 {
@@ -154,13 +148,16 @@ namespace Chess
             {
                 foreach (Button field in gornaWarstwa.Children)
                     field.IsEnabled = false;
+
+                GameOverTextBox.Text = game.gameOverMessage;
+                GameOverBorder.Visibility = Visibility.Visible;
             }
         }
-        private void UpdateEnPassantStatus(string pieceType, string fieldType, int pieceRow, int pieceColumn, int fieldRow, int fieldColumn)
+        private void UpdateEnPassantStatus(int pieceRow, int pieceColumn, int fieldRow, int fieldColumn)
         {
-            if (fieldType == "Empty" && pieceType.EndsWith("Pawn"))
+            if (chessBoard.GetPieceTypeFromField(fieldRow, fieldColumn) == PieceType.EMPTY && chessBoard.GetPieceTypeFromField(pieceRow, pieceColumn) == PieceType.PAWN)
             {
-                if (pieceType.StartsWith("White"))
+                if (chessBoard.GetPieceColorFromField(pieceRow, pieceColumn) == PieceColor.WHITE)
                 {
                     if (fieldRow < pieceRow && fieldColumn < pieceColumn)
                         enPassantStatus = -1;
@@ -169,7 +166,7 @@ namespace Chess
                     else
                         enPassantStatus = 0;
                 }
-                if (pieceType.StartsWith("Black"))
+                if (chessBoard.GetPieceColorFromField(pieceRow, pieceColumn) == PieceColor.BLACK)
                 {
                     if (fieldRow > pieceRow && fieldColumn < pieceColumn)
                         enPassantStatus = -1;

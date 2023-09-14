@@ -15,6 +15,7 @@ namespace Chess
         public int movesCounter;
         public bool testMode;
         public List<string> gameHistory;
+        public string gameOverMessage;
         public Game(GameState setGameState) 
         {
             gameState = setGameState;
@@ -28,15 +29,16 @@ namespace Chess
             if (gameState != GameState.IN_PROGRESS)
             {
                 if (gameState == GameState.STALEMATE)
-                    Trace.WriteLine("GAME OVER: STALEMATE!");
+                    gameOverMessage = "STALEMATE!";
                 if (gameState == GameState.WHITE_WON)
-                    Trace.WriteLine("GAME OVER: WHITE WINS!");
+                    gameOverMessage = "WHITE WINS!";
                 if (gameState == GameState.BLACK_WON)
-                    Trace.WriteLine("GAME OVER: BLACK WINS!");
+                    gameOverMessage = "BLACK WINS!";
                 if (gameState == GameState.DRAW_INSUFFICIENT_MATERIAL)
-                    Trace.WriteLine("GAME OVER: DRAW - INSUFFICIENT MATERIAL!");
+                    gameOverMessage = "DRAW - INSUFFICIENT MATERIAL!";
                 if (gameState == GameState.DRAW_THREEFOLD_REPETITION)
-                    Trace.WriteLine("GAME OVER: DRAW - THREEFOLD REPETITION!");
+                    gameOverMessage = "DRAW - THREEFOLD REPETITION!";
+                Trace.WriteLine(gameOverMessage);
                 return true;
             }
             return false;
@@ -104,21 +106,21 @@ namespace Chess
         private bool CheckForInsufficientMaterial()
         {
             chessBoard.CountAllPiecesOnBoard();
-            if (chessBoard.whitePawns == 0 && chessBoard.blackPawns == 0)
+            if (chessBoard.whitePawns == 0 && chessBoard.blackPawns == 0) // 0 pawns
             {
-                if (chessBoard.whiteQueens == 0 && chessBoard.blackQueens == 0)
+                if (chessBoard.whiteQueens == 0 && chessBoard.blackQueens == 0) // 0 queens
                 {
-                    if (chessBoard.whiteRooks == 0 && chessBoard.blackRooks == 0)
+                    if (chessBoard.whiteRooks == 0 && chessBoard.blackRooks == 0) // 0 rooks
                     {
-                        if (chessBoard.whiteBishops == 2 || chessBoard.blackBishops == 2)
+                        if (chessBoard.whiteBishops == 2 || chessBoard.blackBishops == 2) // 2 bishops
                             return false;
-                        else if ((chessBoard.whiteBishops == 1 && chessBoard.whiteKnights == 1) || (chessBoard.blackBishops == 1 && chessBoard.blackKnights == 1))
+                        else if ((chessBoard.whiteBishops == 1 && chessBoard.whiteKnights == 1) || (chessBoard.blackBishops == 1 && chessBoard.blackKnights == 1)) // bishop and knight
                             return false;
-                        else if ((chessBoard.whiteKnights == 2 && (chessBoard.blackBishops > 0 || chessBoard.blackKnights > 0)))
+                        else if ((chessBoard.whiteKnights == 2 && (chessBoard.blackBishops > 0 || chessBoard.blackKnights > 0))) // 2 white knights and black has something
                             return false;
-                        else if ((chessBoard.blackKnights == 2 && (chessBoard.whiteBishops > 0 || chessBoard.whiteKnights > 0)))
+                        else if ((chessBoard.blackKnights == 2 && (chessBoard.whiteBishops > 0 || chessBoard.whiteKnights > 0))) // 2 black knights and white has something
                             return false;
-                        else
+                        else // insufficient material
                             return true;
                     }
                 }

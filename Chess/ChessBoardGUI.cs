@@ -134,7 +134,7 @@ namespace Chess
             Grid.SetRow(pawnToDelete, pieceRow);
             chessBoard.board[pieceRow, pawnToDeleteColumn] = new Empty(chessBoard, window.game, PieceColor.NONE);
         }
-        public void MovePieceToField(Button selectedField, string pieceType, string fieldType, int fieldColumn, int fieldRow, int pieceColumn, int pieceRow)
+        public void MovePieceToField(Button selectedField, int fieldColumn, int fieldRow, int pieceColumn, int pieceRow)
         {
             Grid.SetColumn(window.pressedButton, fieldColumn); // move piece to field
             Grid.SetRow(window.pressedButton, fieldRow);
@@ -147,10 +147,10 @@ namespace Chess
             if (window.enPassantStatus != 0) // remove pawn captured en passant
                 DeletePawnEnPassant(pieceColumn, pieceRow);
 
-            chessBoard.CheckAllCastlings(pieceType, fieldColumn);
+            chessBoard.CheckAllCastlings(fieldRow, fieldColumn);
             chessBoard.board[fieldRow, fieldColumn].firstMove = false;
 
-            if (fieldType != "Empty")
+            if ((string)selectedField.Tag != "Empty")
             {
                 selectedField.Background = Brushes.Transparent;
                 selectedField.Tag = "Empty";

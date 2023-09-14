@@ -169,29 +169,29 @@ namespace Chess
             whiteQueens = CountPieces(PieceType.QUEEN, PieceColor.WHITE);
             blackQueens = CountPieces(PieceType.QUEEN, PieceColor.BLACK);
         }
-        public void CheckAllCastlings(string pieceType, int fieldColumn)
+        public void CheckAllCastlings(int fieldRow, int fieldColumn)
         {
-            if(FirstMoveOfPiece((int)GetKingPosition(PieceColor.WHITE).X, (int)GetKingPosition(PieceColor.WHITE).Y))
+            if(FirstMoveOfPiece(fieldRow, fieldColumn) && GetPieceColorFromField(fieldRow, fieldColumn) == PieceColor.WHITE)
             {
-                if (whiteShortCastling && pieceType == "WhiteKing" && fieldColumn == SHORT_CASTLING_KING_COLUMN)
+                if (whiteShortCastling && GetPieceTypeFromField(fieldRow, fieldColumn) == PieceType.KING && fieldColumn == SHORT_CASTLING_KING_COLUMN)
                 {
                     chessBoardGUI.PerformCastling(WHITE_CASTLING_ROOK_ROW, SHORT_CASTLING_ROOK_COLUMN, WHITE_CASTLING_ROOK_ROW, SHORT_CASTLING_EMPTYFIELD_COLUMN);
                     whiteShortCastling = false;
                 }
-                if (whiteLongCastling && pieceType == "WhiteKing" && fieldColumn == LONG_CASTLING_KING_COLUMN)
+                if (whiteLongCastling && GetPieceTypeFromField(fieldRow, fieldColumn) == PieceType.KING && fieldColumn == LONG_CASTLING_KING_COLUMN)
                 {
                     chessBoardGUI.PerformCastling(WHITE_CASTLING_ROOK_ROW, LONG_CASTLING_ROOK_COLUMN, WHITE_CASTLING_ROOK_ROW, LONG_CASTLING_EMPTYFIELD_COLUMN);
                     whiteLongCastling = false;
                 }
             }
-            if (FirstMoveOfPiece((int)GetKingPosition(PieceColor.BLACK).X, (int)GetKingPosition(PieceColor.BLACK).Y))
+            if (FirstMoveOfPiece(fieldRow, fieldColumn) && GetPieceColorFromField(fieldRow, fieldColumn) == PieceColor.BLACK)
             {
-                if (blackShortCastling && pieceType == "BlackKing" && fieldColumn == SHORT_CASTLING_KING_COLUMN)
+                if (blackShortCastling && GetPieceTypeFromField(fieldRow, fieldColumn) == PieceType.KING && fieldColumn == SHORT_CASTLING_KING_COLUMN)
                 {
                     chessBoardGUI.PerformCastling(BLACK_CASTLING_ROOK_ROW, SHORT_CASTLING_ROOK_COLUMN, BLACK_CASTLING_ROOK_ROW, SHORT_CASTLING_EMPTYFIELD_COLUMN);
                     blackShortCastling = false;
                 }
-                if (blackLongCastling && pieceType == "BlackKing" && fieldColumn == LONG_CASTLING_KING_COLUMN)
+                if (blackLongCastling && GetPieceTypeFromField(fieldRow, fieldColumn) == PieceType.KING && fieldColumn == LONG_CASTLING_KING_COLUMN)
                 {
                     chessBoardGUI.PerformCastling(BLACK_CASTLING_ROOK_ROW, LONG_CASTLING_ROOK_COLUMN, BLACK_CASTLING_ROOK_ROW, LONG_CASTLING_EMPTYFIELD_COLUMN);
                     blackLongCastling = false;
