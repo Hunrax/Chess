@@ -40,7 +40,7 @@ namespace Chess
                     board[i, j] = new Empty(this, PieceColor.NONE);
             }
         }
-        public void Initialize()
+        public void Initialize() // This can be a contructor as well, one function call less
         {
             Clear();
             board[0, 0] = new Rook(this, PieceColor.BLACK);
@@ -68,7 +68,7 @@ namespace Chess
                 board[6, i] = new Pawn(this, PieceColor.WHITE);
 
             SetPiecesPositions();
-            chessBoardGUI.ConnectPiecesAndButtons();
+            chessBoardGUI.ConnectPiecesAndButtons(); //Why here? Move it to ChessBoardGUI constructor?
         }
         public Piece GetPieceFromField(int row, int column)
         {
@@ -153,7 +153,7 @@ namespace Chess
             }
             return counter;
         }
-        public void CountAllPiecesOnBoard()
+        public void CountAllPiecesOnBoard() //Very time consuming, you can count all types with only one itteration through the board 
         {
             whitePawns = CountPieces(PieceType.PAWN, PieceColor.WHITE);
             blackPawns = CountPieces(PieceType.PAWN, PieceColor.BLACK);
@@ -196,7 +196,7 @@ namespace Chess
             }
         }
         public void GeneratePossibleMovesForPiece(int pieceRow, int pieceColumn, List<Point> possibleMoves, bool checkForChecks)
-        {
+        {   //It looks like we are spending a lot of time generating these possible moves multipule times per position. I thought that possible moves would be generated once (after any change in possition) and saved in a Piece.
             Piece piece = GetPieceFromField(pieceRow, pieceColumn);
             piece.GeneratePossibleMoves(possibleMoves, checkForChecks);
         }

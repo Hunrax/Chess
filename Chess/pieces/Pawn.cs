@@ -82,7 +82,7 @@ namespace Chess
         public void CheckPawnDoubleMove(int fieldRow)
         {
             if (Math.Abs(row - fieldRow) == 2)
-                pawnDoubleMoveTurn = chessBoard.game.movesCounter;
+                pawnDoubleMoveTurn = chessBoard.game.movesCounter; // Maybe this can become a boolean value "pawnLastMoveWasDoubleMove"? It would let us remove Game from ChessBoard
         }
     }
 }
