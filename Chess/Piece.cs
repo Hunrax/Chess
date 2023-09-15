@@ -13,7 +13,7 @@ namespace Chess
         public PieceType type;
         public char symbol;
         public ChessBoard chessBoard;
-        public bool firstMove;
+        public bool firstMove; // I suggest to initialise it here in constructor - good practise is not to leave fields uninitialised
         public Button button;
         public int row, column;
         public Piece(ChessBoard setChessBoard, PieceColor setColor)
