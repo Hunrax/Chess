@@ -18,39 +18,39 @@ namespace Chess
             pawnDoubleMoveTurn = -1;
             SetMoveDirection();
         }
-        public override void GeneratePossibleMoves(int pieceRow, int pieceColumn, List<Point> possibleMoves, bool checkForChecks)
+        public override void GeneratePossibleMoves(List<Point> possibleMoves, bool checkForChecks)
         {
-            if (chessBoard.IsFieldEmpty(pieceRow + moveDirection1, pieceColumn))
+            if (chessBoard.IsFieldEmpty(row + moveDirection1, column))
             {
-                if ((checkForChecks && chessBoard.IsKingSafeAfterMove(pieceRow, pieceColumn, pieceRow + moveDirection1, pieceColumn)) || !checkForChecks)
-                    possibleMoves.Add(new Point(pieceRow + moveDirection1, pieceColumn));
+                if ((checkForChecks && chessBoard.IsKingSafeAfterMove(row, column, row + moveDirection1, column)) || !checkForChecks)
+                    possibleMoves.Add(new Point(row + moveDirection1, column));
 
-                if (chessBoard.IsFieldEmpty(pieceRow + (2 * moveDirection1), pieceColumn) && firstMove)
+                if (chessBoard.IsFieldEmpty(row + (2 * moveDirection1), column) && firstMove)
                 {
-                    if ((checkForChecks && chessBoard.IsKingSafeAfterMove(pieceRow, pieceColumn, pieceRow + (2 * moveDirection1), pieceColumn)) || !checkForChecks)
-                        possibleMoves.Add(new Point(pieceRow + (2 * moveDirection1), pieceColumn));
+                    if ((checkForChecks && chessBoard.IsKingSafeAfterMove(row, column, row + (2 * moveDirection1), column)) || !checkForChecks)
+                        possibleMoves.Add(new Point(row + (2 * moveDirection1), column));
                 }
             }
 
-            if (chessBoard.IsFieldPossibleToCapture(pieceRow + moveDirection1, pieceColumn + moveDirection1, color))
+            if (chessBoard.IsFieldPossibleToCapture(row + moveDirection1, column + moveDirection1, color))
             {
-                if ((checkForChecks && chessBoard.IsKingSafeAfterMove(pieceRow, pieceColumn, pieceRow + moveDirection1, pieceColumn + moveDirection1)) || !checkForChecks)
-                    possibleMoves.Add(new Point(pieceRow + moveDirection1, pieceColumn + moveDirection1));
+                if ((checkForChecks && chessBoard.IsKingSafeAfterMove(row, column, row + moveDirection1, column + moveDirection1)) || !checkForChecks)
+                    possibleMoves.Add(new Point(row + moveDirection1, column + moveDirection1));
             }
-            if (chessBoard.IsFieldPossibleToCapture(pieceRow + moveDirection1, pieceColumn + moveDirection2, color))
+            if (chessBoard.IsFieldPossibleToCapture(row + moveDirection1, column + moveDirection2, color))
             {
-                if ((checkForChecks && chessBoard.IsKingSafeAfterMove(pieceRow, pieceColumn, pieceRow + moveDirection1, pieceColumn + moveDirection2)) || !checkForChecks)
-                    possibleMoves.Add(new Point(pieceRow + moveDirection1, pieceColumn + moveDirection2));
+                if ((checkForChecks && chessBoard.IsKingSafeAfterMove(row, column, row + moveDirection1, column + moveDirection2)) || !checkForChecks)
+                    possibleMoves.Add(new Point(row + moveDirection1, column + moveDirection2));
             }
-            if (chessBoard.IsFieldEmpty(pieceRow + moveDirection1, pieceColumn + moveDirection1) && EnPassant(pieceRow, pieceColumn, moveDirection1))
+            if (chessBoard.IsFieldEmpty(row + moveDirection1, column + moveDirection1) && EnPassant(moveDirection1))
             {
-                if ((checkForChecks && chessBoard.IsKingSafeAfterMove(pieceRow, pieceColumn, pieceRow + moveDirection1, pieceColumn + moveDirection1)) || !checkForChecks)
-                    possibleMoves.Add(new Point(pieceRow + moveDirection1, pieceColumn + moveDirection1));
+                if ((checkForChecks && chessBoard.IsKingSafeAfterMove(row, column, row + moveDirection1, column + moveDirection1)) || !checkForChecks)
+                    possibleMoves.Add(new Point(row + moveDirection1, column + moveDirection1));
             }
-            if (chessBoard.IsFieldEmpty(pieceRow + moveDirection1, pieceColumn + moveDirection2) && EnPassant(pieceRow, pieceColumn, moveDirection2))
+            if (chessBoard.IsFieldEmpty(row + moveDirection1, column + moveDirection2) && EnPassant(moveDirection2))
             {
-                if ((checkForChecks && chessBoard.IsKingSafeAfterMove(pieceRow, pieceColumn, pieceRow + moveDirection1, pieceColumn + moveDirection2)) || !checkForChecks)
-                    possibleMoves.Add(new Point(pieceRow + moveDirection1, pieceColumn + moveDirection2));
+                if ((checkForChecks && chessBoard.IsKingSafeAfterMove(row, column, row + moveDirection1, column + moveDirection2)) || !checkForChecks)
+                    possibleMoves.Add(new Point(row + moveDirection1, column + moveDirection2));
             }
         }
         private void SetMoveDirection()
@@ -66,9 +66,9 @@ namespace Chess
                 moveDirection2 = -1;
             }
         }
-        private bool EnPassant(int pieceRow, int pieceColumn, int columnShift)
+        private bool EnPassant(int columnShift)
         {
-            Piece piece = chessBoard.GetPieceFromField(pieceRow, pieceColumn + columnShift);
+            Piece piece = chessBoard.GetPieceFromField(row, column + columnShift);
             if (piece.type == PieceType.PAWN && color != piece.color)
             {
                 Pawn pawn = (Pawn)piece;
@@ -79,9 +79,9 @@ namespace Chess
             }
             return false;
         }
-        public void CheckPawnDoubleMove(int pieceRow, int fieldRow)
+        public void CheckPawnDoubleMove(int fieldRow)
         {
-            if (Math.Abs(pieceRow - fieldRow) == 2)
+            if (Math.Abs(row - fieldRow) == 2)
                 pawnDoubleMoveTurn = chessBoard.game.movesCounter;
         }
     }

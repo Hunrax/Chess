@@ -14,12 +14,15 @@ namespace Chess
         public char symbol;
         public ChessBoard chessBoard;
         public bool firstMove;
+        public Button button;
+        public int row, column;
         public Piece(ChessBoard setChessBoard, PieceColor setColor)
         {
             chessBoard = setChessBoard;
             color = setColor;
+            button = new Button();
         }
-        public abstract void GeneratePossibleMoves(int pieceRow, int pieceColumn, List<Point> possibleMoves, bool checkForChecks);
+        public abstract void GeneratePossibleMoves(List<Point> possibleMoves, bool checkForChecks);
     }
     public enum PieceColor
     {

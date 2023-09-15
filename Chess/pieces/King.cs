@@ -14,47 +14,47 @@ namespace Chess
             symbol = (color == PieceColor.WHITE) ? 'K' : 'k';
             firstMove = true;
         }
-        public override void GeneratePossibleMoves(int pieceRow, int pieceColumn, List<Point> possibleMoves, bool checkForChecks)
+        public override void GeneratePossibleMoves(List<Point> possibleMoves, bool checkForChecks)
         {
-            if (chessBoard.CanPieceMoveHere(pieceRow, pieceColumn - 1, color, checkForChecks, pieceRow, pieceColumn))
-                possibleMoves.Add(new Point(pieceRow, pieceColumn - 1));
-            if (chessBoard.CanPieceMoveHere(pieceRow - 1, pieceColumn - 1, color, checkForChecks, pieceRow, pieceColumn))
-                possibleMoves.Add(new Point(pieceRow - 1, pieceColumn - 1));
-            if (chessBoard.CanPieceMoveHere(pieceRow + 1, pieceColumn - 1, color, checkForChecks, pieceRow, pieceColumn))
-                possibleMoves.Add(new Point(pieceRow + 1, pieceColumn - 1));
+            if (chessBoard.CanPieceMoveHere(row, column - 1, color, checkForChecks, row, column))
+                possibleMoves.Add(new Point(row, column - 1));
+            if (chessBoard.CanPieceMoveHere(row - 1, column - 1, color, checkForChecks, row, column))
+                possibleMoves.Add(new Point(row - 1, column - 1));
+            if (chessBoard.CanPieceMoveHere(row + 1, column - 1, color, checkForChecks, row, column))
+                possibleMoves.Add(new Point(row + 1, column - 1));
 
-            if (chessBoard.CanPieceMoveHere(pieceRow, pieceColumn + 1, color, checkForChecks, pieceRow, pieceColumn))
-                possibleMoves.Add(new Point(pieceRow, pieceColumn + 1));
-            if (chessBoard.CanPieceMoveHere(pieceRow - 1, pieceColumn + 1, color, checkForChecks, pieceRow, pieceColumn))
-                possibleMoves.Add(new Point(pieceRow - 1, pieceColumn + 1));
-            if (chessBoard.CanPieceMoveHere(pieceRow + 1, pieceColumn + 1, color, checkForChecks, pieceRow, pieceColumn))
-                possibleMoves.Add(new Point(pieceRow + 1, pieceColumn + 1));
+            if (chessBoard.CanPieceMoveHere(row, column + 1, color, checkForChecks, row, column))
+                possibleMoves.Add(new Point(row, column + 1));
+            if (chessBoard.CanPieceMoveHere(row - 1, column + 1, color, checkForChecks, row, column))
+                possibleMoves.Add(new Point(row - 1, column + 1));
+            if (chessBoard.CanPieceMoveHere(row + 1, column + 1, color, checkForChecks, row, column))
+                possibleMoves.Add(new Point(row + 1, column + 1));
 
-            if (chessBoard.CanPieceMoveHere(pieceRow + 1, pieceColumn, color, checkForChecks, pieceRow, pieceColumn))
-                possibleMoves.Add(new Point(pieceRow + 1, pieceColumn));
-            if (chessBoard.CanPieceMoveHere(pieceRow - 1, pieceColumn, color, checkForChecks, pieceRow, pieceColumn))
-                possibleMoves.Add(new Point(pieceRow - 1, pieceColumn));
+            if (chessBoard.CanPieceMoveHere(row + 1, column, color, checkForChecks, row, column))
+                possibleMoves.Add(new Point(row + 1, column));
+            if (chessBoard.CanPieceMoveHere(row - 1, column, color, checkForChecks, row, column))
+                possibleMoves.Add(new Point(row - 1, column));
 
             if (color == PieceColor.WHITE)
             {
-                if (CheckCastling(chessBoard.WHITE_CASTLING_ROOK_ROW, chessBoard.SHORT_CASTLING_ROOK_COLUMN) && chessBoard.IsFieldEmpty(pieceRow, pieceColumn + 1) && chessBoard.IsFieldEmpty(pieceRow, pieceColumn + 2))
+                if (CheckCastling(chessBoard.WHITE_CASTLING_ROOK_ROW, chessBoard.SHORT_CASTLING_ROOK_COLUMN) && chessBoard.IsFieldEmpty(row, column + 1) && chessBoard.IsFieldEmpty(row, column + 2))
                 {
-                    if ((checkForChecks && chessBoard.IsKingSafeAfterMove(pieceRow, pieceColumn, pieceRow, pieceColumn + 2) && chessBoard.IsKingSafeAfterMove(pieceRow, pieceColumn, pieceRow, pieceColumn + 1)) || !checkForChecks)
+                    if ((checkForChecks && chessBoard.IsKingSafeAfterMove(row, column, row, column + 2) && chessBoard.IsKingSafeAfterMove(row, column, row, column + 1)) || !checkForChecks)
                     {
                         if (!chessBoard.whiteKingUnderCheck)
                         {
-                            possibleMoves.Add(new Point(pieceRow, pieceColumn + 2));
+                            possibleMoves.Add(new Point(row, column + 2));
                             chessBoard.whiteShortCastling = true;
                         }
                     }
                 }
-                if (CheckCastling(chessBoard.WHITE_CASTLING_ROOK_ROW, chessBoard.LONG_CASTLING_ROOK_COLUMN) && chessBoard.IsFieldEmpty(pieceRow, pieceColumn - 1) && chessBoard.IsFieldEmpty(pieceRow, pieceColumn - 2) && chessBoard.IsFieldEmpty(pieceRow, pieceColumn - 3))
+                if (CheckCastling(chessBoard.WHITE_CASTLING_ROOK_ROW, chessBoard.LONG_CASTLING_ROOK_COLUMN) && chessBoard.IsFieldEmpty(row, column - 1) && chessBoard.IsFieldEmpty(row, column - 2) && chessBoard.IsFieldEmpty(row, column - 3))
                 {
-                    if ((checkForChecks && chessBoard.IsKingSafeAfterMove(pieceRow, pieceColumn, pieceRow, pieceColumn - 2) && chessBoard.IsKingSafeAfterMove(pieceRow, pieceColumn, pieceRow, pieceColumn - 1)) || !checkForChecks)
+                    if ((checkForChecks && chessBoard.IsKingSafeAfterMove(row, column, row, column - 2) && chessBoard.IsKingSafeAfterMove(row, column, row, column - 1)) || !checkForChecks)
                     {
                         if (!chessBoard.whiteKingUnderCheck)
                         {
-                            possibleMoves.Add(new Point(pieceRow, pieceColumn - 2));
+                            possibleMoves.Add(new Point(row, column - 2));
                             chessBoard.whiteLongCastling = true;
                         }
                     }
@@ -62,24 +62,24 @@ namespace Chess
             }
             if (color == PieceColor.BLACK)
             {
-                if (CheckCastling(chessBoard.BLACK_CASTLING_ROOK_ROW, chessBoard.SHORT_CASTLING_ROOK_COLUMN) && chessBoard.IsFieldEmpty(pieceRow, pieceColumn + 1) && chessBoard.IsFieldEmpty(pieceRow, pieceColumn + 2))
+                if (CheckCastling(chessBoard.BLACK_CASTLING_ROOK_ROW, chessBoard.SHORT_CASTLING_ROOK_COLUMN) && chessBoard.IsFieldEmpty(row, column + 1) && chessBoard.IsFieldEmpty(row, column + 2))
                 {
-                    if ((checkForChecks && chessBoard.IsKingSafeAfterMove(pieceRow, pieceColumn, pieceRow, pieceColumn + 2) && chessBoard.IsKingSafeAfterMove(pieceRow, pieceColumn, pieceRow, pieceColumn + 1)) || !checkForChecks)
+                    if ((checkForChecks && chessBoard.IsKingSafeAfterMove(row, column, row, column + 2) && chessBoard.IsKingSafeAfterMove(row, column, row, column + 1)) || !checkForChecks)
                     {
                         if (!chessBoard.blackKingUnderCheck)
                         {
-                            possibleMoves.Add(new Point(pieceRow, pieceColumn + 2));
+                            possibleMoves.Add(new Point(row, column + 2));
                             chessBoard.blackShortCastling = true;
                         }
                     }
                 }
-                if (CheckCastling(chessBoard.BLACK_CASTLING_ROOK_ROW, chessBoard.LONG_CASTLING_ROOK_COLUMN) && chessBoard.IsFieldEmpty(pieceRow, pieceColumn - 1) && chessBoard.IsFieldEmpty(pieceRow, pieceColumn - 2) && chessBoard.IsFieldEmpty(pieceRow, pieceColumn - 3))
+                if (CheckCastling(chessBoard.BLACK_CASTLING_ROOK_ROW, chessBoard.LONG_CASTLING_ROOK_COLUMN) && chessBoard.IsFieldEmpty(row, column - 1) && chessBoard.IsFieldEmpty(row, column - 2) && chessBoard.IsFieldEmpty(row, column - 3))
                 {
-                    if ((checkForChecks && chessBoard.IsKingSafeAfterMove(pieceRow, pieceColumn, pieceRow, pieceColumn - 2) && chessBoard.IsKingSafeAfterMove(pieceRow, pieceColumn, pieceRow, pieceColumn - 1)) || !checkForChecks)
+                    if ((checkForChecks && chessBoard.IsKingSafeAfterMove(row, column, row, column - 2) && chessBoard.IsKingSafeAfterMove(row, column, row, column - 1)) || !checkForChecks)
                     {
                         if (!chessBoard.blackKingUnderCheck)
                         {
-                            possibleMoves.Add(new Point(pieceRow, pieceColumn - 2));
+                            possibleMoves.Add(new Point(row, column - 2));
                             chessBoard.blackLongCastling = true;
                         }
                     }

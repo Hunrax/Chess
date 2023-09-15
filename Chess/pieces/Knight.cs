@@ -12,27 +12,27 @@ namespace Chess
             type = PieceType.KNIGHT;
             symbol = (color == PieceColor.WHITE) ? 'S' : 's';
         }
-        public override void GeneratePossibleMoves(int pieceRow, int pieceColumn, List<Point> possibleMoves, bool checkForChecks)
+        public override void GeneratePossibleMoves(List<Point> possibleMoves, bool checkForChecks)
         {
-            if (chessBoard.CanPieceMoveHere(pieceRow - 1, pieceColumn - 2, color, checkForChecks, pieceRow, pieceColumn))
-                possibleMoves.Add(new Point(pieceRow - 1, pieceColumn - 2));
-            if (chessBoard.CanPieceMoveHere(pieceRow + 1, pieceColumn - 2, color, checkForChecks, pieceRow, pieceColumn))
-                possibleMoves.Add(new Point(pieceRow + 1, pieceColumn - 2));
+            if (chessBoard.CanPieceMoveHere(row - 1, column - 2, color, checkForChecks, row, column))
+                possibleMoves.Add(new Point(row - 1, column - 2));
+            if (chessBoard.CanPieceMoveHere(row + 1, column - 2, color, checkForChecks, row, column))
+                possibleMoves.Add(new Point(row + 1, column - 2));
 
-            if (chessBoard.CanPieceMoveHere(pieceRow - 1, pieceColumn + 2, color, checkForChecks, pieceRow, pieceColumn))
-                possibleMoves.Add(new Point(pieceRow - 1, pieceColumn + 2));
-            if (chessBoard.CanPieceMoveHere(pieceRow + 1, pieceColumn + 2, color, checkForChecks, pieceRow, pieceColumn))
-                possibleMoves.Add(new Point(pieceRow + 1, pieceColumn + 2));
+            if (chessBoard.CanPieceMoveHere(row - 1, column + 2, color, checkForChecks, row, column))
+                possibleMoves.Add(new Point(row - 1, column + 2));
+            if (chessBoard.CanPieceMoveHere(row + 1, column + 2, color, checkForChecks, row, column))
+                possibleMoves.Add(new Point(row + 1, column + 2));
 
-            if (chessBoard.CanPieceMoveHere(pieceRow - 2, pieceColumn + 1, color, checkForChecks, pieceRow, pieceColumn))
-                possibleMoves.Add(new Point(pieceRow - 2, pieceColumn + 1));
-            if (chessBoard.CanPieceMoveHere(pieceRow + 2, pieceColumn + 1, color, checkForChecks, pieceRow, pieceColumn))
-                possibleMoves.Add(new Point(pieceRow + 2, pieceColumn + 1));
+            if (chessBoard.CanPieceMoveHere(row - 2, column + 1, color, checkForChecks, row, column))
+                possibleMoves.Add(new Point(row - 2, column + 1));
+            if (chessBoard.CanPieceMoveHere(row + 2, column + 1, color, checkForChecks, row, column))
+                possibleMoves.Add(new Point(row + 2, column + 1));
 
-            if (chessBoard.CanPieceMoveHere(pieceRow - 2, pieceColumn - 1, color, checkForChecks, pieceRow, pieceColumn))
-                possibleMoves.Add(new Point(pieceRow - 2, pieceColumn - 1));
-            if (chessBoard.CanPieceMoveHere(pieceRow + 2, pieceColumn - 1, color, checkForChecks, pieceRow, pieceColumn))
-                possibleMoves.Add(new Point(pieceRow + 2, pieceColumn - 1));
+            if (chessBoard.CanPieceMoveHere(row - 2, column - 1, color, checkForChecks, row, column))
+                possibleMoves.Add(new Point(row - 2, column - 1));
+            if (chessBoard.CanPieceMoveHere(row + 2, column - 1, color, checkForChecks, row, column))
+                possibleMoves.Add(new Point(row + 2, column - 1));
         }
     }
 }

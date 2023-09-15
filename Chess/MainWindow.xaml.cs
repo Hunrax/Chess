@@ -11,27 +11,33 @@ namespace Chess
     {
         public Button pressedButton;
         private Piece selectedPromotionPiece;
-        private readonly ChessBoard chessBoard = new ChessBoard();
-        private readonly ChessBoardGUI chessBoardGUI = new ChessBoardGUI();
-        public readonly Game game = new Game(GameState.IN_PROGRESS, false);
+        private readonly ChessBoard chessBoard;
+        private readonly ChessBoardGUI chessBoardGUI;
+        public readonly Game game;
         private readonly MainWindow mainWindow;
-        public bool buttonClicked = false;
-
-        public bool promotionPieceSelected = false;
-        public int enPassantStatus = 0;
-
+        public bool buttonClicked;
+        public bool promotionPieceSelected;
+        public int enPassantStatus;
         public MainWindow()
         {
             InitializeComponent();
             mainWindow = this;
+            chessBoard = new ChessBoard();
+            chessBoardGUI = new ChessBoardGUI();
+            game = new Game(GameState.IN_PROGRESS, false);
+            buttonClicked = false;
+            promotionPieceSelected = false;
+            enPassantStatus = 0;
+
             game.window = mainWindow;
             game.chessBoard = chessBoard;
             chessBoardGUI.window = mainWindow;
+            chessBoardGUI.chessBoard = chessBoard;
             chessBoard.game = game;
             chessBoard.chessBoardGUI = chessBoardGUI;
-            chessBoardGUI.chessBoard = chessBoard;
 
             chessBoard.Initialize();
+            chessBoardGUI.UpdateGUI();
             chessBoard.Print();
             game.DisablePieces();
         }
@@ -72,6 +78,8 @@ namespace Chess
             pressedButton.Tag = pieceType;
             chessBoard.board[pieceRow, pieceColumn] = selectedPromotionPiece;
             chessBoard.board[pieceRow, pieceColumn].firstMove = false;
+            CheckForChecksAndGameOver();
+            chessBoard.board[pieceRow, pieceColumn].button = pressedButton;
             promotionPieceSelected = false;
 
             chessBoard.Print();
@@ -124,7 +132,7 @@ namespace Chess
             if (correctFieldSelected)
             {
                 if (chessBoard.GetPieceTypeFromField(pieceRow, pieceColumn) == PieceType.PAWN)
-                    (chessBoard.GetPieceFromField(pieceRow, pieceColumn) as Pawn).CheckPawnDoubleMove(pieceRow, fieldRow);
+                    (chessBoard.GetPieceFromField(pieceRow, pieceColumn) as Pawn).CheckPawnDoubleMove(fieldRow);
 
                 UpdateEnPassantStatus(pieceRow, pieceColumn, fieldRow, fieldColumn);
                 chessBoardGUI.MovePieceToField(selectedField, fieldColumn, fieldRow, pieceColumn, pieceRow);

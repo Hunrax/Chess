@@ -32,15 +32,12 @@ namespace Chess
         private readonly int LONG_CASTLING_EMPTYFIELD_COLUMN = 3;
 
         public int whitePawns, blackPawns, whiteKnights, blackKnights, whiteBishops, blackBishops, whiteRooks, blackRooks, whiteQueens, blackQueens;
-
         public void Clear()
         {
             for (int i = 0; i < 8; i++)
             {
                 for (int j = 0; j < 8; j++)
-                {
                     board[i, j] = new Empty(this, PieceColor.NONE);
-                }
             }
         }
         public void Initialize()
@@ -69,6 +66,9 @@ namespace Chess
 
             for (int i = 0; i < 8; i++)
                 board[6, i] = new Pawn(this, PieceColor.WHITE);
+
+            SetPiecesPositions();
+            chessBoardGUI.ConnectPiecesAndButtons();
         }
         public Piece GetPieceFromField(int row, int column)
         {
@@ -198,7 +198,7 @@ namespace Chess
         public void GeneratePossibleMovesForPiece(int pieceRow, int pieceColumn, List<Point> possibleMoves, bool checkForChecks)
         {
             Piece piece = GetPieceFromField(pieceRow, pieceColumn);
-            piece.GeneratePossibleMoves(pieceRow, pieceColumn, possibleMoves, checkForChecks);
+            piece.GeneratePossibleMoves(possibleMoves, checkForChecks);
         }
         public bool CheckIfKingUnderCheck(PieceColor pieceColor)
         {
@@ -253,6 +253,17 @@ namespace Chess
                 }
             }
             return possibleMoves;
+        }
+        public void SetPiecesPositions()
+        {
+            for (int i = 0; i < size; i++)
+            {
+                for (int j = 0; j < size; j++)
+                {
+                    board[i, j].row = i;
+                    board[i, j].column = j;
+                }
+            }
         }
         public void Print()
         {

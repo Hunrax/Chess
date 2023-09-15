@@ -10,7 +10,6 @@ namespace Chess
     {
         public MainWindow window;
         public ChessBoard chessBoard;
-
         public void ChangeChessBoardOpacity(double opacity)
         {
             foreach (Grid field in window.dolnaWarstwa.Children)
@@ -101,21 +100,9 @@ namespace Chess
         }
         public void PerformCastling(int rookRow, int rookColumn, int emptyFieldRow, int emptyFieldColumn)
         {
-            Button rook = window.gornaWarstwa.Children.Cast<UIElement>()
-                .FirstOrDefault(e => Grid.GetRow(e) == rookRow && Grid.GetColumn(e) == rookColumn) as Button;
-
-            Button empty = window.gornaWarstwa.Children.Cast<UIElement>()
-                .FirstOrDefault(e => Grid.GetRow(e) == emptyFieldRow && Grid.GetColumn(e) == emptyFieldColumn) as Button;
-
-            PieceColor pieceColor = chessBoard.GetPieceColorFromField(rookRow, rookColumn);
-
-            Grid.SetColumn(rook, emptyFieldColumn);
-            Grid.SetRow(rook, emptyFieldRow);
-            chessBoard.board[emptyFieldRow, emptyFieldColumn] = new Rook(chessBoard, pieceColor);
-
-            Grid.SetColumn(empty, rookColumn);
-            Grid.SetRow(empty, rookRow);
-            chessBoard.board[rookRow, rookColumn] = new Empty(chessBoard, PieceColor.NONE);
+            Piece emptyField = chessBoard.GetPieceFromField(emptyFieldRow, emptyFieldColumn);
+            chessBoard.board[emptyFieldRow, emptyFieldColumn] = chessBoard.GetPieceFromField(rookRow, rookColumn);
+            chessBoard.board[rookRow, rookColumn] = emptyField;
         }
         public void DeletePawnEnPassant(int pieceColumn, int pieceRow)
         {
@@ -126,19 +113,11 @@ namespace Chess
 
             pawnToDelete.Tag = "Empty";
             pawnToDelete.Background = Brushes.Transparent;
-
-            Grid.SetColumn(pawnToDelete, pawnToDeleteColumn);
-            Grid.SetRow(pawnToDelete, pieceRow);
             chessBoard.board[pieceRow, pawnToDeleteColumn] = new Empty(chessBoard, PieceColor.NONE);
         }
         public void MovePieceToField(Button selectedField, int fieldColumn, int fieldRow, int pieceColumn, int pieceRow)
         {
-            Grid.SetColumn(window.pressedButton, fieldColumn); // move piece to field
-            Grid.SetRow(window.pressedButton, fieldRow);
             chessBoard.board[fieldRow, fieldColumn] = chessBoard.board[pieceRow, pieceColumn];
-
-            Grid.SetColumn(selectedField, pieceColumn); // set former piece field to empty
-            Grid.SetRow(selectedField, pieceRow);
             chessBoard.board[pieceRow, pieceColumn] = new Empty(chessBoard, PieceColor.NONE);
 
             if (window.enPassantStatus != 0) // remove pawn captured en passant
@@ -152,6 +131,9 @@ namespace Chess
                 selectedField.Background = Brushes.Transparent;
                 selectedField.Tag = "Empty";
             }
+            chessBoard.board[pieceRow, pieceColumn].button = selectedField;
+            chessBoard.SetPiecesPositions();
+            UpdateGUI();
             ChangeChessBoardOpacity(1);
             window.buttonClicked = false;
         }
@@ -207,6 +189,31 @@ namespace Chess
             window.PromoteBlackKnight.Visibility = visibility;
             window.PromoteBlackQueen.Visibility = visibility;
             window.PromoteBlackRook.Visibility = visibility;
+        }
+        public void ConnectPiecesAndButtons()
+        {
+            for (int i = 0; i < chessBoard.size; i++)
+            {
+                for (int j = 0; j < chessBoard.size; j++)
+                {
+                    Piece piece = chessBoard.GetPieceFromField(i, j);
+                    Button pieceButton = window.gornaWarstwa.Children.Cast<UIElement>()
+                        .FirstOrDefault(e => Grid.GetRow(e) == piece.row && Grid.GetColumn(e) == piece.column) as Button;
+                    piece.button = pieceButton;
+                }
+            }
+        }
+        public void UpdateGUI()
+        {
+            for (int i = 0; i < chessBoard.size; i++)
+            {
+                for (int j = 0; j < chessBoard.size; j++)
+                {
+                    Piece piece = chessBoard.GetPieceFromField(i, j);
+                    Grid.SetRow(piece.button, piece.row);
+                    Grid.SetColumn(piece.button, piece.column);
+                }
+            }
         }
     }
 }

@@ -12,7 +12,7 @@ namespace Chess
             type = PieceType.EMPTY;
             symbol = '.';
         }
-        public override void GeneratePossibleMoves(int pieceRow, int pieceColumn, List<Point> possibleMoves, bool checkForChecks)
+        public override void GeneratePossibleMoves(List<Point> possibleMoves, bool checkForChecks)
         {
             return;
         }
