@@ -6,7 +6,7 @@
 
 <h2> <img height="80" src="/Chess/images/WhiteQueen.png"/> A regular game of chess made in Windows Presentation Foundation <img height="80" src="/Chess/images/BlackQueen.png"/> </h2>
 
-<h2> <img height="100" src="/Chess/images/WhiteKing.png"/> The game includes castling, pawn promotion, en passant and other rules <img height="100" src="/Chess/images/BlackKing.png"/> </h2>
+<h3> <img height="100" src="/Chess/images/WhiteKing.png"/> The game includes castling, pawn promotion, en passant and other rules <img height="100" src="/Chess/images/BlackKing.png"/> </h3>
 
 <img width="31%" src="https://github.com/user-attachments/assets/076c337c-ef13-482d-8926-9c5dfdee34ed" /> 
 <img width="31%" src="https://github.com/user-attachments/assets/be7afc13-417b-4835-82b8-6f851b8742b8" /> 
