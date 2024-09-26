@@ -7,7 +7,7 @@ namespace Chess
     {
         public Queen(ChessBoard setChessBoard, PieceColor setColor) : base(setChessBoard, setColor)
         {
-            chessBoard = setChessBoard;
+            chessBoard = setChessBoard; // We set it in a base constructor so we don't need to set it here - same for other classes
             color = setColor;
             type = PieceType.QUEEN;
             symbol = (color == PieceColor.WHITE) ? 'H' : 'h';

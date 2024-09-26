@@ -58,7 +58,7 @@ namespace Chess
             if (CheckThreefoldRepetition(currentState))
                 gameState = GameState.DRAW_THREEFOLD_REPETITION;
         }
-        public void DisablePieces()
+        public void DisablePieces() // Move it to Window? It operates on Buttons, Game should operate on Pieces only
         {
             if(gameState == GameState.IN_PROGRESS)
             {
@@ -95,9 +95,9 @@ namespace Chess
             {
                 turn = PieceColor.WHITE;
             }
-            window.movesCounterTextBox.Text = movesCounter.ToString();
+            window.movesCounterTextBox.Text = movesCounter.ToString(); //This is tempting but game should not know anything about windows and textBoxes
         }
-        private bool CheckForInsufficientMaterial()
+        private bool CheckForInsufficientMaterial() // Since this function uses only chessBoard fields it probably belongs to chessBoard class
         {
             chessBoard.CountAllPiecesOnBoard();
             if (chessBoard.whitePawns == 0 && chessBoard.blackPawns == 0) // 0 pawns
@@ -166,7 +166,7 @@ namespace Chess
                     return new Empty(chessBoard, PieceColor.NONE);
             }
         }
-        public PieceColor GetPieceColorFromPieceType(string pieceType)
+        public PieceColor GetPieceColorFromPieceType(string pieceType)  // Not used
         {
             if (pieceType.StartsWith("White"))
                 return PieceColor.WHITE;

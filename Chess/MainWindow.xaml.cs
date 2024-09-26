@@ -11,7 +11,7 @@ namespace Chess
     {
         public Button pressedButton;
         private Piece selectedPromotionPiece;
-        private readonly ChessBoard chessBoard;
+        private readonly ChessBoard chessBoard; // MainnWindow have Game, Game have ChessBoard, I would remove ChessBoard from here, Game should manage ChessBoard
         private readonly ChessBoardGUI chessBoardGUI;
         public readonly Game game;
         private readonly MainWindow mainWindow;
@@ -29,7 +29,7 @@ namespace Chess
             promotionPieceSelected = false;
             enPassantStatus = 0;
 
-            game.window = mainWindow;
+            game.window = mainWindow; // We should probably just pass it in a Game constructor, same for lines below
             game.chessBoard = chessBoard;
             chessBoardGUI.window = mainWindow;
             chessBoardGUI.chessBoard = chessBoard;
@@ -122,9 +122,9 @@ namespace Chess
 
             bool correctFieldSelected = false;
             for(int i = 0; i < possibleMoves.Count; i++)
-            {
+            {       // Maybe there is a way to just compare points with something like possibleMoves[i] == Point(fieldRow, fieldColumn) ?
                 if (chessBoard.ArePointsEqual(possibleMoves[i], fieldRow, fieldColumn) && !chessBoard.IsFieldAKing(fieldRow, fieldColumn))
-                {
+                {   // Also, maybe I am missing something but "IsFieldAKing" should not be needed. If you can move to capture enemy king then you just won.
                     correctFieldSelected = true;
                     break;
                 }
@@ -140,7 +140,7 @@ namespace Chess
                 if (!chessBoardGUI.PromotePawn(fieldRow, fieldColumn))
                 {
                     chessBoard.Print();
-                    game.gameHistory.Add(chessBoard.ChessboardToString());
+                    game.gameHistory.Add(chessBoard.ChessboardToString()); // These 3 commands are identical as is ChoosePromotionPiece, I dont fully understand promotion mechanism, but probably they can me moved out of if statement and removed from ChoosePromotionPiece
                     CheckForChecksAndGameOver();
                 }
                 game.ChangeTurn();

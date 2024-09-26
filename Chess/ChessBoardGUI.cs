@@ -6,7 +6,7 @@ using System.Windows;
 
 namespace Chess
 {
-    public class ChessBoardGUI
+    public class ChessBoardGUI // Existance of this class should be reconsidered, many functions operate on MainWindow's fields, e.g. SetWhitePromotionButtonsVisibility
     {
         public MainWindow window;
         public ChessBoard chessBoard;
@@ -99,7 +99,7 @@ namespace Chess
             }
         }
         public void PerformCastling(int rookRow, int rookColumn, int emptyFieldRow, int emptyFieldColumn)
-        {
+        { //This function is only called from ChessBoard and uses only ChessBoard fields, yet it is in ChessBoardGUI class :D
             Piece emptyField = chessBoard.GetPieceFromField(emptyFieldRow, emptyFieldColumn);
             chessBoard.board[emptyFieldRow, emptyFieldColumn] = chessBoard.GetPieceFromField(rookRow, rookColumn);
             chessBoard.board[rookRow, rookColumn] = emptyField;
@@ -135,7 +135,7 @@ namespace Chess
             chessBoard.SetPiecesPositions();
             UpdateGUI();
             ChangeChessBoardOpacity(1);
-            window.buttonClicked = false;
+            window.buttonClicked = false; // I would move this out of this function to MainWindow class and make it private
         }
         public bool PromotePawn(int row, int column)
         {
